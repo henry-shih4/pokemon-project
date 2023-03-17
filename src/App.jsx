@@ -1,39 +1,21 @@
 import "./App.css";
-import { useEffect, useState } from "react";
-import axios from "axios";
+
+import { useFetch } from "./resourcing/useFetch";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import PokemonTypes from "./Pages/PokemonTypes/PokemonTypes";
+import PokemonType from "./Pages/PokemonTypes/PokemonType";
 
 function App() {
-  const [pokemonList, setPokemonList] = useState([]);
-
-  useEffect(() => {
-    fetchPokemon();
-  }, []);
-
-  useEffect(() => {
-    console.log(pokemonList);
-  });
-
-  async function fetchPokemon() {
-    await axios
-      .get("https://pokeapi.co/api/v2/pokemon/?limit=1281")
-      .then((data) => {
-        setPokemonList(data.data.results);
-      })
-      .catch((error) => console.log(error));
-  }
+  const { data, loading } = useFetch("https://pokeapi.co/api/v2/type/");
 
   return (
     <div className="App">
-      <h1>hello world</h1>
-      {pokemonList !== []
-        ? pokemonList.map((item, idx) => {
-            return (
-              <div>
-                {item.name}, {idx + 1}
-              </div>
-            );
-          })
-        : null}
+      <BrowserRouter>
+        <Routes>
+          <Route path="/types" element={<PokemonTypes />} />
+          <Route path="/types/:id" element={<PokemonType />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
