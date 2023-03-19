@@ -4,9 +4,12 @@ import { useFetch } from "../../resourcing/useFetch";
 
 export default function Pokemon() {
   const { name } = useParams();
-  const { data, loading } = useFetch(
+  const { data, loading, error } = useFetch(
     `https://pokeapi.co/api/v2/pokemon/${name}`
   );
+  // const { speciesInfo, speciesLoading, speciesError } = useFetch(
+  //   `https://pokeapi.co/api/v2/pokemon-species/${name}/`
+  // );
 
   return (
     <>

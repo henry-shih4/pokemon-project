@@ -21,34 +21,23 @@ const Pokemon = styled.div`
 
 export default function PokemonType() {
   const [pokemon, setPokemon] = useState([]);
-  const { id } = useParams();
+  const { typeName } = useParams();
   const navigate = useNavigate();
 
-  //   const { data, loading } = useFetch(`https://pokeapi.co/api/v2/type/${id}`);
-  useEffect(() => {
-    getType();
-  }, []);
-
-  async function getType() {
-    await axios
-      .get(`https://pokeapi.co/api/v2/type/${id}`)
-      .then((response) => {
-        console.log(response.data.pokemon);
-        setPokemon(response.data.pokemon);
-      })
-      .catch((e) => console.log(e));
-  }
+  const { data, loading, error } = useFetch(
+    `https://pokeapi.co/api/v2/type/${typeName}`
+  );
 
   return (
     <>
-      <div>hello from pokemonType {id}</div>
+      <div>hello from {typeName}</div>
       <Container>
-        {pokemon ? (
+        {data.pokemon ? (
           <div>
-            {pokemon.map((item, idx) => {
+            {data.pokemon.map((item) => {
               return (
                 <Pokemon
-                  key={idx}
+                  key={item.pokemon.name}
                   onClick={() => {
                     navigate(`/pokemon/${item.pokemon.name}`);
                   }}

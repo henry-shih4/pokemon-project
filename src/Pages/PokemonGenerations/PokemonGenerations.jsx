@@ -20,12 +20,12 @@ const Type = styled.div`
 `;
 
 export default function PokemonTypes() {
-  const { data, loading } = useFetch("https://pokeapi.co/api/v2/type/");
+  const { data, loading } = useFetch("https://pokeapi.co/api/v2/generation/");
   const navigate = useNavigate();
 
   return (
     <>
-      <h1> pokemon types</h1>
+      <h1> pokemon generations</h1>
       <Container>
         {data.results
           ? data.results.map((item) => {
@@ -33,10 +33,10 @@ export default function PokemonTypes() {
                 <Type
                   key={item.name}
                   onClick={() => {
-                    navigate(`/types/${item.name}`);
+                    navigate(`/generation/${item.name}`);
                   }}
                 >
-                  <div>{item.name}</div>
+                  {item.name}
                 </Type>
               );
             })
