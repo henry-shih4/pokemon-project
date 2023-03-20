@@ -23,6 +23,7 @@ export default function PokemonTypes() {
   const { data, loading } = useFetch("https://pokeapi.co/api/v2/type/");
   const navigate = useNavigate();
 
+
   return (
     <>
       <h1> pokemon types</h1>

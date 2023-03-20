@@ -6,23 +6,26 @@ import Pokemon from "./Pages/PokemonProfile/Pokemon";
 import Home from "./Pages/Home/Home";
 import PokemonGenerations from "./Pages/PokemonGenerations/PokemonGenerations";
 import PokemonGeneration from "./Pages/PokemonGenerations/PokemonGeneration";
+import { PokemonProvider } from "./components/PokemonContext";
 
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/types" element={<PokemonTypes />} />
-          <Route path="/types/:typeName" element={<PokemonType />} />
-          <Route path="/pokemon/:name" element={<Pokemon />} />
-          <Route path="/generation" element={<PokemonGenerations />} />
-          <Route
-            path="/generation/:generationNumber"
-            element={<PokemonGeneration />}
-          />
-        </Routes>
-      </BrowserRouter>
+      <PokemonProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/types" element={<PokemonTypes />} />
+            <Route path="/types/:typeName" element={<PokemonType />} />
+            <Route path="/pokemon/:name" element={<Pokemon />} />
+            <Route path="/generation" element={<PokemonGenerations />} />
+            <Route
+              path="/generation/:generationNumber"
+              element={<PokemonGeneration />}
+            />
+          </Routes>
+        </BrowserRouter>
+      </PokemonProvider>
     </div>
   );
 }
