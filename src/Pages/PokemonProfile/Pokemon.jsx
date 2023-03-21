@@ -1,23 +1,40 @@
-import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { useFetch } from "../../resourcing/useFetch";
+import React, { useEffect, useState } from "react";
+import { useParams, useLocation } from "react-router-dom";
+import axios from "axios";
+import Card from "./Card";
 
 export default function Pokemon() {
   const { name } = useParams();
-  const { data, loading, error } = useFetch(
-    `https://pokeapi.co/api/v2/pokemon/${name}`
-  );
-  // const { speciesInfo, speciesLoading, speciesError } = useFetch(
-  //   `https://pokeapi.co/api/v2/pokemon-species/${name}/`
-  // );
+  const [pokeData, setPokeData] = useState([]);
+  const { state } = useLocation();
+
+  const fetchPokemon = async () => {
+    console.log("making new fetch request");
+    const data = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
+    setPokeData(data.data);
+  };
+
+  useEffect(() => {
+    if (state) {
+      setPokeData(state.item);
+    } else {
+      fetchPokemon();
+    }
+  }, []);
 
   return (
     <>
       <div>
-        {data.name ? (
+        {pokeData.name ? (
           <>
-            <div>{data.name}</div>
-            <img src={data.sprites.front_default} />
+            <Card
+              name={pokeData.name}
+              img={pokeData.sprites.front_default}
+              id={pokeData.id}
+              stats={pokeData.stats}
+              abilities={pokeData.abilities}
+              types={pokeData.types}
+            />
           </>
         ) : null}
       </div>

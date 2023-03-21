@@ -1,6 +1,5 @@
 import { createContext } from "react";
-import { useState, useEffect, useCallback } from "react";
-import { useFetch } from "../resourcing/useFetch";
+import { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 
 const PokemonContext = createContext();
@@ -11,36 +10,41 @@ function PokemonProvider(props) {
   const [url, setUrl] = useState(
     "https://pokeapi.co/api/v2/pokemon/?limit=1500"
   );
-  const [nextUrl, setNextUrl] = useState();
-  const [prevUrl, setPrevUrl] = useState();
-  const [pokeDex, setPokeDex] = useState();
 
   const pokeFun = async () => {
-    console.log("running expensive as fk fetch");
     setLoading(true);
+    console.log("running expensive as fk fetch");
     const res = await axios.get(url);
-    setNextUrl(res.data.next);
-    setPrevUrl(res.data.previous);
-    getPokemon(res.data.results);
+    await getPokemon(res.data.results);
     setLoading(false);
+    console.log("fetch finished");
   };
+
   const getPokemon = async (res) => {
-    res.map(async (item) => {
-      const result = await axios.get(item.url);
-      setPokeData((state) => {
-        state = [...state, result.data];
-        state.sort((a, b) => (a.id > b.id ? 1 : -1));
-        return state;
-      });
-    });
+    return await Promise.all(
+      res.map(async (item) => {
+        const result = await axios.get(item.url);
+        setPokeData((state) => {
+          state = [...state, result.data];
+          state.sort((a, b) => (a.id > b.id ? 1 : -1));
+          return state;
+        });
+        setLoading(true);
+        return loading;
+      })
+    );
   };
+
+  const pokeList = useMemo(() => {
+    return pokeData;
+  }, [pokeData]);
 
   useEffect(() => {
     pokeFun();
   }, [url]);
 
   return (
-    <PokemonContext.Provider value={{ pokeData, loading }}>
+    <PokemonContext.Provider value={{ pokeList, loading }}>
       {props.children}
     </PokemonContext.Provider>
   );

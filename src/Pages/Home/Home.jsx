@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-
+import Loading from "../../components/Loading";
 
 const Container = styled.section`
   height: 100dvh;
@@ -24,7 +24,6 @@ const ButtonLink = styled(NavLink)`
 `;
 
 export default function Home() {
-
   return (
     <>
       <Container>
@@ -33,6 +32,7 @@ export default function Home() {
           <ButtonLink to="/types">Type</ButtonLink>
           <ButtonLink to="/generation">Generation</ButtonLink>
         </Links>
+        {/* <Loading /> */}
       </Container>
     </>
   );
