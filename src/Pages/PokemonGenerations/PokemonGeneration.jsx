@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState, useMemo } from "react";
+import { useContext, useEffect, useState, useMemo, useCallback } from "react";
 import { PokemonContext } from "../../components/PokemonContext";
 import Loading from "../../components/Loading";
 
@@ -43,14 +43,14 @@ const LoadingScreen = styled.div`
 `;
 
 export default function PokemonType() {
-  const [generationNumber, setGenerationNumber] = useState('1');
+  const [generationNumber, setGenerationNumber] = useState("1");
   const [start, setStart] = useState();
   const [end, setEnd] = useState();
   const { pokeList, loading } = useContext(PokemonContext);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (generationNumber === '1') {
+  const generation = useCallback(() => {
+    if (generationNumber === "1") {
       setStart(0);
       setEnd(151);
     }
@@ -58,37 +58,46 @@ export default function PokemonType() {
       setStart(151);
       setEnd(251);
     }
-    if (generationNumber === '3') {
+    if (generationNumber === "3") {
       setStart(251);
       setEnd(386);
     }
-    if (generationNumber === '4') {
+    if (generationNumber === "4") {
       setStart(386);
       setEnd(493);
     }
-    if (generationNumber === '5') {
+    if (generationNumber === "5") {
       setStart(493);
       setEnd(649);
     }
-    if (generationNumber === '6') {
+    if (generationNumber === "6") {
       setStart(649);
       setEnd(721);
     }
-    if (generationNumber === '7') {
+    if (generationNumber === "7") {
       setStart(721);
       setEnd(809);
     }
-    if (generationNumber === '8') {
+    if (generationNumber === "8") {
       setStart(809);
       setEnd(905);
     }
-    if (generationNumber === '9') {
+    if (generationNumber === "9") {
       setStart(905);
       setEnd(1010);
     }
   }, [generationNumber]);
 
-  
+  const pokeData = useMemo(() => {
+    generation();
+    let pokemon = pokeList;
+    return pokemon;
+  }, [pokeList, start, end, generation]);
+
+  useEffect(() => {
+    console.log(generationNumber);
+  });
+
   return (
     <>
       {loading ? (
@@ -113,8 +122,8 @@ export default function PokemonType() {
             <option value={9}>Generation 9</option>
           </select>
           <Container>
-            {pokeList
-              ? pokeList.slice(start, end).map((item) => {
+            {pokeData
+              ? pokeData.slice(start, end).map((item) => {
                   return (
                     <Pokemon
                       key={item.id}

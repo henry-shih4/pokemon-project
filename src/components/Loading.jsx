@@ -8,6 +8,7 @@ const spinAnimation = keyframes`
 `;
 
 const Spinner = styled.img`
+  height: 150px;
   animation: 1s linear infinite ${spinAnimation};
 `;
 

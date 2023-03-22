@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -61,8 +62,47 @@ const Bar = styled.div`
   border-radius: 10px;
 `;
 
+const TypeIcon = styled.img`
+  height: 36px;
+  width: 36px;
+`;
+
+const Type = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+`;
+
 export default function Card(props) {
   const { name, img, id, stats, types, abilities } = props;
+  const typeOne = types[0].type.name;
+  let typeTwo = null;
+  if (types[1]) {
+    typeTwo = types[1].type.name;
+  }
+
+  const typeMap = {
+    grass: { img: "/type-icons/grass-icon.png", color: "#78C850" },
+    poison: { img: "/type-icons/poison-icon.png", color: "#A040A0" },
+    normal: { img: "/type-icons/normal-icon.png", color: "#A8A878" },
+    fighting: { img: "/type-icons/fighting-icon.png", color: "#C03028" },
+    flying: { img: "/type-icons/flying-icon.png", color: "#A990F0" },
+    ground: { img: "/type-icons/ground-icon.png", color: "#E0C068" },
+    ghost: { img: "/type-icons/ghost-icon.png", color: "#705898" },
+    water: { img: "/type-icons/water-icon.png", color: "#6890F0" },
+    fire: { img: "/type-icons/fire-icon.png", color: "#EF8030" },
+    bug: { img: "/type-icons/bug-icon.png", color: "#A8B821" },
+    electric: { img: "/type-icons/electric-icon.png", color: "#F8D030" },
+    rock: { img: "/type-icons/rock-icon.png", color: "#B8A038" },
+    steel: { img: "/type-icons/steel-icon.png", color: "#B8B8D0" },
+    ice: { img: "/type-icons/ice-icon.png", color: "#98D8D8" },
+    dark: { img: "/type-icons/dark-icon.png", color: "#705848" },
+    fairy: { img: "/type-icons/fairy-icon.png", color: "#FF65D5" },
+    dragon: { img: "/type-icons/dragon-icon.png", color: "#7042F8" },
+    psychic: { img: "/type-icons/psychic-icon.png", color: "#F85888" },
+  };
+
   return (
     <Container>
       <Title>
@@ -73,8 +113,16 @@ export default function Card(props) {
         <Sprite src={img} />
         <div>
           <div>Type</div>
-          <div>{types[0].type.name}</div>
-          {types[1] ? <div>{types[1].type.name}</div> : null}
+          <Type style={{ backgroundColor: `${typeMap[typeOne].color}` }}>
+            <TypeIcon src={typeMap[typeOne].img} />
+            {types[0].type.name}
+          </Type>
+          {typeTwo ? (
+            <Type style={{ backgroundColor: `${typeMap[typeTwo].color}` }}>
+              <TypeIcon src={typeMap[typeTwo].img} />
+              {types[1].type.name}
+            </Type>
+          ) : null}
         </div>
         <div>
           <div>Abilities</div>

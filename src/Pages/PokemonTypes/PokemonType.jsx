@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
-import { useContext, useEffect, useState, useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { PokemonContext } from "../../components/PokemonContext";
 import Loading from "../../components/Loading";
 const Container = styled.div`
