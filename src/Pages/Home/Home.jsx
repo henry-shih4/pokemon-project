@@ -32,21 +32,38 @@ const LoadingScreen = styled.div`
 
 const Search = styled.input``;
 
-const Form = styled.div``;
+const SearchContainer = styled.div``;
 
-const DropDown = styled.div``;
+const Form = styled.div`
+
+`;
+
+const DropDown = styled.div`
+  position: absolute;
+  bottom: full;
+`;
+
+const Sprite = styled.img`
+  height: 60px;
+  width: 60px;
+`;
+
+const Result = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`;
 
 export default function Home() {
   const { pokeList, loading } = useContext(PokemonContext);
   const [search, setSearch] = useState("");
   const [results, setResults] = useState("");
   const navigate = useNavigate();
-  console.log(pokeList);
+
   function findResults() {
-    console.log("filtering");
     const filterList = pokeList.filter((item) => {
       if (!isNaN(parseInt(search))) {
-        return item.id === (parseInt(search));
+        return item.id === parseInt(search);
       } else {
         return item.name.includes(search);
       }
@@ -56,7 +73,6 @@ export default function Home() {
   }
 
   useEffect(() => {
-    console.log(search);
     findResults();
   }, [search]);
 
@@ -77,28 +93,33 @@ export default function Home() {
 
           <Form />
           <label htmlFor="search">Pokemon Name/Number</label>
-          <Search
-            id="search"
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-            }}
-          />
-          <DropDown>
-            {results.length && search
-              ? results.map((item) => {
-                  return (
-                    <div
-                      onClick={() => {
-                        navigate(`/pokemon/${item.name}`);
-                      }}
-                    >
-                      {item.name}
-                    </div>
-                  );
-                })
-              : null}
-          </DropDown>
+          <SearchContainer>
+            <Search
+              id="search"
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+            />
+            <DropDown>
+              {results.length && search
+                ? results.map((item) => {
+                    return (
+                      <Result
+                        onClick={() => {
+                          navigate(`/pokemon/${item.name}`);
+                        }}
+                      >
+                        <Sprite src={item.sprites.front_default} />
+
+                        <div>{item.name}</div>
+                      </Result>
+                    );
+                  })
+                : null}
+            </DropDown>
+          </SearchContainer>
+
           <Form />
         </Container>
       )}

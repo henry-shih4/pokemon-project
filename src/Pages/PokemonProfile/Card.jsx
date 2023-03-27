@@ -214,8 +214,8 @@ export default function Card(props) {
               ? abilities.map((item) => {
                   return (
                     <div key={item.ability.name}>
-                      {item.is_hidden == true ? <>(hidden) </> : null}
                       {item.ability.name}
+                      {item.is_hidden == true ? <> (hidden) </> : null}
                     </div>
                   );
                 })
