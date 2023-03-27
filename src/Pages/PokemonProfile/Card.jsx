@@ -15,9 +15,11 @@ const Info = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
-  items-align: center;
+  align-items: center;
   gap: 2rem;
+  margin: 1rem;
 `;
+
 const Sprite = styled.img`
   height: 200px;
   width: 200px;
@@ -28,23 +30,24 @@ const Sprite = styled.img`
 const Title = styled.h1`
   display: flex;
   gap: 1rem;
-  align-text: center;
+  text-align: center;
   text-transform: capitalize;
 `;
 
 const Stats = styled.div`
   display: flex;
-
+  justify-content: center;
+  align-items: center;
   gap: 1rem;
 `;
 
 const StatContainer = styled.div`
   display: flex;
-  flex-direction: column;j
-  justify-content:center;
-  align-items:center;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 1rem;
-  width:100%;
+  width: 100%;
 `;
 
 const StatName = styled.div`
@@ -56,10 +59,11 @@ const StatName = styled.div`
 `;
 
 const Bar = styled.div`
-  width: 300px;
+  width: 240px;
   height: 10px;
   display: flex;
   border-radius: 10px;
+  background-color: lightgray;
 `;
 
 const TypeIcon = styled.img`
@@ -68,12 +72,37 @@ const TypeIcon = styled.img`
 `;
 
 const Type = styled.div`
+  padding: 6px;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
+  gap: 0 0.5rem;
+  border-radius: 10px;
+  color: white;
+  font-size: 18px;
+  width: 100px;
 `;
 
+const CategoryTitle = styled.div`
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+`;
+
+const Category = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
+const Section = styled.section`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: start;
+  align-items: start;
+  gap: 1rem;
+`;
 export default function Card(props) {
   const { name, img, id, stats, types, abilities } = props;
   const typeOne = types[0].type.name;
@@ -83,24 +112,76 @@ export default function Card(props) {
   }
 
   const typeMap = {
-    grass: { img: "/type-icons/grass-icon.png", color: "#78C850" },
-    poison: { img: "/type-icons/poison-icon.png", color: "#A040A0" },
-    normal: { img: "/type-icons/normal-icon.png", color: "#A8A878" },
-    fighting: { img: "/type-icons/fighting-icon.png", color: "#C03028" },
-    flying: { img: "/type-icons/flying-icon.png", color: "#A990F0" },
-    ground: { img: "/type-icons/ground-icon.png", color: "#E0C068" },
-    ghost: { img: "/type-icons/ghost-icon.png", color: "#705898" },
-    water: { img: "/type-icons/water-icon.png", color: "#6890F0" },
-    fire: { img: "/type-icons/fire-icon.png", color: "#EF8030" },
-    bug: { img: "/type-icons/bug-icon.png", color: "#A8B821" },
-    electric: { img: "/type-icons/electric-icon.png", color: "#F8D030" },
-    rock: { img: "/type-icons/rock-icon.png", color: "#B8A038" },
-    steel: { img: "/type-icons/steel-icon.png", color: "#B8B8D0" },
-    ice: { img: "/type-icons/ice-icon.png", color: "#98D8D8" },
-    dark: { img: "/type-icons/dark-icon.png", color: "#705848" },
-    fairy: { img: "/type-icons/fairy-icon.png", color: "#FF65D5" },
-    dragon: { img: "/type-icons/dragon-icon.png", color: "#7042F8" },
-    psychic: { img: "/type-icons/psychic-icon.png", color: "#F85888" },
+    grass: {
+      name: "grass",
+      img: "/type-icons/grass-icon.png",
+      color: "#78C850",
+    },
+    poison: {
+      name: "poison",
+      img: "/type-icons/poison-icon.png",
+      color: "#A040A0",
+    },
+    normal: {
+      name: "normal",
+      img: "/type-icons/normal-icon.png",
+      color: "#A8A878",
+    },
+    fighting: {
+      name: "fighting",
+      img: "/type-icons/fighting-icon.png",
+      color: "#ac2922",
+    },
+    flying: {
+      name: "flying",
+      img: "/type-icons/flying-icon.png",
+      color: "#A990F0",
+    },
+    ground: {
+      name: "ground",
+      img: "/type-icons/ground-icon.png",
+      color: "#E0C068",
+    },
+    ghost: {
+      name: "ghost",
+      img: "/type-icons/ghost-icon.png",
+      color: "#705898",
+    },
+    water: {
+      name: "water",
+      img: "/type-icons/water-icon.png",
+      color: "#6890F0",
+    },
+    fire: { name: "fire", img: "/type-icons/fire-icon.png", color: "#EF8030" },
+    bug: { name: "bug", img: "/type-icons/bug-icon.png", color: "#A8B821" },
+    electric: {
+      name: "electric",
+      img: "/type-icons/electric-icon.png",
+      color: "#e2d456",
+    },
+    rock: { name: "rock", img: "/type-icons/rock-icon.png", color: "#B8A038" },
+    steel: {
+      name: "steel",
+      img: "/type-icons/steel-icon.png",
+      color: "#B8B8D0",
+    },
+    ice: { name: "ice", img: "/type-icons/ice-icon.png", color: "#98D8D8" },
+    dark: { name: "dark", img: "/type-icons/dark-icon.png", color: "#705848" },
+    fairy: {
+      name: "fairy",
+      img: "/type-icons/fairy-icon.png",
+      color: "#FF65D5",
+    },
+    dragon: {
+      name: "dragon",
+      img: "/type-icons/dragon-icon.png",
+      color: "#1b4688",
+    },
+    psychic: {
+      name: "psychic",
+      img: "/type-icons/psychic-icon.png",
+      color: "#F85888",
+    },
   };
 
   return (
@@ -111,32 +192,36 @@ export default function Card(props) {
       </Title>
       <Info>
         <Sprite src={img} />
-        <div>
-          <div>Type</div>
-          <Type style={{ backgroundColor: `${typeMap[typeOne].color}` }}>
-            <TypeIcon src={typeMap[typeOne].img} />
-            {types[0].type.name}
-          </Type>
-          {typeTwo ? (
-            <Type style={{ backgroundColor: `${typeMap[typeTwo].color}` }}>
-              <TypeIcon src={typeMap[typeTwo].img} />
-              {types[1].type.name}
+        <Section>
+          <CategoryTitle>Type</CategoryTitle>
+          <Category>
+            <Type style={{ backgroundColor: `${typeMap[typeOne].color}` }}>
+              <TypeIcon src={typeMap[typeOne].img} />
+              {types[0].type.name}
             </Type>
-          ) : null}
-        </div>
-        <div>
-          <div>Abilities</div>
-          {abilities
-            ? abilities.map((item) => {
-                return (
-                  <div key={item.ability.name}>
-                    {item.ability.name}
-                    {item.is_hidden == true ? <>hidden</> : null}
-                  </div>
-                );
-              })
-            : null}
-        </div>
+            {typeTwo ? (
+              <Type style={{ backgroundColor: `${typeMap[typeTwo].color}` }}>
+                <TypeIcon src={typeMap[typeTwo].img} />
+                {types[1].type.name}
+              </Type>
+            ) : null}
+          </Category>
+        </Section>
+        <Section>
+          <CategoryTitle>Abilities</CategoryTitle>
+          <Category>
+            {abilities
+              ? abilities.map((item) => {
+                  return (
+                    <div key={item.ability.name}>
+                      {item.is_hidden == true ? <>(hidden) </> : null}
+                      {item.ability.name}
+                    </div>
+                  );
+                })
+              : null}
+          </Category>
+        </Section>
       </Info>
       <StatContainer>
         {stats

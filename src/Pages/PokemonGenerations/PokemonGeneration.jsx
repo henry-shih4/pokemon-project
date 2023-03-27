@@ -4,13 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState, useMemo, useCallback } from "react";
 import { PokemonContext } from "../../components/PokemonContext";
 import Loading from "../../components/Loading";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const Container = styled.div`
   background-color: lightgray;
   display: grid;
   width: 90%;
   margin: auto;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 `;
 
 const Pokemon = styled.div`
@@ -28,10 +29,7 @@ const Title = styled.div`
   text-transform: capitalize;
 `;
 
-const Sprite = styled.img`
-  height: 140px;
-  width: 140px;
-
+const Sprite = styled(LazyLoadImage)`
   image-rendering: pixelated;
 `;
 
@@ -94,9 +92,6 @@ export default function PokemonType() {
     return pokemon;
   }, [pokeList, start, end, generation]);
 
-  useEffect(() => {
-    console.log(generationNumber);
-  });
 
   return (
     <>
@@ -133,8 +128,13 @@ export default function PokemonType() {
                         });
                       }}
                     >
-                      <Title>{item.name}</Title>
-                      <Sprite src={item.sprites.front_default} />
+                      <Title>{item.name} #{item.id}</Title>
+                      <Sprite
+                        width={140}
+                        height={140}
+                        src={item.sprites.front_default}
+                        placeholderSrc={"/pokeball.svg"}
+                      />
                     </Pokemon>
                   );
                 })
