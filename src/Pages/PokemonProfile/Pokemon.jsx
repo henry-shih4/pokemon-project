@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Card from "./Card";
 import Loading from "../../components/Loading";
+import EvolutionChain from "./EvolutionChain";
 import { PokemonContext } from "../../components/PokemonContext";
 
 export default function Pokemon() {
-  const { name } = useParams();
+  const navigate = useNavigate();
+  const { id } = useParams();
   const [pokeData, setPokeData] = useState([]);
   const { state } = useLocation();
   const [speciesData, setSpeciesData] = useState();
@@ -16,22 +18,38 @@ export default function Pokemon() {
   const [secondEvo, setSecondEvo] = useState("");
   const [evolutions, setEvolutions] = useState(null);
   const { pokeList, loading } = useContext(PokemonContext);
+  const [speciesLoading, setSpeciesLoading] = useState(false);
+  const [speciesError, setSpeciesError] = useState(false);
 
   const fetchPokemon = async () => {
     console.log("making new fetch request");
-    const data = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
+    const data = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
     setPokeData(data.data);
   };
 
   const fetchSpecies = async () => {
-    const data = await axios.get(
-      `https://pokeapi.co/api/v2/pokemon-species/${name}/`
-    );
-    setSpeciesData(data.data);
-
-    const evolutionChain = await axios.get(data.data.evolution_chain.url);
-    console.log(evolutionChain);
-    setEvolutionData(evolutionChain.data);
+    axios
+      .get(`https://pokeapi.co/api/v2/pokemon-species/${id}/`)
+      .then((response) => {
+        setSpeciesLoading(true);
+        setSpeciesData(response.data);
+        return response;
+      })
+      .catch((error) => {
+        console.log(error);
+        setSpeciesError(true);
+      })
+      .then((response) => {
+        axios.get(response.data.evolution_chain.url).then((response) => {
+          console.log(response);
+          setEvolutionData(response.data);
+          setSpeciesLoading(false);
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        setSpeciesError(true);
+      });
   };
 
   useEffect(() => {
@@ -41,15 +59,19 @@ export default function Pokemon() {
     } else {
       fetchPokemon();
     }
-  }, []);
+  }, [id]);
 
   function filterEvolution(base, one, two) {
     console.log("filtering evo");
+    const first = pokeList.filter((item) => {
+      return item.name == base;
+    });
     if (one || two) {
       const evolve = pokeList.filter((item) => {
-        return item.name == base || item.name == one || item.name == two;
+        return item.name == one || item.name == two;
       });
-      setEvolutions(evolve);
+      const evolutions = [...first, ...evolve];
+      setEvolutions(evolutions);
     }
   }
 
@@ -71,6 +93,7 @@ export default function Pokemon() {
         });
       }
       if (
+        evolutionData.chain.evolves_to[0] &&
         evolutionData.chain.evolves_to[0].evolves_to[0] &&
         evolutionData.chain.evolves_to[0].evolves_to[0].evolution_details[0]
           .trigger.name !== "use-item"
@@ -98,6 +121,7 @@ export default function Pokemon() {
             .name,
         });
       } else if (
+        evolutionData.chain.evolves_to[0] &&
         evolutionData.chain.evolves_to[0].evolves_to[0] &&
         evolutionData.chain.evolves_to[0].evolves_to[0].evolution_details[0]
           .trigger.name === "use-item"
@@ -119,19 +143,35 @@ export default function Pokemon() {
     if (firstEvo || secondEvo) {
       filterEvolution(baseEvo, firstEvo.evolution, secondEvo.evolution);
     }
-  }, [firstEvo, secondEvo, evolutionData]);
+  }, [firstEvo, secondEvo, pokeList]);
 
   useEffect(() => {
-    console.log(evolutionData);
-    console.log(evolutions);
-    console.log(baseEvo, firstEvo, secondEvo);
+    // console.log(baseEvo);
+    // console.log(evolutionData);
+    // console.log(evolutions);
+    // console.log(baseEvo, firstEvo, secondEvo);
     console.log(speciesData);
+    console.log(pokeData);
   });
 
   return (
     <>
+      <button
+        onClick={() => {
+          navigate("/types");
+        }}
+      >
+        back to types
+      </button>
+      <button
+        onClick={() => {
+          navigate("/generation");
+        }}
+      >
+        back to generations
+      </button>
       <div>
-        {pokeData.name ? (
+        {pokeData.name && speciesData ? (
           <>
             <Card
               name={pokeData.name}
@@ -140,45 +180,20 @@ export default function Pokemon() {
               stats={pokeData.stats}
               abilities={pokeData.abilities}
               types={pokeData.types}
+              description={speciesData.flavor_text_entries}
+              generation={speciesData.generation.name}
             />
           </>
         ) : null}
       </div>
 
-      {evolutions ? (
-        <>
-          <div>
-            {evolutions[0] ? (
-              <>
-                <img src={evolutions[0].sprites.front_default} />
-              </>
-            ) : null}
-          </div>
-          <div>
-            <div>{firstEvo.level ? firstEvo.level : null}</div>
-            <div>{firstEvo.item ? firstEvo.item : null}</div>
-          </div>
-          <div>
-            {evolutions[1] ? (
-              <>
-                <img src={evolutions[1].sprites.front_default} />
-              </>
-            ) : null}
-          </div>
-          <div>
-            <div>{secondEvo.level ? secondEvo.level : null}</div>
-            <div>{secondEvo.item ? secondEvo.item : null}</div>
-            <div>{secondEvo.trigger ? secondEvo.trigger : null}</div>
-          </div>
-          <div>
-            {evolutions[2] ? (
-              <img src={evolutions[2].sprites.front_default} />
-            ) : null}
-          </div>
-        </>
-      ) : (
-        <Loading />
-      )}
+      <EvolutionChain
+        evolutions={evolutions}
+        speciesLoading={speciesLoading}
+        speciesError={speciesError}
+        firstEvo={firstEvo}
+        secondEvo={secondEvo}
+      />
     </>
   );
 }

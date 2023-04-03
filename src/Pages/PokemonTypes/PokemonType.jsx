@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useContext, useMemo, useState } from "react";
 import { PokemonContext } from "../../components/PokemonContext";
 import Loading from "../../components/Loading";
@@ -180,6 +180,13 @@ export default function PokemonType() {
 
   return (
     <>
+      <button
+        onClick={() => {
+          navigate("/");
+        }}
+      >
+        Back to Home
+      </button>
       {loading || !pokeData ? (
         <Loading />
       ) : (
@@ -190,7 +197,6 @@ export default function PokemonType() {
                 <Type
                   key={item.name}
                   onClick={() => {
-                    console.log(item.name);
                     setTypeName(item.name);
                   }}
                 >

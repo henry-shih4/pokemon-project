@@ -92,9 +92,15 @@ export default function PokemonType() {
     return pokemon;
   }, [pokeList, start, end, generation]);
 
-
   return (
     <>
+      <button
+        onClick={() => {
+          navigate("/");
+        }}
+      >
+        Back to Home
+      </button>
       {loading ? (
         <LoadingScreen>
           <Loading />
@@ -128,7 +134,9 @@ export default function PokemonType() {
                         });
                       }}
                     >
-                      <Title>{item.name} #{item.id}</Title>
+                      <Title>
+                        {item.name} #{item.id}
+                      </Title>
                       <Sprite
                         width={140}
                         height={140}

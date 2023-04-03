@@ -14,7 +14,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/types" element={<PokemonType />} />
-            <Route path="/pokemon/:name" element={<Pokemon />} />
+            <Route path="/pokemon/:id" element={<Pokemon />} />
             <Route path="/generation" element={<PokemonGeneration />} />
           </Routes>
         </BrowserRouter>

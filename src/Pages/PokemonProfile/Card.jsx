@@ -7,7 +7,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 70vh;
   width: 100%;
 `;
 
@@ -103,8 +103,22 @@ const Section = styled.section`
   align-items: start;
   gap: 1rem;
 `;
+
+const Box = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+`;
+const MainSection = styled.div`
+  display: flex;
+  gap: 2rem;
+`;
+
 export default function Card(props) {
-  const { name, img, id, stats, types, abilities } = props;
+  const { name, img, id, stats, types, abilities, description, generation } =
+    props;
+  const [entry, setEntry] = useState();
+
   const typeOne = types[0].type.name;
   let typeTwo = null;
   if (types[1]) {
@@ -184,6 +198,27 @@ export default function Card(props) {
     },
   };
 
+  useEffect(() => {
+    if (description.length > 0) {
+      if (generation === "generation-v") {
+        setEntry(description[1].flavor_text);
+      } else if (generation === "generation-vi") {
+        setEntry(description[14].flavor_text);
+      } else if (
+        generation === "generation-vii" ||
+        generation === "generation-viii"
+      ) {
+        if (description.length <= 1) {
+          setEntry(description[0].flavor_text);
+        } else {
+          setEntry(description[7].flavor_text);
+        }
+      } else {
+        setEntry(description[1].flavor_text);
+      }
+    }
+  }, [generation, description]);
+
   return (
     <Container>
       <Title>
@@ -192,36 +227,44 @@ export default function Card(props) {
       </Title>
       <Info>
         <Sprite src={img} />
-        <Section>
-          <CategoryTitle>Type</CategoryTitle>
-          <Category>
-            <Type style={{ backgroundColor: `${typeMap[typeOne].color}` }}>
-              <TypeIcon src={typeMap[typeOne].img} />
-              {types[0].type.name}
-            </Type>
-            {typeTwo ? (
-              <Type style={{ backgroundColor: `${typeMap[typeTwo].color}` }}>
-                <TypeIcon src={typeMap[typeTwo].img} />
-                {types[1].type.name}
-              </Type>
-            ) : null}
-          </Category>
-        </Section>
-        <Section>
-          <CategoryTitle>Abilities</CategoryTitle>
-          <Category>
-            {abilities
-              ? abilities.map((item) => {
-                  return (
-                    <div key={item.ability.name}>
-                      {item.ability.name}
-                      {item.is_hidden == true ? <> (hidden) </> : null}
-                    </div>
-                  );
-                })
-              : null}
-          </Category>
-        </Section>
+        <Box>
+          <MainSection>
+            <Section>
+              <CategoryTitle>Type</CategoryTitle>
+              <Category>
+                <Type style={{ backgroundColor: `${typeMap[typeOne].color}` }}>
+                  <TypeIcon src={typeMap[typeOne].img} />
+                  {types[0].type.name}
+                </Type>
+                {typeTwo ? (
+                  <Type
+                    style={{ backgroundColor: `${typeMap[typeTwo].color}` }}
+                  >
+                    <TypeIcon src={typeMap[typeTwo].img} />
+                    {types[1].type.name}
+                  </Type>
+                ) : null}
+              </Category>
+            </Section>
+            <Section>
+              <CategoryTitle>Abilities</CategoryTitle>
+              <Category>
+                {abilities
+                  ? abilities.map((item) => {
+                      return (
+                        <div key={item.ability.name}>
+                          {item.ability.name}
+                          {item.is_hidden == true ? <> (hidden) </> : null}
+                        </div>
+                      );
+                    })
+                  : null}
+              </Category>
+            </Section>
+          </MainSection>
+          <div>{entry}</div>
+          <div>{generation}</div>
+        </Box>
       </Info>
       <StatContainer>
         {stats
