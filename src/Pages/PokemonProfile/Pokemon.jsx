@@ -5,6 +5,23 @@ import Card from "./Card";
 import Loading from "../../components/Loading";
 import EvolutionChain from "./EvolutionChain";
 import { PokemonContext } from "../../components/PokemonContext";
+import styled from "styled-components";
+
+const ButtonLink = styled.div`
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: #fff;
+  background-color: #ee1515;
+  margin: 1em;
+`;
 
 export default function Pokemon() {
   const navigate = useNavigate();
@@ -28,8 +45,9 @@ export default function Pokemon() {
   };
 
   const fetchSpecies = async () => {
+   console.log({id})
     axios
-      .get(`https://pokeapi.co/api/v2/pokemon-species/${id}/`)
+      .get(`https://pokeapi.co/api/v2/pokemon-species/${id.split("-")[0]}/`)
       .then((response) => {
         setSpeciesLoading(true);
         setSpeciesData(response.data);
@@ -156,20 +174,20 @@ export default function Pokemon() {
 
   return (
     <>
-      <button
+      <ButtonLink
         onClick={() => {
           navigate("/types");
         }}
       >
-        back to types
-      </button>
-      <button
+        Types
+      </ButtonLink>
+      <ButtonLink
         onClick={() => {
           navigate("/generation");
         }}
       >
-        back to generations
-      </button>
+        Generations
+      </ButtonLink>
       <div>
         {pokeData.name && speciesData ? (
           <>

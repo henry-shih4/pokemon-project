@@ -1,27 +1,55 @@
 import React from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import { useContext, useMemo, useState } from "react";
 import { PokemonContext } from "../../components/PokemonContext";
 import Loading from "../../components/Loading";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import Navigation from "../../components/Navigation";
 
 const Container = styled.div`
-  background-color: lightgray;
+  font-family: Roboto;
+  background-color: #ffffff;
   display: grid;
   width: 90%;
+  min-width: 350px;
   margin: auto;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ButtonLink = styled(NavLink)`
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: #fff;
+  background-color: #ee1515;
+  margin: 1em;
 `;
 
 const Pokemon = styled.div`
-  padding: 1em;
-  font-size: 24px;
-  cursor: pointer;
   display: flex;
   flex-direction: column;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
   justify-content: center;
   align-items: center;
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
 `;
 
 const Title = styled.div`
@@ -39,10 +67,24 @@ const Title = styled.div`
 const Name = styled.div`
   text-align: center;
   text-transform: capitalize;
+  padding: 4px;
+  text-align: center;
+  text-transform: capitalize;
+  font-size:20px;
+  span {
+    font-weight: bold;
+    font-size: 14px;
+    padding-left: 8px;
+  }
 `;
 
 const Sprite = styled(LazyLoadImage)`
   image-rendering: pixelated;
+  transition: transform 200ms linear;
+  &:hover {
+    transform: scale(1.1);
+    transition: transform 200ms linear;
+  }
 `;
 
 const TypeBox = styled.div`
@@ -52,6 +94,7 @@ const TypeBox = styled.div`
   justify-content: center;
   align-items: center;
   padding: 2rem;
+  text-transform: capitalize;
 `;
 const Type = styled.div`
   width: 120px;
@@ -180,13 +223,7 @@ export default function PokemonType() {
 
   return (
     <>
-      <button
-        onClick={() => {
-          navigate("/");
-        }}
-      >
-        Back to Home
-      </button>
+      <Navigation />
       {loading || !pokeData ? (
         <Loading />
       ) : (
@@ -218,7 +255,7 @@ export default function PokemonType() {
               style={{ backgroundColor: `${typeMap[typeName].color}` }}
             >
               <TypeIcon src={typeMap[typeName].img} />
-              <div>{typeName}</div>
+              <div>{typeName} </div>
             </CurrentType>
           </Title>
           <Container>
@@ -233,7 +270,9 @@ export default function PokemonType() {
                         });
                       }}
                     >
-                      <Name>{item.name}</Name>
+                      <Name>
+                        {item.name} <span>#{item.id}</span>
+                      </Name>
                       <Sprite
                         width={140}
                         height={140}

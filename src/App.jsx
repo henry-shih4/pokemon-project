@@ -9,6 +9,7 @@ import { PokemonProvider } from "./components/PokemonContext";
 function App() {
   return (
     <div className="App">
+      
       <PokemonProvider>
         <BrowserRouter>
           <Routes>

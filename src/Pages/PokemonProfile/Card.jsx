@@ -3,12 +3,14 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
+  font-family: "Roboto", sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 70vh;
   width: 100%;
+  
 `;
 
 const Info = styled.div`
@@ -18,7 +20,9 @@ const Info = styled.div`
   align-items: center;
   gap: 2rem;
   margin: 1rem;
+  
 `;
+
 
 const Sprite = styled.img`
   height: 200px;
@@ -47,15 +51,16 @@ const StatContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  width: 100%;
+  width: 50%;
 `;
 
 const StatName = styled.div`
   display: flex;
-  justify-content: start;
+  justify-content: center;
   gap: 1rem;
-  align-items: center;
+  align-items:left;
   width: 140px;
+  text-transform:capitalize;
 `;
 
 const Bar = styled.div`
@@ -67,8 +72,8 @@ const Bar = styled.div`
 `;
 
 const TypeIcon = styled.img`
-  height: 36px;
-  width: 36px;
+  height: 24px;
+  width: 24px;
 `;
 
 const Type = styled.div`
@@ -81,6 +86,7 @@ const Type = styled.div`
   color: white;
   font-size: 18px;
   width: 100px;
+  text-transform:capitalize;
 `;
 
 const CategoryTitle = styled.div`
@@ -93,6 +99,7 @@ const Category = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  text-transform: capitalize;
 `;
 
 const Section = styled.section`
@@ -106,24 +113,47 @@ const Section = styled.section`
 
 const Box = styled.div`
   display: flex;
+  justify-items:center;
   flex-direction: column;
   gap: 2rem;
+  width:50%;
+  align-items:center;
 `;
 const MainSection = styled.div`
   display: flex;
+  justify-items: center;
   gap: 2rem;
 `;
+
+const Entry = styled.div`
+  padding:10px;
+  display:flex;
+  flex-direction:column;
+  gap: 10px;
+  text-align:center;
+  font-size:18px;
+  font-weight:bold;
+`
+
+const TotalStat = styled.div`
+display:flex;
+width:100%;
+justify-content:center;
+font-weight:bold;
+gap:14px;
+`
 
 export default function Card(props) {
   const { name, img, id, stats, types, abilities, description, generation } =
     props;
-  const [entry, setEntry] = useState();
-
+  const [entry, setEntry] = useState("");
+  const [totalStat, setTotalStat] = useState(0);
   const typeOne = types[0].type.name;
   let typeTwo = null;
   if (types[1]) {
     typeTwo = types[1].type.name;
   }
+
 
   const typeMap = {
     grass: {
@@ -198,6 +228,14 @@ export default function Card(props) {
     },
   };
 
+  useEffect(()=>{
+    const total = stats.reduce(function (acc, obj) {
+      return acc + obj['base_stat'];
+    }, 0);
+    setTotalStat(total);
+  },[stats])
+
+
   useEffect(() => {
     if (description.length > 0) {
       if (generation === "generation-v") {
@@ -211,10 +249,13 @@ export default function Card(props) {
         if (description.length <= 1) {
           setEntry(description[0].flavor_text);
         } else {
-          setEntry(description[7].flavor_text);
+          setEntry(description[17].flavor_text);
         }
-      } else {
-        setEntry(description[1].flavor_text);
+      } else if (generation == 'generation-ix'){
+        setEntry(description[0].flavor_text)
+      }
+      else {
+        setEntry(description[8].flavor_text);
       }
     }
   }, [generation, description]);
@@ -262,8 +303,10 @@ export default function Card(props) {
               </Category>
             </Section>
           </MainSection>
-          <div>{entry}</div>
-          <div>{generation}</div>
+          <Entry>
+            <div>{entry}</div>
+            <div>Gen {generation.split("-")[1].toUpperCase()}</div>
+          </Entry>
         </Box>
       </Info>
       <StatContainer>
@@ -274,7 +317,6 @@ export default function Card(props) {
                   <Stats>
                     <StatName>
                       <div>{stat.stat.name} </div>
-                      <div>{stat.base_stat}</div>
                     </StatName>
 
                     <Bar>
@@ -286,11 +328,15 @@ export default function Card(props) {
                         }}
                       ></div>
                     </Bar>
+                    <div>{stat.base_stat}</div>
                   </Stats>
                 </React.Fragment>
               );
             })
           : null}
+        <TotalStat>
+          <p>Total Stat:</p> <p>{totalStat}</p>
+        </TotalStat>
       </StatContainer>
     </Container>
   );
