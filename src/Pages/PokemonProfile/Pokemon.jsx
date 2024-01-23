@@ -2,26 +2,12 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Card from "./Card";
+import Navigation from "../../components/Navigation";
 import Loading from "../../components/Loading";
 import EvolutionChain from "./EvolutionChain";
 import { PokemonContext } from "../../components/PokemonContext";
-import styled from "styled-components";
 
-const ButtonLink = styled.div`
-  display: inline-block;
-  padding: 12px 24px;
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-  text-decoration: none;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  color: #fff;
-  background-color: #ee1515;
-  margin: 1em;
-`;
+
 
 export default function Pokemon() {
   const navigate = useNavigate();
@@ -45,7 +31,7 @@ export default function Pokemon() {
   };
 
   const fetchSpecies = async () => {
-   console.log({id})
+
     axios
       .get(`https://pokeapi.co/api/v2/pokemon-species/${id.split("-")[0]}/`)
       .then((response) => {
@@ -59,7 +45,7 @@ export default function Pokemon() {
       })
       .then((response) => {
         axios.get(response.data.evolution_chain.url).then((response) => {
-          console.log(response);
+          
           setEvolutionData(response.data);
           setSpeciesLoading(false);
         });
@@ -80,18 +66,23 @@ export default function Pokemon() {
   }, [id]);
 
   function filterEvolution(base, one, two) {
-    console.log("filtering evo");
+    
     const first = pokeList.filter((item) => {
       return item.name == base;
     });
     if (one || two) {
       const evolve = pokeList.filter((item) => {
-        return item.name == one || item.name == two;
+        return item.name == one || item.name == two || item.name.includes(one) || item.name.includes(two);
       });
       const evolutions = [...first, ...evolve];
       setEvolutions(evolutions);
     }
   }
+
+  useEffect(()=>{
+    // console.log(evolutions)
+    console.log(evolutionData)
+  },[pokeList])
 
   useEffect(() => {
     if (evolutionData) {
@@ -154,11 +145,28 @@ export default function Pokemon() {
             .evolution_details[0].item.name,
         });
       }
+      if (
+        evolutionData.chain.evolves_to[0].evolution_details[0]
+      ) {
+        for (const [key, value] of Object.entries(
+          evolutionData.chain.evolves_to[0].evolution_details[0]
+        )) {
+          console.log(`${key}: ${value}`);
+        }
+        // setFirstEvo({
+        //   evolution: evolutionData.chain.evolves_to[0].species.name,
+        //   trigger:
+        //     evolutionData.chain.evolves_to[0].evolution_details[0].trigger.name,
+        //   level: "happiness",
+        // });
+      }
     }
   }, [evolutionData]);
 
   useEffect(() => {
     if (firstEvo || secondEvo) {
+      console.log(firstEvo)
+      console.log(secondEvo)
       filterEvolution(baseEvo, firstEvo.evolution, secondEvo.evolution);
     }
   }, [firstEvo, secondEvo, pokeList]);
@@ -168,26 +176,13 @@ export default function Pokemon() {
     // console.log(evolutionData);
     // console.log(evolutions);
     // console.log(baseEvo, firstEvo, secondEvo);
-    console.log(speciesData);
-    console.log(pokeData);
+    // console.log(speciesData);
+    // console.log(pokeData);
   });
 
   return (
     <>
-      <ButtonLink
-        onClick={() => {
-          navigate("/types");
-        }}
-      >
-        Types
-      </ButtonLink>
-      <ButtonLink
-        onClick={() => {
-          navigate("/generation");
-        }}
-      >
-        Generations
-      </ButtonLink>
+      <Navigation/>
       <div>
         {pokeData.name && speciesData ? (
           <>

@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 
+
 const Container = styled.div`
   font-family: "Roboto", sans-serif;
   display: flex;
@@ -228,6 +229,7 @@ export default function Card(props) {
     },
   };
 
+// calculate total stat of pokemon
   useEffect(()=>{
     const total = stats.reduce(function (acc, obj) {
       return acc + obj['base_stat'];
@@ -291,9 +293,9 @@ export default function Card(props) {
               <CategoryTitle>Abilities</CategoryTitle>
               <Category>
                 {abilities
-                  ? abilities.map((item) => {
+                  ? abilities.map((item, idx) => {
                       return (
-                        <div key={item.ability.name}>
+                        <div key={idx}>
                           {item.ability.name}
                           {item.is_hidden == true ? <> (hidden) </> : null}
                         </div>
