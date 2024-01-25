@@ -81,13 +81,13 @@ export default function Pokemon() {
 
   useEffect(()=>{
     // console.log(evolutions)
-    console.log(evolutionData)
-  },[pokeList])
+    console.log(evolutions)
+  },[evolutions])
 
   useEffect(() => {
     if (evolutionData) {
       setBaseEvo(evolutionData.chain.species.name);
-
+        console.log(evolutionData)
       if (
         evolutionData.chain.evolves_to[0] &&
         evolutionData.chain.evolves_to[0].evolution_details[0].trigger.name !==
@@ -145,13 +145,26 @@ export default function Pokemon() {
             .evolution_details[0].item.name,
         });
       }
-      if (
+      if ( evolutionData.chain.evolves_to[0] &&
         evolutionData.chain.evolves_to[0].evolution_details[0]
       ) {
+        console.log(evolutionData.chain.evolves_to[0].evolution_details[0]);
+        const special = []
         for (const [key, value] of Object.entries(
           evolutionData.chain.evolves_to[0].evolution_details[0]
         )) {
-          console.log(`${key}: ${value}`);
+        console.log(`${key}: ${value}`);
+          if (Number.isInteger(value) ){
+            console.log(key, value);
+            special.push([key,value])
+            setFirstEvo({
+              evolution: evolutionData.chain.evolves_to[0].species.name,
+              trigger:
+                evolutionData.chain.evolves_to[0].evolution_details[0].trigger.name,
+              level: `${key}, ${value}`,
+            });
+          }
+        
         }
         // setFirstEvo({
         //   evolution: evolutionData.chain.evolves_to[0].species.name,
@@ -159,6 +172,7 @@ export default function Pokemon() {
         //     evolutionData.chain.evolves_to[0].evolution_details[0].trigger.name,
         //   level: "happiness",
         // });
+        console.log(special)
       }
     }
   }, [evolutionData]);
