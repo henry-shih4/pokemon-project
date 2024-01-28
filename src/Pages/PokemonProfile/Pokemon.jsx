@@ -20,9 +20,11 @@ export default function Pokemon() {
   const [firstEvo, setFirstEvo] = useState("");
   const [secondEvo, setSecondEvo] = useState("");
   const [evolutions, setEvolutions] = useState(null);
+  const [allEvolutions, setAllEvolutions] = useState([])
   const { pokeList, loading } = useContext(PokemonContext);
   const [speciesLoading, setSpeciesLoading] = useState(false);
   const [speciesError, setSpeciesError] = useState(false);
+  
 
   const fetchPokemon = async () => {
     console.log("making new fetch request");
@@ -65,125 +67,177 @@ export default function Pokemon() {
     }
   }, [id]);
 
-  function filterEvolution(base, one, two) {
-    
-    const first = pokeList.filter((item) => {
-      return item.name == base;
+  function filterEvolution(list) {
+    console.log("filtering evolutions");
+    let evolution = []
+    // const first = pokeList.filter((item) => {
+    //   return item.name == list[0];
+    // });
+
+    for (let i = 0; i < list.length; i++){
+    let evo = pokeList.filter((item) => {
+      return item.name == list[i].evolution;
     });
-    if (one || two) {
-      const evolve = pokeList.filter((item) => {
-        return item.name == one || item.name == two || item.name.includes(one) || item.name.includes(two);
-      });
-      const evolutions = [...first, ...evolve];
-      setEvolutions(evolutions);
+    evolution = [...evolution, ...evo]
     }
+    setEvolutions(evolution)
   }
 
-  useEffect(()=>{
-    // console.log(evolutions)
-    console.log(evolutions)
-  },[evolutions])
+//   useEffect(()=>{
+//     console.log(allEvolutions)
+//     console.log(evolutions)
+// },[evolutions])
 
-  useEffect(() => {
-    if (evolutionData) {
-      setBaseEvo(evolutionData.chain.species.name);
-        console.log(evolutionData)
-      if (
-        evolutionData.chain.evolves_to[0] &&
-        evolutionData.chain.evolves_to[0].evolution_details[0].trigger.name !==
-          "use-item"
-      ) {
-        setFirstEvo({
-          evolution: evolutionData.chain.evolves_to[0].species.name,
-          trigger:
-            evolutionData.chain.evolves_to[0].evolution_details[0].trigger.name,
-          level:
-            evolutionData.chain.evolves_to[0].evolution_details[0].min_level,
-        });
-      }
-      if (
-        evolutionData.chain.evolves_to[0] &&
-        evolutionData.chain.evolves_to[0].evolves_to[0] &&
-        evolutionData.chain.evolves_to[0].evolves_to[0].evolution_details[0]
-          .trigger.name !== "use-item"
-      ) {
-        setSecondEvo({
-          evolution:
-            evolutionData.chain.evolves_to[0].evolves_to[0].species.name,
-          trigger:
-            evolutionData.chain.evolves_to[0].evolves_to[0].evolution_details[0]
-              .trigger.name,
-          level:
-            evolutionData.chain.evolves_to[0].evolves_to[0].evolution_details[0]
-              .min_level,
-        });
-      } else if (
-        evolutionData.chain.evolves_to[0] &&
-        evolutionData.chain.evolves_to[0].evolution_details[0].trigger.name ===
-          "use-item"
-      ) {
-        setFirstEvo({
-          evolution: evolutionData.chain.evolves_to[0].species.name,
-          trigger:
-            evolutionData.chain.evolves_to[0].evolution_details[0].trigger.name,
-          item: evolutionData.chain.evolves_to[0].evolution_details[0].item
-            .name,
-        });
-      } else if (
-        evolutionData.chain.evolves_to[0] &&
-        evolutionData.chain.evolves_to[0].evolves_to[0] &&
-        evolutionData.chain.evolves_to[0].evolves_to[0].evolution_details[0]
-          .trigger.name === "use-item"
-      ) {
-        setSecondEvo({
-          evolution:
-            evolutionData.chain.evolves_to[0].evolves_to[0].species.name,
-          trigger:
-            evolutionData.chain.evolves_to[0].evolves_to[0].evolution_details[0]
-              .trigger.name,
-          item: evolutionData.chain.evolves_to[0].evolves_to[0]
-            .evolution_details[0].item.name,
-        });
-      }
-      if ( evolutionData.chain.evolves_to[0] &&
-        evolutionData.chain.evolves_to[0].evolution_details[0]
-      ) {
-        console.log(evolutionData.chain.evolves_to[0].evolution_details[0]);
-        const special = []
-        for (const [key, value] of Object.entries(
-          evolutionData.chain.evolves_to[0].evolution_details[0]
-        )) {
-        console.log(`${key}: ${value}`);
-          if (Number.isInteger(value) ){
-            console.log(key, value);
-            special.push([key,value])
-            setFirstEvo({
-              evolution: evolutionData.chain.evolves_to[0].species.name,
-              trigger:
-                evolutionData.chain.evolves_to[0].evolution_details[0].trigger.name,
-              level: `${key}, ${value}`,
-            });
-          }
+  // useEffect(() => {
+  //   if (evolutionData) {
+  //     setBaseEvo(evolutionData.chain.species.name);
+  //       console.log(evolutionData)
+  //     if (
+  //       evolutionData.chain.evolves_to[0] &&
+  //       evolutionData.chain.evolves_to[0].evolution_details[0].trigger.name !==
+  //         "use-item"
+  //     ) {
+  //       setFirstEvo({
+  //         evolution: evolutionData.chain.evolves_to[0].species.name,
+  //         trigger:
+  //           evolutionData.chain.evolves_to[0].evolution_details[0].trigger.name,
+  //         level:
+  //           evolutionData.chain.evolves_to[0].evolution_details[0].min_level,
+  //       });
+  //     }
+  //     if (
+  //       evolutionData.chain.evolves_to[0] &&
+  //       evolutionData.chain.evolves_to[0].evolves_to[0] &&
+  //       evolutionData.chain.evolves_to[0].evolves_to[0].evolution_details[0]
+  //         .trigger.name !== "use-item"
+  //     ) {
+  //       setSecondEvo({
+  //         evolution:
+  //           evolutionData.chain.evolves_to[0].evolves_to[0].species.name,
+  //         trigger:
+  //           evolutionData.chain.evolves_to[0].evolves_to[0].evolution_details[0]
+  //             .trigger.name,
+  //         level:
+  //           evolutionData.chain.evolves_to[0].evolves_to[0].evolution_details[0]
+  //             .min_level,
+  //       });
+  //     } else if (
+  //       evolutionData.chain.evolves_to[0] &&
+  //       evolutionData.chain.evolves_to[0].evolution_details[0].trigger.name ===
+  //         "use-item"
+  //     ) {
+  //       setFirstEvo({
+  //         evolution: evolutionData.chain.evolves_to[0].species.name,
+  //         trigger:
+  //           evolutionData.chain.evolves_to[0].evolution_details[0].trigger.name,
+  //         item: evolutionData.chain.evolves_to[0].evolution_details[0].item
+  //           .name,
+  //       });
+  //     } else if (
+  //       evolutionData.chain.evolves_to[0] &&
+  //       evolutionData.chain.evolves_to[0].evolves_to[0] &&
+  //       evolutionData.chain.evolves_to[0].evolves_to[0].evolution_details[0]
+  //         .trigger.name === "use-item"
+  //     ) {
+  //       setSecondEvo({
+  //         evolution:
+  //           evolutionData.chain.evolves_to[0].evolves_to[0].species.name,
+  //         trigger:
+  //           evolutionData.chain.evolves_to[0].evolves_to[0].evolution_details[0]
+  //             .trigger.name,
+  //         item: evolutionData.chain.evolves_to[0].evolves_to[0]
+  //           .evolution_details[0].item.name,
+  //       });
+  //     }
+  //     if ( evolutionData.chain.evolves_to[0] &&
+  //       evolutionData.chain.evolves_to[0].evolution_details[0]
+  //     ) {
+  //       console.log(evolutionData.chain.evolves_to[0].evolution_details[0]);
+  //       const special = []
+  //       for (const [key, value] of Object.entries(
+  //         evolutionData.chain.evolves_to[0].evolution_details[0]
+  //       )) {
+  //       console.log(`${key}: ${value}`);
+  //         if (Number.isInteger(value) ){
+  //           console.log(key, value);
+  //           special.push([key,value])
+  //           setFirstEvo({
+  //             evolution: evolutionData.chain.evolves_to[0].species.name,
+  //             trigger:
+  //               evolutionData.chain.evolves_to[0].evolution_details[0].trigger.name,
+  //             level: `${key}, ${value}`,
+  //           });
+  //         }
         
-        }
-        // setFirstEvo({
-        //   evolution: evolutionData.chain.evolves_to[0].species.name,
-        //   trigger:
-        //     evolutionData.chain.evolves_to[0].evolution_details[0].trigger.name,
-        //   level: "happiness",
-        // });
-        console.log(special)
-      }
+  //       }
+  //       // setFirstEvo({
+  //       //   evolution: evolutionData.chain.evolves_to[0].species.name,
+  //       //   trigger:
+  //       //     evolutionData.chain.evolves_to[0].evolution_details[0].trigger.name,
+  //       //   level: "happiness",
+  //       // });
+  //       console.log(special)
+  //     }
+  //   }
+  // }, [evolutionData]);
+
+
+  useEffect(()=>{
+if (evolutionData) {
+let evoChain = [];
+let evoData = evolutionData.chain
+console.log(evoData)
+do {
+//  if (evoData.evolves_to[0]) {
+//       evoChain.push({name: evoData.species.name, details:evoData.evolves_to[0].evolution_details[0]});
+
+//   }
+
+//   if (numberOfEvolutions>1){
+//    for (let i = 0;i < numberOfEvolutions; i++) { 
+//     evoChain.push({ name: evoData.evolves_to[i].species.name });
+//     if (evoData.evolves_to[i + 1]) {
+// console.log(evoData.evolves_to[i+1].evolution_details[0]);
+// }
+//    }
+//   }
+
+ var evoDetails = evoData["evolution_details"][0];
+let numberOfEvolutions = evoData["evolves_to"].length; 
+if (numberOfEvolutions>1){
+  for (let i = 1;i < numberOfEvolutions; i++) { 
+      evoChain.push({
+        evolution: evoData.evolves_to[i].species.name,
+        level: evoData.evolves_to[i].evolution_details ? evoData.evolves_to[i].evolution_details[0].min_level: null,
+        trigger: evoData.evolves_to[i].evolution_details ? evoData.evolves_to[i].evolution_details[0].trigger : null,
+        item: evoData.evolves_to[i].evolution_details?  evoData.evolves_to[i].evolution_details[0].item : null,
+     });
     }
-  }, [evolutionData]);
+}
+else{
+ evoChain.push({
+   evolution: evoData.species.name,
+   level: !evoDetails ? null : evoDetails.min_level,
+   trigger: !evoDetails ? null : evoDetails.trigger.name,
+   item: !evoDetails ? null : evoDetails.item,
+ });
+}
+
+  evoData = evoData["evolves_to"][0];
+} while (!!evoData && evoData.hasOwnProperty("evolves_to"));
+console.log(evoChain)
+setAllEvolutions(evoChain)
+}
+
+  },[evolutionData])
+
+
 
   useEffect(() => {
-    if (firstEvo || secondEvo) {
-      console.log(firstEvo)
-      console.log(secondEvo)
-      filterEvolution(baseEvo, firstEvo.evolution, secondEvo.evolution);
+    if (allEvolutions) {
+      filterEvolution(allEvolutions);
     }
-  }, [firstEvo, secondEvo, pokeList]);
+  }, [allEvolutions, pokeList]);
 
   useEffect(() => {
     // console.log(baseEvo);
@@ -218,8 +272,7 @@ export default function Pokemon() {
         evolutions={evolutions}
         speciesLoading={speciesLoading}
         speciesError={speciesError}
-        firstEvo={firstEvo}
-        secondEvo={secondEvo}
+        allEvolutions={allEvolutions}
       />
     </>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
@@ -37,10 +37,16 @@ const NoEvolutions = styled.h3`
 display:flex;
 justify-content:center`
 
+
 export default function EvolutionChain(props) {
   const navigate = useNavigate();
-  const { evolutions, firstEvo, secondEvo, speciesLoading, speciesError } =
+  const { evolutions, allEvolutions, speciesLoading, speciesError } =
     props;
+
+useEffect(() => {
+  console.log(allEvolutions)
+  console.log(evolutions);
+}, [evolutions]);
 
     
   return (
@@ -52,7 +58,7 @@ export default function EvolutionChain(props) {
             <Loading />
           </LoadingContainer>
         ) : (
-          <Evolutions>
+          /* <Evolutions>
             {evolutions ? (
               <>
                 <div>
@@ -112,6 +118,37 @@ export default function EvolutionChain(props) {
                 </div>
               </>
             ) : null}
+          </Evolutions> */
+                    <Evolutions>
+          {evolutions? evolutions.map((evolution,idx)=>{
+            return (
+              <>
+                <Evolution>
+                  <div>
+                    <div>
+                      {allEvolutions[idx].level
+                        ? allEvolutions[idx].level
+                        : null}
+                    </div>
+                    <div>
+                      {allEvolutions[idx].item ? allEvolutions[idx].item.name : null}
+                    </div>
+                    <div>
+                      {allEvolutions[idx].trigger
+                        ? allEvolutions[idx].trigger.name
+                        ? !allEvolutions[idx].trigger.name :allEvolutions[idx].trigger : null}
+                    </div>
+                  </div>
+                  <img
+                    src={evolutions[idx].sprites.front_default}
+                    onClick={() => {
+                      navigate(`/pokemon/${evolutions[idx].name}`);
+                    }}
+                  />
+                </Evolution>
+              </>
+            );
+          }) :null}
           </Evolutions>
         )}
         {!speciesLoading && evolutions === null ? (
