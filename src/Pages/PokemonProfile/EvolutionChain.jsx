@@ -16,6 +16,7 @@ const Evolutions = styled.div`
 const Evolution = styled.div`
   
   display: flex;
+  flex-direction:column;
   align-items: center;
 `;
 const Heading = styled.h2`
@@ -37,6 +38,11 @@ const NoEvolutions = styled.h3`
 display:flex;
 justify-content:center`
 
+const EvoInfo = styled.div`
+  display:flex;
+  flex-direction:column;
+`
+
 
 export default function EvolutionChain(props) {
   const navigate = useNavigate();
@@ -46,7 +52,7 @@ export default function EvolutionChain(props) {
 useEffect(() => {
   console.log(allEvolutions)
   console.log(evolutions);
-}, [evolutions]);
+});
 
     
   return (
@@ -119,36 +125,42 @@ useEffect(() => {
               </>
             ) : null}
           </Evolutions> */
-                    <Evolutions>
-          {evolutions? evolutions.map((evolution,idx)=>{
-            return (
-              <>
-                <Evolution>
-                  <div>
-                    <div>
-                      {allEvolutions[idx].level
-                        ? allEvolutions[idx].level
-                        : null}
-                    </div>
-                    <div>
-                      {allEvolutions[idx].item ? allEvolutions[idx].item.name : null}
-                    </div>
-                    <div>
-                      {allEvolutions[idx].trigger
-                        ? allEvolutions[idx].trigger.name
-                        ? !allEvolutions[idx].trigger.name :allEvolutions[idx].trigger : null}
-                    </div>
-                  </div>
-                  <img
-                    src={evolutions[idx].sprites.front_default}
-                    onClick={() => {
-                      navigate(`/pokemon/${evolutions[idx].name}`);
-                    }}
-                  />
-                </Evolution>
-              </>
-            );
-          }) :null}
+
+          <Evolutions>
+            {evolutions
+              ? evolutions.map((evolution, idx) => {
+                  return (
+                    <React.Fragment key={idx}>
+                      <Evolution>
+                        <EvoInfo>
+                          <div>
+                            {allEvolutions[idx]
+                              ? allEvolutions[idx].level
+                              : null}
+                          </div>
+                          <div>
+                            {allEvolutions[idx]?.item
+                              ? allEvolutions[idx].item.name
+                              : null}
+                          </div>
+                          <div>
+                            {allEvolutions[idx]?.trigger
+                              ? allEvolutions[idx].trigger
+                              : null}
+                          </div>
+                        </EvoInfo>
+                        <img
+                          src={evolutions[idx].sprites.front_default}
+                          onClick={() => {
+                            navigate(`/pokemon/${evolutions[idx].name}`);
+                          }}
+                        />
+                      </Evolution>
+                    </React.Fragment>
+                  );
+                })
+              : null}
+            
           </Evolutions>
         )}
         {!speciesLoading && evolutions === null ? (
@@ -163,3 +175,23 @@ useEffect(() => {
     </>
   );
 }
+
+
+
+                        /* <div>
+                          <div>
+                            {allEvolutions[idx]
+                              ? allEvolutions[idx].level
+                              : null}
+                          </div>
+                          <div>
+                            {allEvolutions[idx]?.item
+                              ? allEvolutions[idx].item.name
+                              : null}
+                          </div>
+                          <div>
+                            {allEvolutions[idx]?.trigger
+                              ? allEvolutions[idx].trigger
+                              : null}
+                          </div>
+                        </div> */

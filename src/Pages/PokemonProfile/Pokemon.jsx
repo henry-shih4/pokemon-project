@@ -73,11 +73,15 @@ export default function Pokemon() {
     // const first = pokeList.filter((item) => {
     //   return item.name == list[0];
     // });
-
+    
     for (let i = 0; i < list.length; i++){
     let evo = pokeList.filter((item) => {
-      return item.name == list[i].evolution;
+      return (
+        item.name == list[i].evolution || item.name.includes(list[i].evolution)
+      );
+      // return item.name == list[i].evolution || item.name.includes(list[i].evolution);
     });
+    
     evolution = [...evolution, ...evo]
     }
     setEvolutions(evolution)
@@ -186,7 +190,7 @@ export default function Pokemon() {
 if (evolutionData) {
 let evoChain = [];
 let evoData = evolutionData.chain
-console.log(evoData)
+
 do {
 //  if (evoData.evolves_to[0]) {
 //       evoChain.push({name: evoData.species.name, details:evoData.evolves_to[0].evolution_details[0]});
@@ -205,14 +209,30 @@ do {
  var evoDetails = evoData["evolution_details"][0];
 let numberOfEvolutions = evoData["evolves_to"].length; 
 if (numberOfEvolutions>1){
-  for (let i = 1;i < numberOfEvolutions; i++) { 
-      evoChain.push({
-        evolution: evoData.evolves_to[i].species.name,
-        level: evoData.evolves_to[i].evolution_details ? evoData.evolves_to[i].evolution_details[0].min_level: null,
-        trigger: evoData.evolves_to[i].evolution_details ? evoData.evolves_to[i].evolution_details[0].trigger : null,
-        item: evoData.evolves_to[i].evolution_details?  evoData.evolves_to[i].evolution_details[0].item : null,
-     });
-    }
+  for (let i = 1;i < numberOfEvolutions; i++) {
+          const special = []
+          console.log(evoData)
+          console.log(i)
+          // for (const [key, value] of Object.entries(evoData.evolves_to[i])) {
+          //   console.log(`${key}: ${value}`);
+          //   if (Number.isInteger(value)) {
+          //     console.log(key, value);
+          //     special.push([key, value]);
+          //   }
+          // }
+    evoChain.push({
+      evolution: evoData.evolves_to[i].species.name,
+      level: evoData.evolves_to[i].evolution_details
+        ? evoData.evolves_to[i].evolution_details[0].min_level
+        : null,
+      trigger: evoData.evolves_to[i].evolution_details
+        ? evoData.evolves_to[i].evolution_details[0].trigger.name
+        : null,
+      item: evoData.evolves_to[i].evolution_details
+        ? evoData.evolves_to[i].evolution_details[0].item
+        : null,
+    });
+  }
 }
 else{
  evoChain.push({
