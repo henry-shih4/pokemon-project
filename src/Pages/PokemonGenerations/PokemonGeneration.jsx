@@ -155,6 +155,11 @@ export default function PokemonType() {
     return pokemon;
   }, [pokeList, start, end, generation]);
 
+
+    // useEffect(()=>{
+    //   console.log(pokeList)
+    // },[pokeList])
+
   return (
     <>
       <Navigation/>

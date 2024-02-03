@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios, { all } from "axios";
 import Card from "./Card";
 import Navigation from "../../components/Navigation";
 import Loading from "../../components/Loading";
@@ -16,21 +16,29 @@ export default function Pokemon() {
   const { state } = useLocation();
   const [speciesData, setSpeciesData] = useState();
   const [evolutionData, setEvolutionData] = useState();
-  const [baseEvo, setBaseEvo] = useState("");
-  const [firstEvo, setFirstEvo] = useState("");
-  const [secondEvo, setSecondEvo] = useState("");
   const [evolutions, setEvolutions] = useState(null);
   const [allEvolutions, setAllEvolutions] = useState([])
   const { pokeList, loading } = useContext(PokemonContext);
   const [speciesLoading, setSpeciesLoading] = useState(false);
   const [speciesError, setSpeciesError] = useState(false);
-  
+  const [altForms, setAltForms] = useState([])
 
   const fetchPokemon = async () => {
     console.log("making new fetch request");
-    const data = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
-    setPokeData(data.data);
+    // const data = await axios.get(
+    //   `https://pokeapi.co/api/v2/pokemon-species/${id.split("-")[0]}/`
+    // );
+    // const pokeId = data.data.id
+    // console.log(data.data.id)
+
+    const pokeInfo = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
+    setPokeData(pokeInfo.data);
+
   };
+
+  useEffect(()=>{
+    console.log(altForms)
+  },[altForms])
 
   const fetchSpecies = async () => {
 
@@ -39,6 +47,7 @@ export default function Pokemon() {
       .then((response) => {
         setSpeciesLoading(true);
         setSpeciesData(response.data);
+        console.log(response.data)
         return response;
       })
       .catch((error) => {
@@ -67,25 +76,43 @@ export default function Pokemon() {
     }
   }, [id]);
 
-  function filterEvolution(list) {
+  async function filterEvolution(list) {
     console.log("filtering evolutions");
+    if(speciesData){
+      let forms = []
+      for (let i = 1; i<speciesData.varieties.length;i++){
+        let form = await axios.get(`https://pokeapi.co/api/v2/pokemon/${speciesData.varieties[i].pokemon.name}`)
+        console.log(form)
+        forms.push(form.data)
+      }
+      setAltForms(forms)
+    }
+
+
     let evolution = []
+    let forms = []
     // const first = pokeList.filter((item) => {
     //   return item.name == list[0];
     // });
     
     for (let i = 0; i < list.length; i++){
+      console.log(list.length)
     let evo = pokeList.filter((item) => {
       return (
         item.name == list[i].evolution || item.name.includes(list[i].evolution)
       );
       // return item.name == list[i].evolution || item.name.includes(list[i].evolution);
     });
-    
+
     evolution = [...evolution, ...evo]
     }
-    setEvolutions(evolution)
+
+
+
+    setEvolutions(evolution.slice(0,allEvolutions.length))
+    
   }
+
 
 //   useEffect(()=>{
 //     console.log(allEvolutions)
@@ -190,7 +217,7 @@ export default function Pokemon() {
 if (evolutionData) {
 let evoChain = [];
 let evoData = evolutionData.chain
-
+console.log(evoData);
 do {
 //  if (evoData.evolves_to[0]) {
 //       evoChain.push({name: evoData.species.name, details:evoData.evolves_to[0].evolution_details[0]});
@@ -205,13 +232,15 @@ do {
 // }
 //    }
 //   }
-
+// console.log(evoData)
  var evoDetails = evoData["evolution_details"][0];
 let numberOfEvolutions = evoData["evolves_to"].length; 
+
 if (numberOfEvolutions>1){
+  // evoChain.push({ evolution: evoData.species.name });
   for (let i = 1;i < numberOfEvolutions; i++) {
           const special = []
-          console.log(evoData)
+          
           console.log(i)
           // for (const [key, value] of Object.entries(evoData.evolves_to[i])) {
           //   console.log(`${key}: ${value}`);
@@ -259,14 +288,6 @@ setAllEvolutions(evoChain)
     }
   }, [allEvolutions, pokeList]);
 
-  useEffect(() => {
-    // console.log(baseEvo);
-    // console.log(evolutionData);
-    // console.log(evolutions);
-    // console.log(baseEvo, firstEvo, secondEvo);
-    // console.log(speciesData);
-    // console.log(pokeData);
-  });
 
   return (
     <>
@@ -293,6 +314,7 @@ setAllEvolutions(evoChain)
         speciesLoading={speciesLoading}
         speciesError={speciesError}
         allEvolutions={allEvolutions}
+        altForms = {altForms}
       />
     </>
   );

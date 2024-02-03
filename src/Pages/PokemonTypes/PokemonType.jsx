@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate, NavLink } from "react-router-dom";
-import { useContext, useMemo, useState } from "react";
+import { useContext, useMemo, useState , useEffect} from "react";
 import { PokemonContext } from "../../components/PokemonContext";
 import Loading from "../../components/Loading";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -137,6 +137,7 @@ export default function PokemonType() {
   const navigate = useNavigate();
   const [typeName, setTypeName] = useState("grass");
 
+  
   const typeMap = {
     grass: {
       name: "grass",
@@ -209,6 +210,11 @@ export default function PokemonType() {
       color: "#F85888",
     },
   };
+
+  
+useEffect(() => {
+  console.log(pokeList);
+}, [pokeList]);
 
   const pokeData = useMemo(() => {
     console.log("filtering..");

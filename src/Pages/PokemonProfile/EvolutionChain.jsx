@@ -6,6 +6,10 @@ import Loading from "../../components/Loading";
 
 const Container = styled.div`
   font-family: "Roboto", sans-serif;
+  display:flex;
+  flex-direction: column;
+  justify-content:center;
+  align-items:center;
 `;
 const Evolutions = styled.div`
   display: flex;
@@ -42,19 +46,20 @@ const EvoInfo = styled.div`
   display:flex;
   flex-direction:column;
 `
-
+const AltForm = styled.div`
+  display:flex; 
+  gap:14px;
+`
 
 export default function EvolutionChain(props) {
   const navigate = useNavigate();
-  const { evolutions, allEvolutions, speciesLoading, speciesError } =
+  const { evolutions, allEvolutions, speciesLoading, speciesError, altForms } =
     props;
 
-useEffect(() => {
-  console.log(allEvolutions)
-  console.log(evolutions);
-});
-
-    
+useEffect(()=>{
+  console.log(altForms)
+},[altForms])
+  
   return (
     <>
       <Container>
@@ -152,7 +157,7 @@ useEffect(() => {
                         <img
                           src={evolutions[idx].sprites.front_default}
                           onClick={() => {
-                            navigate(`/pokemon/${evolutions[idx].name}`);
+                            navigate(`/pokemon/${evolutions[idx].id}`);
                           }}
                         />
                       </Evolution>
@@ -160,9 +165,26 @@ useEffect(() => {
                   );
                 })
               : null}
-            
           </Evolutions>
         )}
+        <div>Other forms</div>
+        <AltForm>
+          {altForms
+            ? altForms.map((item) => {
+                return (
+                  <div key={item.name}>
+                    <img
+                      src={item.sprites.front_default}
+                      onClick={() => {
+                        navigate(`/pokemon/${item.id}`);
+                      }}
+                    />
+                    <p>{item.name}</p>
+                  </div>
+                );
+              })
+            : null}
+        </AltForm>
         {!speciesLoading && evolutions === null ? (
           <NoEvolutions>No known evolutions</NoEvolutions>
         ) : null}

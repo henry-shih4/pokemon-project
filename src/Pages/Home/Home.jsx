@@ -111,7 +111,7 @@ export default function Home() {
                       <Result
                         key={item.id}
                         onClick={() => {
-                          navigate(`/pokemon/${item.name}`);
+                          navigate(`/pokemon/${item.id}`);
                         }}
                       >
                         <Sprite src={item.sprites.front_default} />
