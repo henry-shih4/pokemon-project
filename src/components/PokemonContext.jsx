@@ -65,10 +65,6 @@ function PokemonProvider(props) {
     return pokeInfo;
   }, [pokeInfo]);
 
-      useEffect(() => {
-        console.log(pokeList);
-      }, [pokeList]);
-
   useEffect(() => {
     pokeFun();
   }, []);

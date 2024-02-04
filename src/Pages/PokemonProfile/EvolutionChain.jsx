@@ -153,6 +153,11 @@ useEffect(()=>{
                               ? allEvolutions[idx].trigger
                               : null}
                           </div>
+                          <div>
+                            {allEvolutions[idx]?.special
+                              ? allEvolutions[idx].special
+                              : null}
+                          </div>
                         </EvoInfo>
                         <img
                           src={evolutions[idx].sprites.front_default}

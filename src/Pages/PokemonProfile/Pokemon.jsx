@@ -42,8 +42,9 @@ export default function Pokemon() {
 
   const fetchSpecies = async () => {
 
+    if (id <= 1025){
     axios
-      .get(`https://pokeapi.co/api/v2/pokemon-species/${id.split("-")[0]}/`)
+      .get(`https://pokeapi.co/api/v2/pokemon-species/${id}/`)
       .then((response) => {
         setSpeciesLoading(true);
         setSpeciesData(response.data);
@@ -65,6 +66,7 @@ export default function Pokemon() {
         console.log(error);
         setSpeciesError(true);
       });
+    }
   };
 
   useEffect(() => {
@@ -242,13 +244,14 @@ if (numberOfEvolutions>1){
           const special = []
           
           console.log(i)
-          // for (const [key, value] of Object.entries(evoData.evolves_to[i])) {
-          //   console.log(`${key}: ${value}`);
-          //   if (Number.isInteger(value)) {
-          //     console.log(key, value);
-          //     special.push([key, value]);
-          //   }
-          // }
+          console.log(evoData.evolves_to[i])
+          for (const [key, value] of Object.entries(evoData.evolves_to[i].evolution_details[0])) {
+            if (Number.isInteger(value) || key == 'time_of_day') {
+              if (value != ''){
+              special.push([key, value]);
+              }
+            }
+          }
     evoChain.push({
       evolution: evoData.evolves_to[i].species.name,
       level: evoData.evolves_to[i].evolution_details
@@ -260,17 +263,32 @@ if (numberOfEvolutions>1){
       item: evoData.evolves_to[i].evolution_details
         ? evoData.evolves_to[i].evolution_details[0].item
         : null,
+        special: special
     });
   }
 }
 else{
+  console.log(evoData)
+  const special = [];
+  if (evoData.evolution_details[0]){
+            for (const [key, value] of Object.entries(
+              evoData.evolution_details[0]
+            )) {
+              if (Number.isInteger(value)) {
+                console.log(key, value);
+                special.push([key, value]);
+              }
+            }
+          }
  evoChain.push({
    evolution: evoData.species.name,
    level: !evoDetails ? null : evoDetails.min_level,
    trigger: !evoDetails ? null : evoDetails.trigger.name,
    item: !evoDetails ? null : evoDetails.item,
+   special: special,
  });
 }
+
 
   evoData = evoData["evolves_to"][0];
 } while (!!evoData && evoData.hasOwnProperty("evolves_to"));
