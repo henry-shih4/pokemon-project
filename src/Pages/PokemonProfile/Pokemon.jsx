@@ -22,6 +22,7 @@ export default function Pokemon() {
   const [speciesLoading, setSpeciesLoading] = useState(false);
   const [speciesError, setSpeciesError] = useState(false);
   const [altForms, setAltForms] = useState([])
+  const [evoLoading, setEvoLoading] = useState(true)
 
   const fetchPokemon = async () => {
     console.log("making new fetch request");
@@ -81,6 +82,7 @@ export default function Pokemon() {
   async function filterEvolution(list) {
     console.log("filtering evolutions");
     if(speciesData){
+
       let forms = []
       for (let i = 1; i<speciesData.varieties.length;i++){
         let form = await axios.get(`https://pokeapi.co/api/v2/pokemon/${speciesData.varieties[i].pokemon.name}`)
@@ -92,27 +94,27 @@ export default function Pokemon() {
 
 
     let evolution = []
-    let forms = []
     // const first = pokeList.filter((item) => {
     //   return item.name == list[0];
     // });
     
     for (let i = 0; i < list.length; i++){
       console.log(list.length)
-    let evo = pokeList.filter((item) => {
-      return (
-        item.name == list[i].evolution || item.name.includes(list[i].evolution)
-      );
+    let evo = pokeList.find((item) => {
+      if (item.name == list[i].evolution){
+        return item.name == list[i].evolution }
+      else{
+        return item.name.includes(list[i].evolution)
+      }
       // return item.name == list[i].evolution || item.name.includes(list[i].evolution);
     });
 
-    evolution = [...evolution, ...evo]
+    evolution = [...evolution, evo]
     }
 
 
 
     setEvolutions(evolution.slice(0,allEvolutions.length))
-    
   }
 
 
@@ -219,7 +221,7 @@ export default function Pokemon() {
 if (evolutionData) {
 let evoChain = [];
 let evoData = evolutionData.chain
-console.log(evoData);
+console.log(evoData)
 do {
 //  if (evoData.evolves_to[0]) {
 //       evoChain.push({name: evoData.species.name, details:evoData.evolves_to[0].evolution_details[0]});
@@ -239,16 +241,31 @@ do {
 let numberOfEvolutions = evoData["evolves_to"].length; 
 
 if (numberOfEvolutions>1){
-  // evoChain.push({ evolution: evoData.species.name });
+  const special = {};
+  if (evoData.evolution_details[0]) {
+    for (const [key, value] of Object.entries(evoData.evolution_details[0])) {
+      if (Number.isInteger(value) || value == 0 || key == "location") {
+        console.log(key, value);
+        special[key] = value;
+      }
+    }
+  }
+  evoChain.push({
+    evolution: evoData.species.name,
+    level: !evoDetails ? null : evoDetails.min_level,
+    trigger: !evoDetails ? null : evoDetails.trigger.name,
+    item: !evoDetails ? null : evoDetails.item,
+    special: special,
+  });
   for (let i = 1;i < numberOfEvolutions; i++) {
-          const special = []
+          const special = {}
           
           console.log(i)
           console.log(evoData.evolves_to[i])
           for (const [key, value] of Object.entries(evoData.evolves_to[i].evolution_details[0])) {
-            if (Number.isInteger(value) || key == 'time_of_day') {
-              if (value != ''){
-              special.push([key, value]);
+            if (Number.isInteger(value) || key == 'time_of_day' || value == 0 || key== 'location') {
+              if (value !== ''){
+              special[key] = value;
               }
             }
           }
@@ -269,14 +286,14 @@ if (numberOfEvolutions>1){
 }
 else{
   console.log(evoData)
-  const special = [];
+  const special = {};
   if (evoData.evolution_details[0]){
             for (const [key, value] of Object.entries(
               evoData.evolution_details[0]
             )) {
-              if (Number.isInteger(value)) {
+              if (Number.isInteger(value) || value == 0 || key== 'location')  {
                 console.log(key, value);
-                special.push([key, value]);
+                special[key] = value;
               }
             }
           }
@@ -302,7 +319,9 @@ setAllEvolutions(evoChain)
 
   useEffect(() => {
     if (allEvolutions) {
+     setEvoLoading(true)
       filterEvolution(allEvolutions);
+        setEvoLoading(false);
     }
   }, [allEvolutions, pokeList]);
 
@@ -333,6 +352,7 @@ setAllEvolutions(evoChain)
         speciesError={speciesError}
         allEvolutions={allEvolutions}
         altForms = {altForms}
+        evoLoading = {evoLoading}
       />
     </>
   );
