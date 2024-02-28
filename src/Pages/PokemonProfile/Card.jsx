@@ -9,19 +9,22 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 70vh;
+  height: 100%;
   width: 100%;
-  
+
 `;
 
 const Info = styled.div`
   display: flex;
   width: 100%;
+  height:100%;
   justify-content: center;
   align-items: center;
   gap: 2rem;
   margin: 1rem;
-  
+  @media (max-width: 900px) {
+    flex-direction: column;
+  }
 `;
 
 
@@ -77,6 +80,12 @@ const TypeIcon = styled.img`
   width: 24px;
 `;
 
+const TypeBox = styled.div`
+  display:flex;
+  justify-content:center;
+  flex-direction:column;
+  gap:10px;
+`
 const Type = styled.div`
   padding: 6px;
   display: flex;
@@ -86,7 +95,7 @@ const Type = styled.div`
   border-radius: 10px;
   color: white;
   font-size: 18px;
-  width: 100px;
+  width: 110px;
   text-transform:capitalize;
 `;
 
@@ -96,20 +105,27 @@ const CategoryTitle = styled.div`
   font-weight: bold;
 `;
 
-const Category = styled.div`
+const AbilityBox = styled.div`
   display: flex;
-  flex-direction: column;
   gap: 0.5rem;
-  text-transform: capitalize;
+  justify-content: center;
+  align-items: start;
+  div {
+    padding: 12px;
+  }
 `;
+  const AbilityName = styled.div`
+    span{text-transform: capitalize};
+  `;
 
 const Section = styled.section`
   display: flex;
   flex-direction: column;
   height: 100%;
-  justify-content: start;
-  align-items: start;
+  justify-content: center;
+  align-items: center;
   gap: 1rem;
+  
 `;
 
 const Box = styled.div`
@@ -123,7 +139,11 @@ const Box = styled.div`
 const MainSection = styled.div`
   display: flex;
   justify-items: center;
+  align-items:center;
   gap: 2rem;
+  @media (max-width: 900px) {
+    flex-direction: column;
+  }
 `;
 
 const Entry = styled.div`
@@ -134,6 +154,7 @@ const Entry = styled.div`
   text-align:center;
   font-size:18px;
   font-weight:bold;
+  width:50%;
 `
 
 const TotalStat = styled.div`
@@ -145,7 +166,7 @@ gap:14px;
 `
 
 export default function Card(props) {
-  const { name, img, id, stats, types, abilities, description, generation } =
+  const { name, img, id, stats, types, abilities, description, generation, abilityText } =
     props;
   const [entry, setEntry] = useState("");
   const [totalStat, setTotalStat] = useState(0);
@@ -229,6 +250,8 @@ export default function Card(props) {
     },
   };
 
+ 
+
 // calculate total stat of pokemon
   useEffect(()=>{
     const total = stats.reduce(function (acc, obj) {
@@ -268,13 +291,17 @@ export default function Card(props) {
         <div>{name}</div>
         <div>#{id}</div>
       </Title>
+      <Entry>
+        <div>{entry}</div>
+        <div>Gen {generation.split("-")[1].toUpperCase()}</div>
+      </Entry>
       <Info>
         <Sprite src={img} />
         <Box>
           <MainSection>
             <Section>
               <CategoryTitle>Type</CategoryTitle>
-              <Category>
+              <TypeBox>
                 <Type style={{ backgroundColor: `${typeMap[typeOne].color}` }}>
                   <TypeIcon src={typeMap[typeOne].img} />
                   {types[0].type.name}
@@ -287,28 +314,29 @@ export default function Card(props) {
                     {types[1].type.name}
                   </Type>
                 ) : null}
-              </Category>
+              </TypeBox>
             </Section>
             <Section>
               <CategoryTitle>Abilities</CategoryTitle>
-              <Category>
-                {abilities
-                  ? abilities.map((item, idx) => {
-                      return (
-                        <div key={idx}>
-                          {item.ability.name}
-                          {item.is_hidden == true ? <> (hidden) </> : null}
-                        </div>
-                      );
-                    })
-                  : null}
-              </Category>
+              <AbilityBox>
+                <AbilityName>
+                  {abilities
+                    ? abilities.map((item, idx) => {
+                        return (
+                          <div key={idx}>
+                            <span>{item.ability.name}</span>
+                            {item.is_hidden == true ? <> (hidden) </> : null}
+                            {abilityText[idx] ? (
+                              <div>{abilityText[idx].flavor_text}</div>
+                            ) : null}
+                          </div>
+                        );
+                      })
+                    : null}
+                </AbilityName>
+              </AbilityBox>
             </Section>
           </MainSection>
-          <Entry>
-            <div>{entry}</div>
-            <div>Gen {generation.split("-")[1].toUpperCase()}</div>
-          </Entry>
         </Box>
       </Info>
       <StatContainer>

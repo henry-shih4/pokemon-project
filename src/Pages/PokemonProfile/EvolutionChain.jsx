@@ -176,7 +176,7 @@ useEffect(()=>{
                     </React.Fragment>
                   ); */
                   return (
-                    <div>
+                    <div key={idx}>
                       <div>
                         {allEvolutions[idx].special.min_level ? (
                           <p>level {allEvolutions[idx].special.min_level} </p>

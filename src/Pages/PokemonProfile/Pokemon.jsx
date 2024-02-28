@@ -7,8 +7,6 @@ import Loading from "../../components/Loading";
 import EvolutionChain from "./EvolutionChain";
 import { PokemonContext } from "../../components/PokemonContext";
 
-
-
 export default function Pokemon() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -17,12 +15,13 @@ export default function Pokemon() {
   const [speciesData, setSpeciesData] = useState();
   const [evolutionData, setEvolutionData] = useState();
   const [evolutions, setEvolutions] = useState(null);
-  const [allEvolutions, setAllEvolutions] = useState([])
+  const [allEvolutions, setAllEvolutions] = useState([]);
   const { pokeList, loading } = useContext(PokemonContext);
   const [speciesLoading, setSpeciesLoading] = useState(false);
   const [speciesError, setSpeciesError] = useState(false);
-  const [altForms, setAltForms] = useState([])
-  const [evoLoading, setEvoLoading] = useState(true)
+  const [altForms, setAltForms] = useState([]);
+  const [evoLoading, setEvoLoading] = useState(true);
+  const [abilityText, setAbilityText] = useState([]);
 
   const fetchPokemon = async () => {
     console.log("making new fetch request");
@@ -34,41 +33,63 @@ export default function Pokemon() {
 
     const pokeInfo = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
     setPokeData(pokeInfo.data);
-
   };
 
-  useEffect(()=>{
-    console.log(altForms)
-  },[altForms])
-
-  const fetchSpecies = async () => {
-
-    if (id <= 1025){
-    axios
-      .get(`https://pokeapi.co/api/v2/pokemon-species/${id}/`)
-      .then((response) => {
-        setSpeciesLoading(true);
-        setSpeciesData(response.data);
-        console.log(response.data)
-        return response;
-      })
-      .catch((error) => {
-        console.log(error);
-        setSpeciesError(true);
-      })
-      .then((response) => {
-        axios.get(response.data.evolution_chain.url).then((response) => {
-          
-          setEvolutionData(response.data);
-          setSpeciesLoading(false);
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-        setSpeciesError(true);
-      });
+  const fetchAbilityData = async () => {
+    console.log("fetching abilities");
+    if (pokeData.abilities) {
+      let abilities = pokeData.abilities;
+      console.log(abilities);
+      let ability_urls = [];
+      for (let i = 0; i < abilities.length; i++) {
+        ability_urls.push(abilities[i].ability.url);
+      }
+      let ability_texts = [];
+      for (const url of ability_urls) {
+        let ability_data = await axios.get(url);
+        let desc = ability_data.data.flavor_text_entries;
+        console.log(desc[desc.length - 1]);
+        ability_texts.push(desc[desc.length - 1]);
+      }
+      setAbilityText(ability_texts);
     }
   };
+
+  useEffect(() => {
+    console.log(abilityText);
+  }, [abilityText]);
+
+  const fetchSpecies = async () => {
+    if (id <= 1025) {
+      axios
+        .get(`https://pokeapi.co/api/v2/pokemon-species/${id}/`)
+        .then((response) => {
+          setSpeciesLoading(true);
+          setSpeciesData(response.data);
+          return response;
+        })
+        .catch((error) => {
+          console.log(error);
+          setSpeciesError(true);
+        })
+        .then((response) => {
+          axios.get(response.data.evolution_chain.url).then((response) => {
+            setEvolutionData(response.data);
+            setSpeciesLoading(false);
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          setSpeciesError(true);
+        });
+    }
+  };
+
+  useEffect(() => {
+    if (pokeData) {
+      fetchAbilityData();
+    }
+  }, [pokeData]);
 
   useEffect(() => {
     fetchSpecies();
@@ -81,47 +102,54 @@ export default function Pokemon() {
 
   async function filterEvolution(list) {
     console.log("filtering evolutions");
-    if(speciesData){
-
-      let forms = []
-      for (let i = 1; i<speciesData.varieties.length;i++){
-        let form = await axios.get(`https://pokeapi.co/api/v2/pokemon/${speciesData.varieties[i].pokemon.name}`)
-        console.log(form)
-        forms.push(form.data)
+    if (speciesData) {
+      let forms = [];
+      for (let i = 1; i < speciesData.varieties.length; i++) {
+        let form = await axios.get(
+          `https://pokeapi.co/api/v2/pokemon/${speciesData.varieties[i].pokemon.name}`
+        );
+        console.log(form);
+        forms.push(form.data);
       }
-      setAltForms(forms)
+      setAltForms(forms);
     }
 
-
-    let evolution = []
+    let evolution = [];
     // const first = pokeList.filter((item) => {
     //   return item.name == list[0];
     // });
-    
-    for (let i = 0; i < list.length; i++){
-      console.log(list.length)
-    let evo = pokeList.find((item) => {
-      if (item.name == list[i].evolution){
-        return item.name == list[i].evolution }
-      else{
-        return item.name.includes(list[i].evolution)
-      }
-      // return item.name == list[i].evolution || item.name.includes(list[i].evolution);
-    });
 
-    evolution = [...evolution, evo]
+    for (let i = 0; i < list.length; i++) {
+      console.log(list);
+      let evo = "";
+      evo = pokeList.find((item) => {
+        if (item.name == list[i].evolution) {
+          console.log("found match");
+          return item.name == list[i].evolution;
+        } else {
+          return;
+        }
+
+      });
+
+      if (evo == undefined){
+        evo = pokeList.find((item)=>{
+          return (
+            item.name.includes(list[i].evolution)
+          );
+        })
+      }
+
+      evolution = [...evolution, evo];
+
     }
 
-
-
-    setEvolutions(evolution.slice(0,allEvolutions.length))
+    setEvolutions(evolution.slice(0, allEvolutions.length));
   }
 
-
-//   useEffect(()=>{
-//     console.log(allEvolutions)
-//     console.log(evolutions)
-// },[evolutions])
+  useEffect(() => {
+    console.log(pokeData);
+  }, [pokeData]);
 
   // useEffect(() => {
   //   if (evolutionData) {
@@ -203,7 +231,7 @@ export default function Pokemon() {
   //             level: `${key}, ${value}`,
   //           });
   //         }
-        
+
   //       }
   //       // setFirstEvo({
   //       //   evolution: evolutionData.chain.evolves_to[0].species.name,
@@ -216,119 +244,121 @@ export default function Pokemon() {
   //   }
   // }, [evolutionData]);
 
+  useEffect(() => {
+    if (evolutionData) {
+      let evoChain = [];
+      let evoData = evolutionData.chain;
+      console.log(evoData);
+      do {
+        //  if (evoData.evolves_to[0]) {
+        //       evoChain.push({name: evoData.species.name, details:evoData.evolves_to[0].evolution_details[0]});
 
-  useEffect(()=>{
-if (evolutionData) {
-let evoChain = [];
-let evoData = evolutionData.chain
-console.log(evoData)
-do {
-//  if (evoData.evolves_to[0]) {
-//       evoChain.push({name: evoData.species.name, details:evoData.evolves_to[0].evolution_details[0]});
+        //   }
 
-//   }
+        //   if (numberOfEvolutions>1){
+        //    for (let i = 0;i < numberOfEvolutions; i++) {
+        //     evoChain.push({ name: evoData.evolves_to[i].species.name });
+        //     if (evoData.evolves_to[i + 1]) {
+        // console.log(evoData.evolves_to[i+1].evolution_details[0]);
+        // }
+        //    }
+        //   }
+        // console.log(evoData)
+        var evoDetails = evoData["evolution_details"][0];
+        let numberOfEvolutions = evoData["evolves_to"].length;
 
-//   if (numberOfEvolutions>1){
-//    for (let i = 0;i < numberOfEvolutions; i++) { 
-//     evoChain.push({ name: evoData.evolves_to[i].species.name });
-//     if (evoData.evolves_to[i + 1]) {
-// console.log(evoData.evolves_to[i+1].evolution_details[0]);
-// }
-//    }
-//   }
-// console.log(evoData)
- var evoDetails = evoData["evolution_details"][0];
-let numberOfEvolutions = evoData["evolves_to"].length; 
-
-if (numberOfEvolutions>1){
-  const special = {};
-  if (evoData.evolution_details[0]) {
-    for (const [key, value] of Object.entries(evoData.evolution_details[0])) {
-      if (Number.isInteger(value) || value == 0 || key == "location") {
-        console.log(key, value);
-        special[key] = value;
-      }
-    }
-  }
-  evoChain.push({
-    evolution: evoData.species.name,
-    level: !evoDetails ? null : evoDetails.min_level,
-    trigger: !evoDetails ? null : evoDetails.trigger.name,
-    item: !evoDetails ? null : evoDetails.item,
-    special: special,
-  });
-  for (let i = 1;i < numberOfEvolutions; i++) {
-          const special = {}
-          
-          console.log(i)
-          console.log(evoData.evolves_to[i])
-          for (const [key, value] of Object.entries(evoData.evolves_to[i].evolution_details[0])) {
-            if (Number.isInteger(value) || key == 'time_of_day' || value == 0 || key== 'location') {
-              if (value !== ''){
-              special[key] = value;
-              }
-            }
-          }
-    evoChain.push({
-      evolution: evoData.evolves_to[i].species.name,
-      level: evoData.evolves_to[i].evolution_details
-        ? evoData.evolves_to[i].evolution_details[0].min_level
-        : null,
-      trigger: evoData.evolves_to[i].evolution_details
-        ? evoData.evolves_to[i].evolution_details[0].trigger.name
-        : null,
-      item: evoData.evolves_to[i].evolution_details
-        ? evoData.evolves_to[i].evolution_details[0].item
-        : null,
-        special: special
-    });
-  }
-}
-else{
-  console.log(evoData)
-  const special = {};
-  if (evoData.evolution_details[0]){
+        if (numberOfEvolutions > 1) {
+          const special = {};
+          if (evoData.evolution_details[0]) {
             for (const [key, value] of Object.entries(
               evoData.evolution_details[0]
             )) {
-              if (Number.isInteger(value) || value == 0 || key== 'location')  {
+              if (Number.isInteger(value) || value == 0 || key == "location") {
                 console.log(key, value);
                 special[key] = value;
               }
             }
           }
- evoChain.push({
-   evolution: evoData.species.name,
-   level: !evoDetails ? null : evoDetails.min_level,
-   trigger: !evoDetails ? null : evoDetails.trigger.name,
-   item: !evoDetails ? null : evoDetails.item,
-   special: special,
- });
-}
+          evoChain.push({
+            evolution: evoData.species.name,
+            level: !evoDetails ? null : evoDetails.min_level,
+            trigger: !evoDetails ? null : evoDetails.trigger.name,
+            item: !evoDetails ? null : evoDetails.item,
+            special: special,
+          });
+          for (let i = 1; i < numberOfEvolutions; i++) {
+            const special = {};
 
+            console.log(i);
+            console.log(evoData.evolves_to[i]);
+            for (const [key, value] of Object.entries(
+              evoData.evolves_to[i].evolution_details[0]
+            )) {
+              if (
+                Number.isInteger(value) ||
+                key == "time_of_day" ||
+                value == 0 ||
+                key == "location"
+              ) {
+                if (value !== "") {
+                  special[key] = value;
+                }
+              }
+            }
+            evoChain.push({
+              evolution: evoData.evolves_to[i].species.name,
+              level: evoData.evolves_to[i].evolution_details
+                ? evoData.evolves_to[i].evolution_details[0].min_level
+                : null,
+              trigger: evoData.evolves_to[i].evolution_details
+                ? evoData.evolves_to[i].evolution_details[0].trigger.name
+                : null,
+              item: evoData.evolves_to[i].evolution_details
+                ? evoData.evolves_to[i].evolution_details[0].item
+                : null,
+              special: special,
+            });
+          }
+        } else {
+          console.log(evoData);
+          const special = {};
+          if (evoData.evolution_details[0]) {
+            for (const [key, value] of Object.entries(
+              evoData.evolution_details[0]
+            )) {
+              if (Number.isInteger(value) || value == 0 || key == "location") {
+                console.log(key, value);
+                special[key] = value;
+              }
+            }
+          }
+          evoChain.push({
+            evolution: evoData.species.name,
+            level: !evoDetails ? null : evoDetails.min_level,
+            trigger: !evoDetails ? null : evoDetails.trigger.name,
+            item: !evoDetails ? null : evoDetails.item,
+            special: special,
+          });
+        }
 
-  evoData = evoData["evolves_to"][0];
-} while (!!evoData && evoData.hasOwnProperty("evolves_to"));
-console.log(evoChain)
-setAllEvolutions(evoChain)
-}
-
-  },[evolutionData])
-
-
+        evoData = evoData["evolves_to"][0];
+      } while (!!evoData && evoData.hasOwnProperty("evolves_to"));
+      console.log(evoChain);
+      setAllEvolutions(evoChain);
+    }
+  }, [evolutionData]);
 
   useEffect(() => {
     if (allEvolutions) {
-     setEvoLoading(true)
+      setEvoLoading(true);
       filterEvolution(allEvolutions);
-        setEvoLoading(false);
+      setEvoLoading(false);
     }
   }, [allEvolutions, pokeList]);
 
-
   return (
     <>
-      <Navigation/>
+      <Navigation />
       <div>
         {pokeData.name && speciesData ? (
           <>
@@ -341,6 +371,7 @@ setAllEvolutions(evoChain)
               types={pokeData.types}
               description={speciesData.flavor_text_entries}
               generation={speciesData.generation.name}
+              abilityText={abilityText}
             />
           </>
         ) : null}
@@ -351,8 +382,8 @@ setAllEvolutions(evoChain)
         speciesLoading={speciesLoading}
         speciesError={speciesError}
         allEvolutions={allEvolutions}
-        altForms = {altForms}
-        evoLoading = {evoLoading}
+        altForms={altForms}
+        evoLoading={evoLoading}
       />
     </>
   );
