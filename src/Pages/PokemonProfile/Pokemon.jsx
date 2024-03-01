@@ -22,6 +22,7 @@ export default function Pokemon() {
   const [altForms, setAltForms] = useState([]);
   const [evoLoading, setEvoLoading] = useState(true);
   const [abilityText, setAbilityText] = useState([]);
+  const [evoGenData, setEvoGenData] = useState([])
 
   const fetchPokemon = async () => {
     console.log("making new fetch request");
@@ -36,10 +37,10 @@ export default function Pokemon() {
   };
 
   const fetchAbilityData = async () => {
-    console.log("fetching abilities");
+
     if (pokeData.abilities) {
       let abilities = pokeData.abilities;
-      console.log(abilities);
+      
       let ability_urls = [];
       for (let i = 0; i < abilities.length; i++) {
         ability_urls.push(abilities[i].ability.url);
@@ -48,16 +49,20 @@ export default function Pokemon() {
       for (const url of ability_urls) {
         let ability_data = await axios.get(url);
         let desc = ability_data.data.flavor_text_entries;
-        console.log(desc[desc.length - 1]);
-        ability_texts.push(desc[desc.length - 1]);
+        
+        if (id == 681){
+          ability_texts.push(desc[43]);
+        }
+        else{
+          ability_texts.push(desc[desc.length - 1]);
+        }
+
       }
       setAbilityText(ability_texts);
     }
   };
 
-  useEffect(() => {
-    console.log(abilityText);
-  }, [abilityText]);
+
 
   const fetchSpecies = async () => {
     if (id <= 1025) {
@@ -108,7 +113,6 @@ export default function Pokemon() {
         let form = await axios.get(
           `https://pokeapi.co/api/v2/pokemon/${speciesData.varieties[i].pokemon.name}`
         );
-        console.log(form);
         forms.push(form.data);
       }
       setAltForms(forms);
@@ -120,11 +124,10 @@ export default function Pokemon() {
     // });
 
     for (let i = 0; i < list.length; i++) {
-      console.log(list);
       let evo = "";
       evo = pokeList.find((item) => {
         if (item.name == list[i].evolution) {
-          console.log("found match");
+
           return item.name == list[i].evolution;
         } else {
           return;
@@ -321,23 +324,30 @@ export default function Pokemon() {
           }
         } else {
           console.log(evoData);
-          const special = {};
-          if (evoData.evolution_details[0]) {
+          const specialA = [];
+          for (let i = 0;i<evoData.evolution_details.length;i++){
+          if (evoData.evolution_details[i]) {
+            let special = {};
             for (const [key, value] of Object.entries(
-              evoData.evolution_details[0]
+              evoData.evolution_details[i]
             )) {
               if (Number.isInteger(value) || value == 0 || key == "location") {
                 console.log(key, value);
+                
                 special[key] = value;
               }
             }
+            specialA.push(special);
           }
+            console.log(specialA)
+          }
+
           evoChain.push({
             evolution: evoData.species.name,
             level: !evoDetails ? null : evoDetails.min_level,
             trigger: !evoDetails ? null : evoDetails.trigger.name,
             item: !evoDetails ? null : evoDetails.item,
-            special: special,
+            special: specialA,
           });
         }
 
