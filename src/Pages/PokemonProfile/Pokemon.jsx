@@ -22,7 +22,7 @@ export default function Pokemon() {
   const [altForms, setAltForms] = useState([]);
   const [evoLoading, setEvoLoading] = useState(true);
   const [abilityText, setAbilityText] = useState([]);
-  const [evoGenData, setEvoGenData] = useState([])
+  const [evoGenData, setEvoGenData] = useState([]);
 
   const fetchPokemon = async () => {
     console.log("making new fetch request");
@@ -37,10 +37,9 @@ export default function Pokemon() {
   };
 
   const fetchAbilityData = async () => {
-
     if (pokeData.abilities) {
       let abilities = pokeData.abilities;
-      
+
       let ability_urls = [];
       for (let i = 0; i < abilities.length; i++) {
         ability_urls.push(abilities[i].ability.url);
@@ -49,20 +48,16 @@ export default function Pokemon() {
       for (const url of ability_urls) {
         let ability_data = await axios.get(url);
         let desc = ability_data.data.flavor_text_entries;
-        
-        if (id == 681){
+
+        if (id == 681) {
           ability_texts.push(desc[43]);
-        }
-        else{
+        } else {
           ability_texts.push(desc[desc.length - 1]);
         }
-
       }
       setAbilityText(ability_texts);
     }
   };
-
-
 
   const fetchSpecies = async () => {
     if (id <= 1025) {
@@ -127,24 +122,19 @@ export default function Pokemon() {
       let evo = "";
       evo = pokeList.find((item) => {
         if (item.name == list[i].evolution) {
-
           return item.name == list[i].evolution;
         } else {
           return;
         }
-
       });
 
-      if (evo == undefined){
-        evo = pokeList.find((item)=>{
-          return (
-            item.name.includes(list[i].evolution)
-          );
-        })
+      if (evo == undefined) {
+        evo = pokeList.find((item) => {
+          return item.name.includes(list[i].evolution);
+        });
       }
 
       evolution = [...evolution, evo];
-
     }
 
     setEvolutions(evolution.slice(0, allEvolutions.length));
@@ -253,93 +243,114 @@ export default function Pokemon() {
       let evoData = evolutionData.chain;
       console.log(evoData);
       do {
-        //  if (evoData.evolves_to[0]) {
-        //       evoChain.push({name: evoData.species.name, details:evoData.evolves_to[0].evolution_details[0]});
-
-        //   }
-
-        //   if (numberOfEvolutions>1){
-        //    for (let i = 0;i < numberOfEvolutions; i++) {
-        //     evoChain.push({ name: evoData.evolves_to[i].species.name });
-        //     if (evoData.evolves_to[i + 1]) {
-        // console.log(evoData.evolves_to[i+1].evolution_details[0]);
-        // }
-        //    }
-        //   }
-        // console.log(evoData)
-        var evoDetails = evoData["evolution_details"][0];
         let numberOfEvolutions = evoData["evolves_to"].length;
-
+        var evoDetails = evoData["evolution_details"][0];
         if (numberOfEvolutions > 1) {
-          const special = {};
-          if (evoData.evolution_details[0]) {
-            for (const [key, value] of Object.entries(
-              evoData.evolution_details[0]
-            )) {
-              if (Number.isInteger(value) || value == 0 || key == "location") {
-                console.log(key, value);
-                special[key] = value;
-              }
-            }
-          }
-          evoChain.push({
-            evolution: evoData.species.name,
-            level: !evoDetails ? null : evoDetails.min_level,
-            trigger: !evoDetails ? null : evoDetails.trigger.name,
-            item: !evoDetails ? null : evoDetails.item,
-            special: special,
-          });
+          // const special = {};
+          // if (evoData.evolution_details[0]) {
+          //   for (const [key, value] of Object.entries(
+          //     evoData.evolution_details[0]
+          //   )) {
+          //     if (Number.isInteger(value) || value == 0 || key == "location") {
+          //       console.log(key, value);
+          //       special[key] = value;
+          //     }
+          //   }
+          // }
+          // evoChain.push({
+          //   evolution: evoData.species.name,
+          //   level: !evoDetails ? null : evoDetails.min_level,
+          //   trigger: !evoDetails ? null : evoDetails.trigger.name,
+          //   item: !evoDetails ? null : evoDetails.item,
+          //   special: special,
+          // });
           for (let i = 1; i < numberOfEvolutions; i++) {
-            const special = {};
+            let currentEvo = evoData.evolves_to[i];
+            console.log(currentEvo);
+            const specialA = [];
+            let currentEvoDetails = currentEvo.evolution_details;
+            for (let j = 0; j <= currentEvoDetails.length; j++) {
+              if (currentEvoDetails[j]) {
+                console.log(currentEvoDetails[j]);
+                let special = {};
+                for (const [key, value] of Object.entries(
+                  currentEvoDetails[j]
+                )) {
+                  if (
+                    Number.isInteger(value) ||
+                    value == 0 ||
+                    key == "time_of_day" ||
+                    key == "location"
+                    ||
+                    key == "item"
+                    || key == 'trigger'
+                  ) {
+                    console.log(key, value);
 
-            console.log(i);
-            console.log(evoData.evolves_to[i]);
-            for (const [key, value] of Object.entries(
-              evoData.evolves_to[i].evolution_details[0]
-            )) {
-              if (
-                Number.isInteger(value) ||
-                key == "time_of_day" ||
-                value == 0 ||
-                key == "location"
-              ) {
-                if (value !== "") {
-                  special[key] = value;
+                    special[key] = value;
+                  }
                 }
+                specialA.push(special);
               }
+              // )) {
+              //   console.log(evoData.evolves_to[i].evolution_details[0]);
+              //   if (
+              //     Number.isInteger(value) ||
+              //     key == "time_of_day" ||
+              //     value == 0 ||
+              //     key == "location"
+              //   ) {
+              //     if (value !== "") {
+              //       special[key] = value;
+              //     }
+              //   }
+              // }
+              // evoChain.push({
+              //   evolution: evoData.evolves_to[i].species.name,
+              //   level: evoData.evolves_to[i].evolution_details
+              //     ? evoData.evolves_to[i].evolution_details[0].min_level
+              //     : null,
+              //   trigger: evoData.evolves_to[i].evolution_details
+              //     ? evoData.evolves_to[i].evolution_details[0].trigger.name
+              //     : null,
+              //   item: evoData.evolves_to[i].evolution_details
+              //     ? evoData.evolves_to[i].evolution_details[0].item
+              //     : null,
+              //   special: special,
+              // });
             }
             evoChain.push({
-              evolution: evoData.evolves_to[i].species.name,
-              level: evoData.evolves_to[i].evolution_details
-                ? evoData.evolves_to[i].evolution_details[0].min_level
-                : null,
-              trigger: evoData.evolves_to[i].evolution_details
-                ? evoData.evolves_to[i].evolution_details[0].trigger.name
-                : null,
-              item: evoData.evolves_to[i].evolution_details
-                ? evoData.evolves_to[i].evolution_details[0].item
-                : null,
-              special: special,
+              evolution: currentEvo.species.name,
+              level: !evoDetails ? null : evoDetails.min_level,
+              trigger: !evoDetails ? null : evoDetails.trigger.name,
+              item: !evoDetails ? null : evoDetails.item,
+              special: specialA,
             });
           }
         } else {
           console.log(evoData);
           const specialA = [];
-          for (let i = 0;i<evoData.evolution_details.length;i++){
-          if (evoData.evolution_details[i]) {
-            let special = {};
-            for (const [key, value] of Object.entries(
-              evoData.evolution_details[i]
-            )) {
-              if (Number.isInteger(value) || value == 0 || key == "location") {
-                console.log(key, value);
-                
-                special[key] = value;
+          for (let i = 0; i < evoData.evolution_details.length; i++) {
+            if (evoData.evolution_details[i]) {
+              let special = {};
+              for (const [key, value] of Object.entries(
+                evoData.evolution_details[i]
+              )) {
+                if (
+                  Number.isInteger(value) ||
+                  value == 0 ||
+                  key == "time_of_day" ||
+
+                  key == "location"
+                ) {
+                  console.log(key, value);
+
+                  special[key] = value;
+                }
               }
+              specialA.push(special);
             }
-            specialA.push(special);
-          }
-            console.log(specialA)
+            console.log(specialA);
           }
 
           evoChain.push({

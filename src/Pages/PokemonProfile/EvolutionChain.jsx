@@ -202,20 +202,14 @@ export default function EvolutionChain(props) {
                             : null}
                         </div>
                         <div>
-                          {allEvolutions[idx].special.time_of_day == "day"
+                          {allEvolutions[idx].special[0].time_of_day == "day"
                             ? "day time"
-                            : allEvolutions[idx].special.time_of_day == "night"
+                            : allEvolutions[idx].special[0].time_of_day ==
+                              "night"
                             ? "night time"
                             : null}
                         </div>
-                        <div>
-                          {allEvolutions[idx].special.min_happiness ? (
-                            <p>
-                              happiness{" "}
-                              {allEvolutions[idx].special.min_happiness}
-                            </p>
-                          ) : null}
-                        </div>
+
                         <div>
                           {allEvolutions[idx].special.min_beauty ? (
                             <p>
@@ -224,19 +218,41 @@ export default function EvolutionChain(props) {
                           ) : null}
 
                           <div>
-                            {allEvolutions[idx].special.min_happiness ? (
-                              <p>
-                                happiness{" "}
-                                {allEvolutions[idx].special.min_happiness}
-                              </p>
-                            ) : null}
+               
 
                             <div>
-                              {allEvolutions
-                                ? allEvolutions[idx].special.map((item) => {
+                              {allEvolutions[idx].special
+                                ? allEvolutions[idx].special.map((item, i) => {
                                     return (
-                                      <div>
-                                        {item.location? item.location.name:null}
+                                      <div key={i}>
+                                        {item.location
+                                          ? item.location.name
+                                          : null}
+                                      </div>
+                                    );
+                                  })
+                                : null}
+                            </div>
+
+                            <div>
+                              {allEvolutions[idx].special
+                                ? allEvolutions[idx].special.map((item, i) => {
+                                    return (
+                                      <div key={i}>
+                                        {item.min_affection ? (
+                                          <>
+                                            <p>
+                                              affection {item.min_affection}
+                                            </p>
+                                          </>
+                                        ) : null}
+                                        {item.min_happiness ? (
+                                          <>
+                                            <p>
+                                              happiness {item.min_happiness}
+                                            </p>
+                                          </>
+                                        ) : null}
                                       </div>
                                     );
                                   })
