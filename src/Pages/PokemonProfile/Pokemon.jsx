@@ -264,12 +264,12 @@ export default function Pokemon() {
           //   item: !evoDetails ? null : evoDetails.item,
           //   special: special,
           // });
-          for (let i = 1; i < numberOfEvolutions; i++) {
+          for (let i = 0; i < numberOfEvolutions ; i++) {
             let currentEvo = evoData.evolves_to[i];
             console.log(currentEvo);
             const specialA = [];
             let currentEvoDetails = currentEvo.evolution_details;
-            for (let j = 0; j <= currentEvoDetails.length; j++) {
+            for (let j = 0; j <=currentEvoDetails.length; j++) {
               if (currentEvoDetails[j]) {
                 console.log(currentEvoDetails[j]);
                 let special = {};
@@ -277,13 +277,14 @@ export default function Pokemon() {
                   currentEvoDetails[j]
                 )) {
                   if (
-                    Number.isInteger(value) ||
-                    value == 0 ||
-                    key == "time_of_day" ||
-                    key == "location"
-                    ||
-                    key == "item"
-                    || key == 'trigger'
+                    // Number.isInteger(value) ||
+                    // value == 0 ||
+                    // key == "time_of_day" ||
+                    // key == "location" && value != ""
+                    // ||
+                    // key == "item"
+                    // || key == 'trigger'
+                    value
                   ) {
                     console.log(key, value);
 
@@ -336,12 +337,15 @@ export default function Pokemon() {
               for (const [key, value] of Object.entries(
                 evoData.evolution_details[i]
               )) {
+                if (value === "") {
+                  special[key] = false;
+                }
                 if (
-                  Number.isInteger(value) ||
-                  value == 0 ||
-                  key == "time_of_day" ||
-
-                  key == "location"
+                  // Number.isInteger(value) ||
+                  // value == 0 ||
+                  // key == "time_of_day" && value != "" ||
+                  // key == "location"
+                  value
                 ) {
                   console.log(key, value);
 

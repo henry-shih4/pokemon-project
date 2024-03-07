@@ -20,8 +20,13 @@ const Evolutions = styled.div`
 const Evolution = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: end;
+
+  location {
+    text-transform: capitalize;
+  }
 `;
+
 const Heading = styled.h2`
   display: flex;
   justify-content: center;
@@ -50,6 +55,10 @@ const AltForm = styled.div`
   display: flex;
   gap: 14px;
 `;
+
+// const location = styled.div`
+//   text-transform:capitalize;
+// `
 
 export default function EvolutionChain(props) {
   const navigate = useNavigate();
@@ -178,8 +187,8 @@ export default function EvolutionChain(props) {
                     </React.Fragment>
                   ); */
                     return (
-                      <div key={idx}>
-                        <div>
+                      <Evolution key={idx}>
+                        {/* <div>
                           {allEvolutions[idx].special.min_level ? (
                             <p>level {allEvolutions[idx].special.min_level} </p>
                           ) : null}
@@ -195,45 +204,91 @@ export default function EvolutionChain(props) {
                           {allEvolutions[idx]?.item
                             ? allEvolutions[idx].item.name
                             : null}
-                        </div>
-                        <div>
-                          {allEvolutions[idx]?.trigger
-                            ? allEvolutions[idx].trigger
-                            : null}
-                        </div>
-                        <div>
-                          {allEvolutions[idx].special[0].time_of_day == "day"
-                            ? "day time"
-                            : allEvolutions[idx].special[0].time_of_day ==
-                              "night"
-                            ? "night time"
-                            : null}
-                        </div>
+                        </div> */}
 
-                        <div>
-                          {allEvolutions[idx].special.min_beauty ? (
-                            <p>
-                              beauty {allEvolutions[idx].special.min_beauty}
-                            </p>
-                          ) : null}
-
+                        {/* {allEvolutions[idx].special ? (
                           <div>
-               
-
+                            {allEvolutions[idx].special["time_of_day"] ? (
+                              <div>
+                                {allEvolutions[idx].special["time_of_day"] ==
+                                "day"
+                                  ? "day time"
+                                  : allEvolutions[idx].special["time_of_day"] ==
+                                    "night"
+                                  ? "night time"
+                                  : null}
+                              </div>
+                            ) : null}
+                          </div>
+                        ) : null} */}
+ 
+                        <div>
+                          <div>
                             <div>
                               {allEvolutions[idx].special
                                 ? allEvolutions[idx].special.map((item, i) => {
                                     return (
                                       <div key={i}>
-                                        {item.location
-                                          ? item.location.name
-                                          : null}
+                                        <p>
+                                          {item.min_level ? (
+                                            <span>Level {item.min_level} </span>
+                                          ) : null}
+                                        </p>
+                                        <p>
+                                          {item.trigger &&
+                                          item.trigger.name == "level-up" ? (
+                                            <span> Level up </span>
+                                          ) : null}
+                                        </p>
+                                        <p>
+                                          {item.item ? (
+                                            <span> use {item.item.name} </span>
+                                          ) : null}
+                                        </p>
+                                        <p>
+                                          {item.location ? (
+                                            <location>at {item.location.name.split('-').join(' ')}</location>
+                                          ) : null}
+                                        </p>
+                                        <p>
+                                          {item.time_of_day
+                                            ? item.time_of_day
+                                            : null}
+                                        </p>
+                                        <p>
+                                          {item.min_beauty ? (
+                                            <span>
+                                              Beauty {item.min_beauty}
+                                            </span>
+                                          ) : null}
+                                        </p>
+                                        <p>
+                                          {item.min_affection ? (
+                                            <span>
+                                              Affection {item.min_affection}
+                                            </span>
+                                          ) : null}
+                                        </p>
+                                        <p>
+                                          {item.min_happiness ? (
+                                            <span>
+                                              Happiness {item.min_happiness}
+                                            </span>
+                                          ) : null}
+                                        </p>
+                                        <p>
+                                          {item.known_move_type ? (
+                                            <span>
+                                              knows {item.known_move_type.name} move
+                                            </span>
+                                          ) : null}
+                                        </p>
                                       </div>
                                     );
                                   })
                                 : null}
                             </div>
-
+{/* 
                             <div>
                               {allEvolutions[idx].special
                                 ? allEvolutions[idx].special.map((item, i) => {
@@ -257,7 +312,7 @@ export default function EvolutionChain(props) {
                                     );
                                   })
                                 : null}
-                            </div>
+                            </div> */}
 
                             <div>
                               {allEvolutions[idx].special.gender == "1"
@@ -276,7 +331,7 @@ export default function EvolutionChain(props) {
                             }}
                           />
                         ) : null}
-                      </div>
+                      </Evolution>
                     );
                   })
                 : null}
