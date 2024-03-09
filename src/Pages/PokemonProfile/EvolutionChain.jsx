@@ -21,7 +21,7 @@ const Evolution = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: end;
-  justify-content:center;
+  align-items:center;
 `;
 
 const Location = styled.div`
@@ -57,6 +57,14 @@ const EvoInfo = styled.div`
 const AltForm = styled.div`
   display: flex;
   gap: 14px;
+  p{
+    text-transform:capitalize;
+  }
+`;
+
+const Artwork = styled.img`
+  height: 120px;
+  width: 120px;
 `;
 
 // const location = styled.div`
@@ -77,7 +85,8 @@ export default function EvolutionChain(props) {
 
   useEffect(() => {
     console.log(allEvolutions);
-  }, [allEvolutions]);
+    console.log(evolutions)
+  }, [evolutions]);
 
   return (
     <>
@@ -318,13 +327,15 @@ export default function EvolutionChain(props) {
                             :null} */}
                           </div>
                         </div>
-                        {evolutions[idx] ? (
-                          <img
-                            src={evolutions[idx].sprites.front_default}
+                        {evolutions[idx] && evolutions[idx].sprites ? (
+                            
+                          <Artwork
+                            src={evolutions[idx].sprites.other['official-artwork']['front_default']}
                             onClick={() => {
                               navigate(`/pokemon/${evolutions[idx].id}`);
                             }}
                           />
+
                         ) : null}
                       </Evolution>
                     );
@@ -345,7 +356,7 @@ export default function EvolutionChain(props) {
                           navigate(`/pokemon/${item.id}`);
                         }}
                       />
-                      <p>{item.name}</p>
+                      <p>{item.name.split('-').join(' ')}</p>
                     </div>
                   );
                 })

@@ -2,7 +2,6 @@ import React from "react";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 
-
 const Container = styled.div`
   font-family: "Roboto", sans-serif;
   display: flex;
@@ -11,13 +10,12 @@ const Container = styled.div`
   align-items: center;
   height: 100%;
   width: 100%;
-
 `;
 
 const Info = styled.div`
   display: flex;
   width: 100%;
-  height:100%;
+  height: 100%;
   justify-content: center;
   align-items: center;
   gap: 2rem;
@@ -27,10 +25,19 @@ const Info = styled.div`
   }
 `;
 
+const Vitals = styled.div`
+  h3 {
+    font-weight: bold;
+    margin: 2px;
+  }
+`;
 
+const Sprites = styled.div`
+  display: flex;
+`;
 const Sprite = styled.img`
-  height: 200px;
-  width: 200px;
+  height: 140px;
+  width: 140px;
 
   image-rendering: pixelated;
 `;
@@ -38,7 +45,6 @@ const Sprite = styled.img`
 const Artwork = styled.img`
   height: 400px;
   width: 400px;
-
 `;
 
 const Title = styled.h1`
@@ -68,9 +74,9 @@ const StatName = styled.div`
   display: flex;
   justify-content: center;
   gap: 1rem;
-  align-items:left;
+  align-items: left;
   width: 140px;
-  text-transform:capitalize;
+  text-transform: capitalize;
 `;
 
 const Bar = styled.div`
@@ -87,11 +93,11 @@ const TypeIcon = styled.img`
 `;
 
 const TypeBox = styled.div`
-  display:flex;
-  justify-content:center;
-  flex-direction:column;
-  gap:10px;
-`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+`;
 const Type = styled.div`
   padding: 6px;
   display: flex;
@@ -102,7 +108,7 @@ const Type = styled.div`
   color: white;
   font-size: 18px;
   width: 110px;
-  text-transform:capitalize;
+  text-transform: capitalize;
 `;
 
 const CategoryTitle = styled.div`
@@ -113,16 +119,19 @@ const CategoryTitle = styled.div`
 
 const AbilityBox = styled.div`
   display: flex;
-  gap: 0.5rem;
+  gap: 0.3rem;
   justify-content: center;
   align-items: start;
   div {
-    padding: 12px;
+    padding: 1px;
   }
 `;
-  const AbilityName = styled.div`
-    span{text-transform: capitalize};
-  `;
+const AbilityName = styled.div`
+  h3 {
+    text-transform: capitalize;
+    margin: 4px;
+  }
+`;
 
 const Section = styled.section`
   display: flex;
@@ -131,21 +140,20 @@ const Section = styled.section`
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  
 `;
 
 const Box = styled.div`
   display: flex;
-  justify-items:center;
+  justify-items: center;
   flex-direction: column;
   gap: 2rem;
-  width:50%;
-  align-items:center;
+  width: 50%;
+  align-items: center;
 `;
 const MainSection = styled.div`
   display: flex;
   justify-items: center;
-  align-items:center;
+  align-items: center;
   gap: 2rem;
   @media (max-width: 900px) {
     flex-direction: column;
@@ -153,27 +161,39 @@ const MainSection = styled.div`
 `;
 
 const Entry = styled.div`
-  padding:10px;
-  display:flex;
-  flex-direction:column;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
   gap: 10px;
-  text-align:center;
-  font-size:18px;
-  font-weight:bold;
-  width:50%;
-`
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  width: 50%;
+`;
 
 const TotalStat = styled.div`
-display:flex;
-width:100%;
-justify-content:center;
-font-weight:bold;
-gap:14px;
-`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  font-weight: bold;
+  gap: 14px;
+`;
 
 export default function Card(props) {
-  const { name, img, art, id, stats, types, abilities, description, generation, abilityText, height, weight } =
-    props;
+  const {
+    name,
+    img,
+    art,
+    id,
+    stats,
+    types,
+    abilities,
+    description,
+    generation,
+    abilityText,
+    height,
+    weight,
+  } = props;
   const [entry, setEntry] = useState("");
   const [totalStat, setTotalStat] = useState(0);
   const typeOne = types[0].type.name;
@@ -181,7 +201,6 @@ export default function Card(props) {
   if (types[1]) {
     typeTwo = types[1].type.name;
   }
-
 
   const typeMap = {
     grass: {
@@ -256,19 +275,17 @@ export default function Card(props) {
     },
   };
 
- 
-  useEffect(()=>{
-    console.log(art)
-  },[])
+  useEffect(() => {
+    console.log(art);
+  }, []);
 
-// calculate total stat of pokemon
-  useEffect(()=>{
+  // calculate total stat of pokemon
+  useEffect(() => {
     const total = stats.reduce(function (acc, obj) {
-      return acc + obj['base_stat'];
+      return acc + obj["base_stat"];
     }, 0);
     setTotalStat(total);
-  },[stats])
-
+  }, [stats]);
 
   useEffect(() => {
     if (description.length > 0) {
@@ -285,10 +302,9 @@ export default function Card(props) {
         } else {
           setEntry(description[17].flavor_text);
         }
-      } else if (generation == 'generation-ix'){
-        setEntry(description[0].flavor_text)
-      }
-      else {
+      } else if (generation == "generation-ix") {
+        setEntry(description[0].flavor_text);
+      } else {
         setEntry(description[8].flavor_text);
       }
     }
@@ -305,12 +321,27 @@ export default function Card(props) {
         <div>Gen {generation.split("-")[1].toUpperCase()}</div>
       </Entry>
       <Info>
-        <Sprite src={img} />
         <Artwork src={art} />
         <div>
-          <p>{height.length >= 3? height.slice(0,2) + '.' + height.slice(-1)  : height.length ==2? height.slice(0,1) +'.' + height.slice(-1) : height/10} m</p>
-          <p>{weight/10} kg</p>
+          <Vitals>
+            <div>
+              <h3>Height</h3>
+              <p>
+                {height.length >= 3
+                  ? height.slice(0, 2) + "." + height.slice(-1)
+                  : height.length == 2
+                  ? height.slice(0, 1) + "." + height.slice(-1)
+                  : height / 10}{" "}
+                m
+              </p>
+            </div>
+            <div>
+              <h3>Weight</h3>
+              <p>{weight / 10} kg</p>
+            </div>
+          </Vitals>
         </div>
+
         <Box>
           <MainSection>
             <Section>
@@ -338,8 +369,11 @@ export default function Card(props) {
                     ? abilities.map((item, idx) => {
                         return (
                           <div key={idx}>
-                            <span>{item.ability.name}</span>
-                            {item.is_hidden == true ? <> (hidden) </> : null}
+                            <h3>
+                              {item.ability.name}{" "}
+                              {item.is_hidden == true ? <> (hidden) </> : null}
+                            </h3>
+
                             {abilityText[idx] ? (
                               <div>{abilityText[idx].flavor_text}</div>
                             ) : null}
@@ -382,6 +416,11 @@ export default function Card(props) {
           <p>Total Stat:</p> <p>{totalStat}</p>
         </TotalStat>
       </StatContainer>
+      <Sprites>
+        <Sprite src={img.front_default} />
+        {img.back_default ? <Sprite src={img.back_default} /> : null}
+        <Sprite src={img.front_shiny} />
+      </Sprites>
     </Container>
   );
 }

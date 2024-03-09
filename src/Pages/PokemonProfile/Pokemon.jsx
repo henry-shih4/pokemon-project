@@ -143,6 +143,9 @@ export default function Pokemon() {
   useEffect(() => {
     console.log(pokeData);
   }, [pokeData]);
+  useEffect(() => {
+    console.log(speciesData);
+  }, [speciesData]);
 
   // useEffect(() => {
   //   if (evolutionData) {
@@ -340,7 +343,7 @@ export default function Pokemon() {
           <>
             <Card
               name={pokeData.name}
-              img={pokeData.sprites.front_default}
+              img={pokeData.sprites}
               art={pokeData.sprites.other['official-artwork']['front_default']}
               id={pokeData.id}
               stats={pokeData.stats}
