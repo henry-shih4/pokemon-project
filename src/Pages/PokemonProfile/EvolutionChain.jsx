@@ -21,6 +21,7 @@ const Evolution = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: end;
+  justify-content:center;
 `;
 
 const Location = styled.div`
@@ -207,9 +208,11 @@ export default function EvolutionChain(props) {
                                           {item.trigger &&
                                           item.trigger.name == "level-up" ? (
                                             <span> Level up </span>
-                                          ) : item.trigger.name == 'trade'? (
+                                          ) : item.trigger.name == "trade" ? (
                                             <span> By trade</span>
-                                          ) : null}
+                                          ) : item.trigger.name == "other" ? (
+                                            <span>other</span>
+                                          ): null}
                                         </p>
                                         <p>
                                           {item.item ? (
@@ -263,34 +266,16 @@ export default function EvolutionChain(props) {
                                         {item.relative_physical_stats ? (
                                           <div>
                                             {item.relative_physical_stats ==
-                                            -1 ? 
-                                              <p>atk > def</p>
-                                             : item.relative_physical_stats ==
-                                            -1 ?
-                                              <p>def>atk</p>
-                                             : <p>atk = def</p>}
+                                            -1 ? (
+                                              <p>atk {">"} def</p>
+                                            ) : item.relative_physical_stats ==
+                                              1 ? (
+                                              <p>def{">"}atk</p>
+                                            ) : (
+                                              <p>atk = def</p>
+                                            )}
                                           </div>
-                                        ) : null
-                                          
-                                        }
-
-                                        {/* <div>
-                          {allEvolutions[idx].special.min_level ? (
-                            <p>level {allEvolutions[idx].special.min_level} </p>
-                          ) : null}
-                        </div>
-                        {allEvolutions[idx].special.relative_physical_stats ==
-                        -1
-                          ? "def>atk"
-                          : allEvolutions[idx].special
-                              .relative_physical_stats == 1
-                          ? "atk>def"
-                          : null}
-                        <div>
-                          {allEvolutions[idx]?.item
-                            ? allEvolutions[idx].item.name
-                            : null}
-                        </div> */}
+                                        ) : null}
                                       </div>
                                     );
                                   })

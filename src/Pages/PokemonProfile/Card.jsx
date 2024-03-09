@@ -35,6 +35,12 @@ const Sprite = styled.img`
   image-rendering: pixelated;
 `;
 
+const Artwork = styled.img`
+  height: 400px;
+  width: 400px;
+
+`;
+
 const Title = styled.h1`
   display: flex;
   gap: 1rem;
@@ -166,7 +172,7 @@ gap:14px;
 `
 
 export default function Card(props) {
-  const { name, img, id, stats, types, abilities, description, generation, abilityText } =
+  const { name, img, art, id, stats, types, abilities, description, generation, abilityText, height, weight } =
     props;
   const [entry, setEntry] = useState("");
   const [totalStat, setTotalStat] = useState(0);
@@ -251,6 +257,9 @@ export default function Card(props) {
   };
 
  
+  useEffect(()=>{
+    console.log(art)
+  },[])
 
 // calculate total stat of pokemon
   useEffect(()=>{
@@ -297,6 +306,11 @@ export default function Card(props) {
       </Entry>
       <Info>
         <Sprite src={img} />
+        <Artwork src={art} />
+        <div>
+          <p>{height.length >= 3? height.slice(0,2) + '.' + height.slice(-1)  : height.length ==2? height.slice(0,1) +'.' + height.slice(-1) : height/10} m</p>
+          <p>{weight/10} kg</p>
+        </div>
         <Box>
           <MainSection>
             <Section>
