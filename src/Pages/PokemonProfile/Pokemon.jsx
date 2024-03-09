@@ -114,9 +114,6 @@ export default function Pokemon() {
     }
 
     let evolution = [];
-    // const first = pokeList.filter((item) => {
-    //   return item.name == list[0];
-    // });
 
     for (let i = 0; i < list.length; i++) {
       let evo = "";
@@ -144,99 +141,6 @@ export default function Pokemon() {
     console.log(pokeData);
   }, [pokeData]);
 
-  // useEffect(() => {
-  //   if (evolutionData) {
-  //     setBaseEvo(evolutionData.chain.species.name);
-  //       console.log(evolutionData)
-  //     if (
-  //       evolutionData.chain.evolves_to[0] &&
-  //       evolutionData.chain.evolves_to[0].evolution_details[0].trigger.name !==
-  //         "use-item"
-  //     ) {
-  //       setFirstEvo({
-  //         evolution: evolutionData.chain.evolves_to[0].species.name,
-  //         trigger:
-  //           evolutionData.chain.evolves_to[0].evolution_details[0].trigger.name,
-  //         level:
-  //           evolutionData.chain.evolves_to[0].evolution_details[0].min_level,
-  //       });
-  //     }
-  //     if (
-  //       evolutionData.chain.evolves_to[0] &&
-  //       evolutionData.chain.evolves_to[0].evolves_to[0] &&
-  //       evolutionData.chain.evolves_to[0].evolves_to[0].evolution_details[0]
-  //         .trigger.name !== "use-item"
-  //     ) {
-  //       setSecondEvo({
-  //         evolution:
-  //           evolutionData.chain.evolves_to[0].evolves_to[0].species.name,
-  //         trigger:
-  //           evolutionData.chain.evolves_to[0].evolves_to[0].evolution_details[0]
-  //             .trigger.name,
-  //         level:
-  //           evolutionData.chain.evolves_to[0].evolves_to[0].evolution_details[0]
-  //             .min_level,
-  //       });
-  //     } else if (
-  //       evolutionData.chain.evolves_to[0] &&
-  //       evolutionData.chain.evolves_to[0].evolution_details[0].trigger.name ===
-  //         "use-item"
-  //     ) {
-  //       setFirstEvo({
-  //         evolution: evolutionData.chain.evolves_to[0].species.name,
-  //         trigger:
-  //           evolutionData.chain.evolves_to[0].evolution_details[0].trigger.name,
-  //         item: evolutionData.chain.evolves_to[0].evolution_details[0].item
-  //           .name,
-  //       });
-  //     } else if (
-  //       evolutionData.chain.evolves_to[0] &&
-  //       evolutionData.chain.evolves_to[0].evolves_to[0] &&
-  //       evolutionData.chain.evolves_to[0].evolves_to[0].evolution_details[0]
-  //         .trigger.name === "use-item"
-  //     ) {
-  //       setSecondEvo({
-  //         evolution:
-  //           evolutionData.chain.evolves_to[0].evolves_to[0].species.name,
-  //         trigger:
-  //           evolutionData.chain.evolves_to[0].evolves_to[0].evolution_details[0]
-  //             .trigger.name,
-  //         item: evolutionData.chain.evolves_to[0].evolves_to[0]
-  //           .evolution_details[0].item.name,
-  //       });
-  //     }
-  //     if ( evolutionData.chain.evolves_to[0] &&
-  //       evolutionData.chain.evolves_to[0].evolution_details[0]
-  //     ) {
-  //       console.log(evolutionData.chain.evolves_to[0].evolution_details[0]);
-  //       const special = []
-  //       for (const [key, value] of Object.entries(
-  //         evolutionData.chain.evolves_to[0].evolution_details[0]
-  //       )) {
-  //       console.log(`${key}: ${value}`);
-  //         if (Number.isInteger(value) ){
-  //           console.log(key, value);
-  //           special.push([key,value])
-  //           setFirstEvo({
-  //             evolution: evolutionData.chain.evolves_to[0].species.name,
-  //             trigger:
-  //               evolutionData.chain.evolves_to[0].evolution_details[0].trigger.name,
-  //             level: `${key}, ${value}`,
-  //           });
-  //         }
-
-  //       }
-  //       // setFirstEvo({
-  //       //   evolution: evolutionData.chain.evolves_to[0].species.name,
-  //       //   trigger:
-  //       //     evolutionData.chain.evolves_to[0].evolution_details[0].trigger.name,
-  //       //   level: "happiness",
-  //       // });
-  //       console.log(special)
-  //     }
-  //   }
-  // }, [evolutionData]);
-
   useEffect(() => {
     if (evolutionData) {
       let evoChain = [];
@@ -244,48 +148,41 @@ export default function Pokemon() {
       console.log(evoData);
       do {
         let numberOfEvolutions = evoData["evolves_to"].length;
+        console.log(numberOfEvolutions);
         var evoDetails = evoData["evolution_details"][0];
-        if (numberOfEvolutions > 1) {
-          // const special = {};
-          // if (evoData.evolution_details[0]) {
-          //   for (const [key, value] of Object.entries(
-          //     evoData.evolution_details[0]
-          //   )) {
-          //     if (Number.isInteger(value) || value == 0 || key == "location") {
-          //       console.log(key, value);
-          //       special[key] = value;
-          //     }
-          //   }
-          // }
-          // evoChain.push({
-          //   evolution: evoData.species.name,
-          //   level: !evoDetails ? null : evoDetails.min_level,
-          //   trigger: !evoDetails ? null : evoDetails.trigger.name,
-          //   item: !evoDetails ? null : evoDetails.item,
-          //   special: special,
-          // });
-          for (let i = 0; i < numberOfEvolutions ; i++) {
+        if (numberOfEvolutions !== 1 && numberOfEvolutions !== 0) {
+          const specialA = [];
+          if (evoData.evolution_details[0]) {
+            let special = {}
+            for (const [key, value] of Object.entries(
+              evoData.evolution_details[0]
+            )) {
+              if (value) {
+                console.log(key, value);
+
+                special[key] = value;
+              }
+            }
+            specialA.push(special);
+          }
+          evoChain.push({
+            evolution: evoData.species.name,
+            special: specialA,
+          });
+
+          for (let i = 1; i < numberOfEvolutions; i++) {
             let currentEvo = evoData.evolves_to[i];
             console.log(currentEvo);
             const specialA = [];
             let currentEvoDetails = currentEvo.evolution_details;
-            for (let j = 0; j <=currentEvoDetails.length; j++) {
+            for (let j = 0; j <= currentEvoDetails.length; j++) {
               if (currentEvoDetails[j]) {
                 console.log(currentEvoDetails[j]);
                 let special = {};
                 for (const [key, value] of Object.entries(
                   currentEvoDetails[j]
                 )) {
-                  if (
-                    // Number.isInteger(value) ||
-                    // value == 0 ||
-                    // key == "time_of_day" ||
-                    // key == "location" && value != ""
-                    // ||
-                    // key == "item"
-                    // || key == 'trigger'
-                    value
-                  ) {
+                  if (value) {
                     console.log(key, value);
 
                     special[key] = value;
@@ -293,32 +190,6 @@ export default function Pokemon() {
                 }
                 specialA.push(special);
               }
-              // )) {
-              //   console.log(evoData.evolves_to[i].evolution_details[0]);
-              //   if (
-              //     Number.isInteger(value) ||
-              //     key == "time_of_day" ||
-              //     value == 0 ||
-              //     key == "location"
-              //   ) {
-              //     if (value !== "") {
-              //       special[key] = value;
-              //     }
-              //   }
-              // }
-              // evoChain.push({
-              //   evolution: evoData.evolves_to[i].species.name,
-              //   level: evoData.evolves_to[i].evolution_details
-              //     ? evoData.evolves_to[i].evolution_details[0].min_level
-              //     : null,
-              //   trigger: evoData.evolves_to[i].evolution_details
-              //     ? evoData.evolves_to[i].evolution_details[0].trigger.name
-              //     : null,
-              //   item: evoData.evolves_to[i].evolution_details
-              //     ? evoData.evolves_to[i].evolution_details[0].item
-              //     : null,
-              //   special: special,
-              // });
             }
             evoChain.push({
               evolution: currentEvo.species.name,
@@ -354,7 +225,6 @@ export default function Pokemon() {
               }
               specialA.push(special);
             }
-            console.log(specialA);
           }
 
           evoChain.push({
@@ -368,7 +238,7 @@ export default function Pokemon() {
 
         evoData = evoData["evolves_to"][0];
       } while (!!evoData && evoData.hasOwnProperty("evolves_to"));
-      console.log(evoChain);
+
       setAllEvolutions(evoChain);
     }
   }, [evolutionData]);

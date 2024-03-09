@@ -212,10 +212,6 @@ export default function PokemonType() {
   };
 
   
-useEffect(() => {
-  console.log(pokeList);
-}, [pokeList]);
-
   const pokeData = useMemo(() => {
     console.log("filtering..");
     const pokemon = pokeList.filter((item) => {

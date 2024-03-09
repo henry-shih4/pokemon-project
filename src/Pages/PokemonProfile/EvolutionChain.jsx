@@ -21,10 +21,12 @@ const Evolution = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: end;
+`;
 
-  location {
+const Location = styled.div`
+  
     text-transform: capitalize;
-  }
+  
 `;
 
 const Heading = styled.h2`
@@ -188,40 +190,7 @@ export default function EvolutionChain(props) {
                   ); */
                     return (
                       <Evolution key={idx}>
-                        {/* <div>
-                          {allEvolutions[idx].special.min_level ? (
-                            <p>level {allEvolutions[idx].special.min_level} </p>
-                          ) : null}
-                        </div>
-                        {allEvolutions[idx].special.relative_physical_stats ==
-                        -1
-                          ? "def>atk"
-                          : allEvolutions[idx].special
-                              .relative_physical_stats == 1
-                          ? "atk>def"
-                          : null}
-                        <div>
-                          {allEvolutions[idx]?.item
-                            ? allEvolutions[idx].item.name
-                            : null}
-                        </div> */}
 
-                        {/* {allEvolutions[idx].special ? (
-                          <div>
-                            {allEvolutions[idx].special["time_of_day"] ? (
-                              <div>
-                                {allEvolutions[idx].special["time_of_day"] ==
-                                "day"
-                                  ? "day time"
-                                  : allEvolutions[idx].special["time_of_day"] ==
-                                    "night"
-                                  ? "night time"
-                                  : null}
-                              </div>
-                            ) : null}
-                          </div>
-                        ) : null} */}
- 
                         <div>
                           <div>
                             <div>
@@ -238,6 +207,8 @@ export default function EvolutionChain(props) {
                                           {item.trigger &&
                                           item.trigger.name == "level-up" ? (
                                             <span> Level up </span>
+                                          ) : item.trigger.name == 'trade'? (
+                                            <span> By trade</span>
                                           ) : null}
                                         </p>
                                         <p>
@@ -245,11 +216,16 @@ export default function EvolutionChain(props) {
                                             <span> use {item.item.name} </span>
                                           ) : null}
                                         </p>
-                                        <p>
-                                          {item.location ? (
-                                            <location>at {item.location.name.split('-').join(' ')}</location>
-                                          ) : null}
-                                        </p>
+
+                                        {item.location ? (
+                                          <Location>
+                                            at{" "}
+                                            {item.location.name
+                                              .split("-")
+                                              .join(" ")}
+                                          </Location>
+                                        ) : null}
+
                                         <p>
                                           {item.time_of_day
                                             ? item.time_of_day
@@ -279,16 +255,48 @@ export default function EvolutionChain(props) {
                                         <p>
                                           {item.known_move_type ? (
                                             <span>
-                                              knows {item.known_move_type.name} move
+                                              knows {item.known_move_type.name}{" "}
+                                              move
                                             </span>
                                           ) : null}
                                         </p>
+                                        {item.relative_physical_stats ? (
+                                          <div>
+                                            {item.relative_physical_stats ==
+                                            -1 ? 
+                                              <p>atk > def</p>
+                                             : item.relative_physical_stats ==
+                                            -1 ?
+                                              <p>def>atk</p>
+                                             : <p>atk = def</p>}
+                                          </div>
+                                        ) : null
+                                          
+                                        }
+
+                                        {/* <div>
+                          {allEvolutions[idx].special.min_level ? (
+                            <p>level {allEvolutions[idx].special.min_level} </p>
+                          ) : null}
+                        </div>
+                        {allEvolutions[idx].special.relative_physical_stats ==
+                        -1
+                          ? "def>atk"
+                          : allEvolutions[idx].special
+                              .relative_physical_stats == 1
+                          ? "atk>def"
+                          : null}
+                        <div>
+                          {allEvolutions[idx]?.item
+                            ? allEvolutions[idx].item.name
+                            : null}
+                        </div> */}
                                       </div>
                                     );
                                   })
                                 : null}
                             </div>
-{/* 
+                            {/* 
                             <div>
                               {allEvolutions[idx].special
                                 ? allEvolutions[idx].special.map((item, i) => {
@@ -314,6 +322,7 @@ export default function EvolutionChain(props) {
                                 : null}
                             </div> */}
 
+                            {/* {allEvolutions[idx].special.gender?
                             <div>
                               {allEvolutions[idx].special.gender == "1"
                                 ? "female"
@@ -321,6 +330,7 @@ export default function EvolutionChain(props) {
                                 ? "male"
                                 : null}
                             </div>
+                            :null} */}
                           </div>
                         </div>
                         {evolutions[idx] ? (
