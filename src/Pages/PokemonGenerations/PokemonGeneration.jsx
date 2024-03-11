@@ -149,7 +149,15 @@ export default function PokemonType() {
     }
   }, [generationNumber]);
 
+
+  useEffect(()=>{
+    console.log(generationNumber)
+  }, [generationNumber])
   const pokeData = useMemo(() => {
+    let data = sessionStorage.getItem("generation");
+    if (data){
+      setGenerationNumber(data)
+    }
     generation();
     let pokemon = pokeList;
     return pokemon;
@@ -171,8 +179,10 @@ export default function PokemonType() {
         <>
           <Form>
             <Select
+            defaultValue={generationNumber}
               onChange={(e) => {
                 setGenerationNumber(e.target.value);
+                sessionStorage.setItem("generation", e.target.value);
               }}
             >
               <Option value={1}>Generation 1</Option>

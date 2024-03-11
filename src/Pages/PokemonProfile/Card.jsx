@@ -23,13 +23,24 @@ const Info = styled.div`
   @media (max-width: 900px) {
     flex-direction: column;
   }
+
 `;
 
 const Vitals = styled.div`
+  text-align: center;
+  display:flex;
+  flex-direction:column;
   h3 {
     font-weight: bold;
     margin: 2px;
   }
+  
+    @media (max-width: 900px) {
+      
+      flex-direction: row;
+      gap:14px;
+    }
+  
 `;
 
 const Sprites = styled.div`
@@ -43,6 +54,7 @@ const Sprite = styled.img`
 `;
 
 const Artwork = styled.img`
+  padding-left:10px;
   height: 400px;
   width: 400px;
 `;
@@ -97,6 +109,9 @@ const TypeBox = styled.div`
   justify-content: center;
   flex-direction: column;
   gap: 10px;
+  @media (max-width: 900px) {
+    flex-direction: row;
+  }
 `;
 const Type = styled.div`
   padding: 6px;
@@ -112,22 +127,28 @@ const Type = styled.div`
 `;
 
 const CategoryTitle = styled.div`
-  text-align: center;
-  text-transform: uppercase;
-  font-weight: bold;
+  text-transform: capitalize;
+  display: flex;
+  justify-content: start;
+  h3 {
+    width:full;
+    margin: 4px;
+  }
 `;
 
 const AbilityBox = styled.div`
   display: flex;
+  flex-direction:column;
   gap: 0.3rem;
   justify-content: center;
   align-items: start;
   div {
     padding: 1px;
   }
+  padding-right:10px;
 `;
 const AbilityName = styled.div`
-  h3 {
+  h4 {
     text-transform: capitalize;
     margin: 4px;
   }
@@ -138,7 +159,6 @@ const Section = styled.section`
   flex-direction: column;
   height: 100%;
   justify-content: center;
-  align-items: center;
   gap: 1rem;
 `;
 
@@ -153,7 +173,7 @@ const Box = styled.div`
 const MainSection = styled.div`
   display: flex;
   justify-items: center;
-  align-items: center;
+  align-items: start;
   gap: 2rem;
   @media (max-width: 900px) {
     flex-direction: column;
@@ -165,10 +185,12 @@ const Entry = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  text-align: center;
-  font-size: 18px;
-  font-weight: bold;
   width: 50%;
+  margin: 1.5rem;
+  h3 {
+    text-transform: capitalize;
+    margin: 4px;
+  }
 `;
 
 const TotalStat = styled.div`
@@ -316,14 +338,14 @@ export default function Card(props) {
         <div>{name}</div>
         <div>#{id}</div>
       </Title>
-      <Entry>
-        <div>{entry}</div>
-        <div>Gen {generation.split("-")[1].toUpperCase()}</div>
-      </Entry>
       <Info>
         <Artwork src={art} />
         <div>
           <Vitals>
+            <div>
+              <h3>Generation</h3>
+              <p>{generation.split("-")[1].toUpperCase()}</p>
+            </div>
             <div>
               <h3>Height</h3>
               <p>
@@ -345,8 +367,10 @@ export default function Card(props) {
         <Box>
           <MainSection>
             <Section>
-              <CategoryTitle>Type</CategoryTitle>
               <TypeBox>
+                <CategoryTitle>
+                  <h3>Type</h3>
+                </CategoryTitle>
                 <Type style={{ backgroundColor: `${typeMap[typeOne].color}` }}>
                   <TypeIcon src={typeMap[typeOne].img} />
                   {types[0].type.name}
@@ -362,17 +386,19 @@ export default function Card(props) {
               </TypeBox>
             </Section>
             <Section>
-              <CategoryTitle>Abilities</CategoryTitle>
               <AbilityBox>
+                <CategoryTitle>
+                  <h3>Abilities</h3>
+                </CategoryTitle>
                 <AbilityName>
                   {abilities
                     ? abilities.map((item, idx) => {
                         return (
                           <div key={idx}>
-                            <h3>
+                            <h4>
                               {item.ability.name}{" "}
                               {item.is_hidden == true ? <> (hidden) </> : null}
-                            </h3>
+                            </h4>
 
                             {abilityText[idx] ? (
                               <div>{abilityText[idx].flavor_text}</div>
@@ -387,6 +413,10 @@ export default function Card(props) {
           </MainSection>
         </Box>
       </Info>
+      <Entry>
+        <h3>Pokedex Entry</h3>
+        <div>{entry}</div>
+      </Entry>
       <StatContainer>
         {stats
           ? stats.map((stat, idx) => {
