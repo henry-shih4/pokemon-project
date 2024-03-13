@@ -21,13 +21,18 @@ const Evolution = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: end;
-  align-items:center;
+  align-items: center;
+  h4 {
+    text-transform: capitalize;
+  }
+`;
+
+const Line = styled.div`
+  border: 1px solid gray;
 `;
 
 const Location = styled.div`
-  
-    text-transform: capitalize;
-  
+  text-transform: capitalize;
 `;
 
 const Heading = styled.h2`
@@ -45,31 +50,34 @@ const Error = styled.h3`
   justify-content: center;
 `;
 
-const NoEvolutions = styled.h3`
-  display: flex;
-  justify-content: center;
-`;
-
 const EvoInfo = styled.div`
   display: flex;
   flex-direction: column;
 `;
 const AltForm = styled.div`
   display: flex;
-  gap: 14px;
-  p{
-    text-transform:capitalize;
+  gap: 2rem;
+  justify-content: center;
+  div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  h4 {
+    text-transform: capitalize;
+    text-align: center;
+  }
+  @media (max-width: 900px) {
+    flex-direction: column;
   }
 `;
 
 const Artwork = styled.img`
   height: 120px;
   width: 120px;
+  display: flex;
+  justify-content: center;
 `;
-
-// const location = styled.div`
-//   text-transform:capitalize;
-// `
 
 export default function EvolutionChain(props) {
   const navigate = useNavigate();
@@ -85,7 +93,7 @@ export default function EvolutionChain(props) {
 
   useEffect(() => {
     console.log(allEvolutions);
-    console.log(evolutions)
+    console.log(evolutions);
   }, [evolutions]);
 
   return (
@@ -100,107 +108,11 @@ export default function EvolutionChain(props) {
               <Loading />
             </LoadingContainer>
           ) : (
-            /* <Evolutions>
-            {evolutions ? (
-              <>
-                <div>
-                  {evolutions[0] ? (
-                    <>
-                      <Evolution>
-                        <img
-                          src={evolutions[0].sprites.front_default}
-                          onClick={() => {
-                            navigate(`/pokemon/${evolutions[0].name}`);
-                          }}
-                        />
-                        <div>
-                          <div>{firstEvo.level ? firstEvo.level : null}</div>
-                          <div>{firstEvo.item ? firstEvo.item : null}</div>
-                          <div>
-                            {firstEvo.trigger ? firstEvo.trigger : null}
-                          </div>
-                        </div>
-                      </Evolution>
-                    </>
-                  ) : (
-                    <Loading />
-                  )}
-                </div>
-                <div>
-                  {evolutions[1] ? (
-                    <>
-                      <Evolution>
-                        <img
-                          src={evolutions[1].sprites.front_default}
-                          onClick={() => {
-                            navigate(`/pokemon/${evolutions[1].name}`);
-                          }}
-                        />
-                        <div>
-                          <div>{secondEvo.level ? secondEvo.level : null}</div>
-                          <div>{secondEvo.item ? secondEvo.item : null}</div>
-                          <div>
-                            {secondEvo.trigger ? secondEvo.trigger : null}
-                          </div>
-                        </div>
-                      </Evolution>
-                    </>
-                  ) : null}
-                </div>
-
-                <div>
-                  {evolutions[2] ? (
-                    <img
-                      src={evolutions[2].sprites.front_default}
-                      onClick={() => {
-                        navigate(`/pokemon/${evolutions[2].name}`);
-                      }}
-                    />
-                  ) : null}
-                </div>
-              </>
-            ) : null}
-          </Evolutions> */
-
             <Evolutions>
               {evolutions
                 ? evolutions.map((evolution, idx) => {
-                    /* return (
-                    <React.Fragment key={idx}>
-                      <Evolution>
-                        <EvoInfo>
-                          <div>
-                            {allEvolutions[idx]
-                              ? allEvolutions[idx].level
-                              : null}
-                          </div>
-                          <div>
-                            {allEvolutions[idx]?.item
-                              ? allEvolutions[idx].item.name
-                              : null}
-                          </div>
-                          <div>
-                            {allEvolutions[idx]?.trigger
-                              ? allEvolutions[idx].trigger
-                              : null}
-                          </div>
-
-                         
-                        </EvoInfo>
-                        {evolutions[idx]?
-                        <img
-                          src={evolutions[idx].sprites.front_default}
-                          onClick={() => {
-                            navigate(`/pokemon/${evolutions[idx].id}`);
-                          }}
-                        />
-                        :null}
-                      </Evolution>
-                    </React.Fragment>
-                  ); */
                     return (
                       <Evolution key={idx}>
-
                         <div>
                           <div>
                             <div>
@@ -214,6 +126,13 @@ export default function EvolutionChain(props) {
                                           ) : null}
                                         </p>
                                         <p>
+                                          {item.held_item ? (
+                                            <span>
+                                              holding {item.held_item.name}{" "}
+                                            </span>
+                                          ) : null}
+                                        </p>
+                                        <p>
                                           {item.trigger &&
                                           item.trigger.name == "level-up" ? (
                                             <span> Level up </span>
@@ -221,7 +140,7 @@ export default function EvolutionChain(props) {
                                             <span> By trade</span>
                                           ) : item.trigger.name == "other" ? (
                                             <span>other</span>
-                                          ): null}
+                                          ) : null}
                                         </p>
                                         <p>
                                           {item.item ? (
@@ -265,6 +184,11 @@ export default function EvolutionChain(props) {
                                           ) : null}
                                         </p>
                                         <p>
+                                          {item.needs_overworld_rain ? (
+                                            <span>when raining</span>
+                                          ) : null}
+                                        </p>
+                                        <p>
                                           {item.known_move_type ? (
                                             <span>
                                               knows {item.known_move_type.name}{" "}
@@ -280,11 +204,10 @@ export default function EvolutionChain(props) {
                                             ) : item.relative_physical_stats ==
                                               1 ? (
                                               <p>def{">"}atk</p>
-                                            ) : (
-                                              <p>atk = def</p>
-                                            )}
+                                            ) : <p>def{"="}atk</p>}
                                           </div>
                                         ) : null}
+                                        <Line></Line>
                                       </div>
                                     );
                                   })
@@ -327,15 +250,21 @@ export default function EvolutionChain(props) {
                             :null} */}
                           </div>
                         </div>
-                        {evolutions[idx] && evolutions[idx].sprites ? (
-                            
-                          <Artwork
-                            src={evolutions[idx].sprites.other['official-artwork']['front_default']}
-                            onClick={() => {
-                              navigate(`/pokemon/${evolutions[idx].id}`);
-                            }}
-                          />
 
+                        {evolutions[idx] && evolutions[idx].sprites ? (
+                          <>
+                            <Artwork
+                              src={
+                                evolutions[idx].sprites.other[
+                                  "official-artwork"
+                                ]["front_default"]
+                              }
+                              onClick={() => {
+                                navigate(`/pokemon/${evolutions[idx].id}`);
+                              }}
+                            />
+                            <h4>{evolution.name ? evolution.name : null}</h4>
+                          </>
                         ) : null}
                       </Evolution>
                     );
@@ -344,27 +273,26 @@ export default function EvolutionChain(props) {
             </Evolutions>
           )}
 
-          <div>Other forms</div>
-          <AltForm>
-            {altForms
-              ? altForms.map((item) => {
-                  return (
-                    <div key={item.name}>
-                      <img
-                        src={item.sprites.front_default}
-                        onClick={() => {
-                          navigate(`/pokemon/${item.id}`);
-                        }}
-                      />
-                      <p>{item.name.split('-').join(' ')}</p>
-                    </div>
-                  );
-                })
-              : null}
-          </AltForm>
-          {!speciesLoading && evolutions === null ? (
-            <NoEvolutions>No known evolutions</NoEvolutions>
-          ) : null}
+          <Container>
+            <h3>Alternate Forms</h3>
+            <AltForm>
+              {altForms
+                ? altForms.map((item) => {
+                    return (
+                      <div key={item.name}>
+                        <Artwork
+                          src={item.sprites.front_default}
+                          onClick={() => {
+                            navigate(`/pokemon/${item.id}`);
+                          }}
+                        />
+                        <h4>{item.name.split("-").join(" ")}</h4>
+                      </div>
+                    );
+                  })
+                : null}
+            </AltForm>
+          </Container>
           {speciesError ? (
             <Error>
               Something went wrong! That Pokemon may not exist in our database.

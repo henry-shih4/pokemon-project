@@ -266,7 +266,7 @@ export default function Pokemon() {
                 for (const [key, value] of Object.entries(
                   currentEvoDetails[j]
                 )) {
-                  if (value === "") {
+                  if (value === "" || value == 0) {
                     special[key] = false;
                   }
                   if (

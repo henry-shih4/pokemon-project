@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate, NavLink } from "react-router-dom";
-import { useContext, useMemo, useState , useEffect} from "react";
+import { useContext, useMemo, useState, useEffect } from "react";
 import { PokemonContext } from "../../components/PokemonContext";
 import Loading from "../../components/Loading";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -70,7 +70,7 @@ const Name = styled.div`
   padding: 4px;
   text-align: center;
   text-transform: capitalize;
-  font-size:20px;
+  font-size: 20px;
   span {
     font-weight: bold;
     font-size: 14px;
@@ -137,7 +137,6 @@ export default function PokemonType() {
   const navigate = useNavigate();
   const [typeName, setTypeName] = useState("grass");
 
-  
   const typeMap = {
     grass: {
       name: "grass",
@@ -211,7 +210,6 @@ export default function PokemonType() {
     },
   };
 
-  
   const pokeData = useMemo(() => {
     console.log("filtering..");
     const pokemon = pokeList.filter((item) => {
@@ -220,6 +218,11 @@ export default function PokemonType() {
         (item.types[1] && item.types[1].type.name === typeName)
       );
     });
+
+    let data = sessionStorage.getItem("type");
+    if (data) {
+      setTypeName(data);
+    }
     return pokemon;
   }, [pokeList, typeName]);
 
@@ -237,6 +240,7 @@ export default function PokemonType() {
                   key={item.name}
                   onClick={() => {
                     setTypeName(item.name);
+                    sessionStorage.setItem("type", item.name);
                   }}
                 >
                   {typeMap[item.name] ? (

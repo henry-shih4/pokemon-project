@@ -45,11 +45,14 @@ const Vitals = styled.div`
 
 const Sprites = styled.div`
   display: flex;
+  justify-content:center;
+  p{
+    text-align:center;
+  }
 `;
 const Sprite = styled.img`
   height: 140px;
   width: 140px;
-
   image-rendering: pixelated;
 `;
 
@@ -185,7 +188,7 @@ const Entry = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 50%;
+  width: 45%;
   margin: 1.5rem;
   h3 {
     text-transform: capitalize;
@@ -297,6 +300,18 @@ export default function Card(props) {
     },
   };
 
+  const generationMap = {
+    'i' : 1, 
+    'ii': 2,
+    'iii': 3,
+    'iv': 4,
+    'v': 5,
+    'vi': 6,
+    'Vvii':7,
+    'viii': 8, 
+    'ix': 9
+
+  }
   useEffect(() => {
     console.log(art);
   }, []);
@@ -344,7 +359,7 @@ export default function Card(props) {
           <Vitals>
             <div>
               <h3>Generation</h3>
-              <p>{generation.split("-")[1].toUpperCase()}</p>
+              <p>{generationMap[generation.split("-")[1]]}</p>
             </div>
             <div>
               <h3>Height</h3>
@@ -447,9 +462,21 @@ export default function Card(props) {
         </TotalStat>
       </StatContainer>
       <Sprites>
-        <Sprite src={img.front_default} />
-        {img.back_default ? <Sprite src={img.back_default} /> : null}
-        <Sprite src={img.front_shiny} />
+        <div>
+          <p>Front Sprite</p>
+          <Sprite src={img.front_default} />
+        </div>
+
+        {img.back_default ? (
+          <div>
+            <p>Back Sprite</p>
+            <Sprite src={img.back_default} />
+          </div>
+        ) : null}
+        <div>
+          <p>Shiny</p>
+          <Sprite src={img.front_shiny} />
+        </div>
       </Sprites>
     </Container>
   );
