@@ -213,20 +213,39 @@ export default function Pokemon() {
               splitEvo: splitEvo,
             });
           }
-          
-          for (let i = 0; i<evoData.evolves_to.length;i++){
-          if (numberOfEvolutions > 1 && evoData.evolves_to[0].evolves_to[0]) {
-            console.log(evoData.evolves_to[i].evolves_to);
-            doubleEvo = true;
-            evoChain.push({
-              evolution: evoData.evolves_to[i].evolves_to[0].species.name,
-              splitEvo: splitEvo,
-              doubleEvo: doubleEvo,
-            });
-            
-           
+
+          for (let i = 0; i < evoData.evolves_to.length; i++) {
+            if (numberOfEvolutions > 1 && evoData.evolves_to[0].evolves_to[0]) {
+              console.log(evoData.evolves_to[i].evolves_to);
+              doubleEvo = true;
+              const specialA = [];
+              let currentEvoDetails = evoData.evolves_to[i].evolves_to[0].evolution_details;
+              console.log(currentEvoDetails)
+              for (let j = 0; j <= currentEvoDetails.length; j++) {
+                if (currentEvoDetails[j]) {
+                  let special = {};
+                  for (const [key, value] of Object.entries(
+                    currentEvoDetails[j]
+                  )) {
+                    if (value === "") {
+                      special[key] = false;
+                    }
+                    if (value || value === 0) {
+                      special[key] = value;
+                    }
+                  }
+                  specialA.push(special);
+                }
+              }
+
+              evoChain.push({
+                evolution: evoData.evolves_to[i].evolves_to[0].species.name,
+                splitEvo: splitEvo,
+                doubleEvo: doubleEvo,
+                special: specialA,
+              });
+            }
           }
-        }
           // if (numberOfEvolutions > 1 && evoData.evolves_to[1].evolves_to[0]) {
           //   console.log(evoData.evolves_to[1].evolves_to);
           //   evoChain.push({

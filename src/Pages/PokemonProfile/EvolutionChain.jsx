@@ -100,6 +100,11 @@ const Artwork = styled.img`
   justify-content: center;
 `;
 
+const Arrow = styled.div`
+display:flex;
+justify-content:center;
+`
+
 export default function EvolutionChain(props) {
   const navigate = useNavigate();
   const {
@@ -136,10 +141,13 @@ export default function EvolutionChain(props) {
                   ? evolutions.map((evolution, idx) => {
                       if (allEvolutions[idx].splitEvo == false) {
                         return (
-                          
                           <Evolution key={idx}>
-                            
                             <div>
+                              <Arrow>
+                                {idx != 0 ? (
+                                  <img src={DownArrow} alt="down-arrow-svg" />
+                                ) : null}
+                              </Arrow>
                               <div>
                                 <div>
                                   {allEvolutions[idx].special
@@ -147,7 +155,6 @@ export default function EvolutionChain(props) {
                                         (item, i) => {
                                           return (
                                             <div key={i}>
-                                              {idx !=0? <img src={DownArrow} alt="" /> : null}
                                               <p>
                                                 {item.min_level ? (
                                                   <span>
@@ -305,6 +312,11 @@ export default function EvolutionChain(props) {
                         return (
                           <Evolution key={idx}>
                             <div>
+                              <Arrow>
+                                {idx != 0 ? (
+                                  <img src={DownArrow} alt="down-arrow-svg" />
+                                ) : null}
+                              </Arrow>
                               <div>
                                 <div>
                                   {allEvolutions[idx].special
@@ -466,6 +478,11 @@ export default function EvolutionChain(props) {
                         return (
                           <Evolution key={idx}>
                             <div>
+                              <Arrow>
+                                {idx != 0 ? (
+                                  <img src={DownArrow} alt="down-arrow-svg" />
+                                ) : null}
+                              </Arrow>
                               <div>
                                 <div>
                                   {allEvolutions[idx].special
