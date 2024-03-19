@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
 import { PokemonContext } from "../../components/PokemonContext";
+import DownArrow from "../../icons/down-arrow.svg"
 
 const Container = styled.div`
   font-family: "Roboto", sans-serif;
@@ -11,8 +12,16 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
+const EvoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 const Evolutions = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   gap: 2rem;
 `;
@@ -25,6 +34,18 @@ const Evolution = styled.div`
   h4 {
     text-transform: capitalize;
   }
+`;
+
+const SplitEvolutions = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+`;
+
+const DoubleEvolutions = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
 `;
 
 const Line = styled.div`
@@ -108,138 +129,138 @@ export default function EvolutionChain(props) {
               <Loading />
             </LoadingContainer>
           ) : (
-            <Evolutions>
-              {evolutions
-                ? evolutions.map((evolution, idx) => {
-                    return (
-                      <Evolution key={idx}>
-                        <div>
-                          <div>
+            <EvoContainer>
+              <Evolutions>
+                
+                {evolutions
+                  ? evolutions.map((evolution, idx) => {
+                      if (allEvolutions[idx].splitEvo == false) {
+                        return (
+                          
+                          <Evolution key={idx}>
+                            
                             <div>
-                              {allEvolutions[idx].special
-                                ? allEvolutions[idx].special.map((item, i) => {
-                                    return (
-                                      <div key={i}>
-                                        <p>
-                                          {item.min_level ? (
-                                            <span>Level {item.min_level} </span>
-                                          ) : null}
-                                        </p>
-                                        <p>
-                                          {item.held_item ? (
-                                            <span>
-                                              holding {item.held_item.name}{" "}
-                                            </span>
-                                          ) : null}
-                                        </p>
-                                        <p>
-                                          {item.trigger &&
-                                          item.trigger.name == "level-up" ? (
-                                            <span> Level up </span>
-                                          ) : item.trigger.name == "trade" ? (
-                                            <span> By trade</span>
-                                          ) : item.trigger.name == "other" ? (
-                                            <span>other</span>
-                                          ) : null}
-                                        </p>
-                                        <p>
-                                          {item.item ? (
-                                            <span> use {item.item.name} </span>
-                                          ) : null}
-                                        </p>
+                              <div>
+                                <div>
+                                  {allEvolutions[idx].special
+                                    ? allEvolutions[idx].special.map(
+                                        (item, i) => {
+                                          return (
+                                            <div key={i}>
+                                              {idx !=0? <img src={DownArrow} alt="" /> : null}
+                                              <p>
+                                                {item.min_level ? (
+                                                  <span>
+                                                    Level {item.min_level}{" "}
+                                                  </span>
+                                                ) : null}
+                                              </p>
+                                              <p>
+                                                {item.held_item ? (
+                                                  <span>
+                                                    holding{" "}
+                                                    {item.held_item.name}{" "}
+                                                  </span>
+                                                ) : null}
+                                              </p>
+                                              <p>
+                                                {item.trigger &&
+                                                item.trigger.name ==
+                                                  "level-up" ? (
+                                                  <span> Level up </span>
+                                                ) : item.trigger.name ==
+                                                  "trade" ? (
+                                                  <span> By trade</span>
+                                                ) : item.trigger.name ==
+                                                  "other" ? (
+                                                  <span>other</span>
+                                                ) : null}
+                                              </p>
+                                              <p>
+                                                {item.item ? (
+                                                  <span>
+                                                    {" "}
+                                                    use {item.item.name}{" "}
+                                                  </span>
+                                                ) : null}
+                                              </p>
 
-                                        {item.location ? (
-                                          <Location>
-                                            at{" "}
-                                            {item.location.name
-                                              .split("-")
-                                              .join(" ")}
-                                          </Location>
-                                        ) : null}
+                                              {item.location ? (
+                                                <Location>
+                                                  at{" "}
+                                                  {item.location.name
+                                                    .split("-")
+                                                    .join(" ")}
+                                                </Location>
+                                              ) : null}
 
-                                        <p>
-                                          {item.time_of_day
-                                            ? item.time_of_day
-                                            : null}
-                                        </p>
-                                        <p>
-                                          {item.min_beauty ? (
-                                            <span>
-                                              Beauty {item.min_beauty}
-                                            </span>
-                                          ) : null}
-                                        </p>
-                                        <p>
-                                          {item.min_affection ? (
-                                            <span>
-                                              Affection {item.min_affection}
-                                            </span>
-                                          ) : null}
-                                        </p>
-                                        <p>
-                                          {item.min_happiness ? (
-                                            <span>
-                                              Happiness {item.min_happiness}
-                                            </span>
-                                          ) : null}
-                                        </p>
-                                        <p>
-                                          {item.needs_overworld_rain ? (
-                                            <span>when raining</span>
-                                          ) : null}
-                                        </p>
-                                        <p>
-                                          {item.known_move_type ? (
-                                            <span>
-                                              knows {item.known_move_type.name}{" "}
-                                              move
-                                            </span>
-                                          ) : null}
-                                        </p>
-                                        {item.relative_physical_stats ? (
-                                          <div>
-                                            {item.relative_physical_stats ==
-                                            -1 ? (
-                                              <p>atk {">"} def</p>
-                                            ) : item.relative_physical_stats ==
-                                              1 ? (
-                                              <p>def{">"}atk</p>
-                                            ) : <p>def{"="}atk</p>}
-                                          </div>
-                                        ) : null}
-                                        <Line></Line>
-                                      </div>
-                                    );
-                                  })
-                                : null}
-                            </div>
-                            {/* 
-                            <div>
-                              {allEvolutions[idx].special
-                                ? allEvolutions[idx].special.map((item, i) => {
-                                    return (
-                                      <div key={i}>
-                                        {item.min_affection ? (
-                                          <>
-                                            <p>
-                                              affection {item.min_affection}
-                                            </p>
-                                          </>
-                                        ) : null}
-                                        {item.min_happiness ? (
-                                          <>
-                                            <p>
-                                              happiness {item.min_happiness}
-                                            </p>
-                                          </>
-                                        ) : null}
-                                      </div>
-                                    );
-                                  })
-                                : null}
-                            </div> */}
+                                              <p>
+                                                {item.time_of_day ? (
+                                                  <span>
+                                                    {item.time_of_day} time
+                                                  </span>
+                                                ) : null}
+                                              </p>
+                                              <p>
+                                                {item.min_beauty ? (
+                                                  <span>
+                                                    Beauty {item.min_beauty}
+                                                  </span>
+                                                ) : null}
+                                              </p>
+                                              <p>
+                                                {item.min_affection ? (
+                                                  <span>
+                                                    Affection{" "}
+                                                    {item.min_affection}
+                                                  </span>
+                                                ) : null}
+                                              </p>
+                                              <p>
+                                                {item.min_happiness ? (
+                                                  <span>
+                                                    Happiness{" "}
+                                                    {item.min_happiness}
+                                                  </span>
+                                                ) : null}
+                                              </p>
+                                              <p>
+                                                {item.needs_overworld_rain ? (
+                                                  <span>when raining</span>
+                                                ) : null}
+                                              </p>
+                                              <p>
+                                                {item.known_move_type ? (
+                                                  <span>
+                                                    knows{" "}
+                                                    {item.known_move_type.name}{" "}
+                                                    move
+                                                  </span>
+                                                ) : null}
+                                              </p>
+                                              {item.relative_physical_stats ? (
+                                                <div>
+                                                  {item.relative_physical_stats ==
+                                                  -1 ? (
+                                                    <p>atk {">"} def</p>
+                                                  ) : item.relative_physical_stats ==
+                                                    1 ? (
+                                                    <p>def{">"}atk</p>
+                                                  ) : item.relative_physical_stats ==
+                                                    0 ? (
+                                                    <p>def=atk</p>
+                                                  ) : null}
+                                                </div>
+                                              ) : null}
+                                              <Line></Line>
+                                            </div>
+                                          );
+                                        }
+                                      )
+                                    : null}
+                                </div>
 
-                            {/* {allEvolutions[idx].special.gender?
+                                {/* {allEvolutions[idx].special.gender?
                             <div>
                               {allEvolutions[idx].special.gender == "1"
                                 ? "female"
@@ -248,29 +269,358 @@ export default function EvolutionChain(props) {
                                 : null}
                             </div>
                             :null} */}
-                          </div>
-                        </div>
+                              </div>
+                            </div>
 
-                        {evolutions[idx] && evolutions[idx].sprites ? (
-                          <>
-                            <Artwork
-                              src={
-                                evolutions[idx].sprites.other[
-                                  "official-artwork"
-                                ]["front_default"]
-                              }
-                              onClick={() => {
-                                navigate(`/pokemon/${evolutions[idx].id}`);
-                              }}
-                            />
-                            <h4>{evolution.name ? evolution.name : null}</h4>
-                          </>
-                        ) : null}
-                      </Evolution>
-                    );
-                  })
-                : null}
-            </Evolutions>
+                            {evolutions[idx] && evolutions[idx].sprites ? (
+                              <>
+                                <Artwork
+                                  src={
+                                    evolutions[idx].sprites.other[
+                                      "official-artwork"
+                                    ]["front_default"]
+                                  }
+                                  onClick={() => {
+                                    navigate(`/pokemon/${evolutions[idx].id}`);
+                                  }}
+                                />
+                                <h4>
+                                  {evolution.name ? evolution.name : null}
+                                </h4>
+                              </>
+                            ) : null}
+                          </Evolution>
+                        );
+                      }
+                    })
+                  : null}
+              </Evolutions>
+              <SplitEvolutions>
+                {evolutions
+                  ? evolutions.map((evolution, idx) => {
+                      if (
+                        allEvolutions[idx].splitEvo &&
+                        !allEvolutions[idx].doubleEvo
+                      ) {
+                        return (
+                          <Evolution key={idx}>
+                            <div>
+                              <div>
+                                <div>
+                                  {allEvolutions[idx].special
+                                    ? allEvolutions[idx].special.map(
+                                        (item, i) => {
+                                          return (
+                                            <div key={i}>
+                                              <p>
+                                                {item.min_level ? (
+                                                  <span>
+                                                    Level {item.min_level}{" "}
+                                                  </span>
+                                                ) : null}
+                                              </p>
+                                              <p>
+                                                {item.held_item ? (
+                                                  <span>
+                                                    holding{" "}
+                                                    {item.held_item.name}{" "}
+                                                  </span>
+                                                ) : null}
+                                              </p>
+                                              <p>
+                                                {item.trigger &&
+                                                item.trigger.name ==
+                                                  "level-up" ? (
+                                                  <span> Level up </span>
+                                                ) : item.trigger.name ==
+                                                  "trade" ? (
+                                                  <span> By trade</span>
+                                                ) : item.trigger.name ==
+                                                  "other" ? (
+                                                  <span>other</span>
+                                                ) : null}
+                                              </p>
+                                              <p>
+                                                {item.item ? (
+                                                  <span>
+                                                    {" "}
+                                                    use {item.item.name}{" "}
+                                                  </span>
+                                                ) : null}
+                                              </p>
+
+                                              {item.location ? (
+                                                <Location>
+                                                  at{" "}
+                                                  {item.location.name
+                                                    .split("-")
+                                                    .join(" ")}
+                                                </Location>
+                                              ) : null}
+
+                                              <p>
+                                                {item.time_of_day ? (
+                                                  <span>
+                                                    {item.time_of_day} time
+                                                  </span>
+                                                ) : null}
+                                              </p>
+                                              <p>
+                                                {item.min_beauty ? (
+                                                  <span>
+                                                    Beauty {item.min_beauty}
+                                                  </span>
+                                                ) : null}
+                                              </p>
+                                              <p>
+                                                {item.min_affection ? (
+                                                  <span>
+                                                    Affection{" "}
+                                                    {item.min_affection}
+                                                  </span>
+                                                ) : null}
+                                              </p>
+                                              <p>
+                                                {item.min_happiness ? (
+                                                  <span>
+                                                    Happiness{" "}
+                                                    {item.min_happiness}
+                                                  </span>
+                                                ) : null}
+                                              </p>
+                                              <p>
+                                                {item.needs_overworld_rain ? (
+                                                  <span>when raining</span>
+                                                ) : null}
+                                              </p>
+                                              <p>
+                                                {item.known_move_type ? (
+                                                  <span>
+                                                    knows{" "}
+                                                    {item.known_move_type.name}{" "}
+                                                    move
+                                                  </span>
+                                                ) : null}
+                                              </p>
+                                              {item.relative_physical_stats ? (
+                                                <div>
+                                                  {item.relative_physical_stats ==
+                                                  -1 ? (
+                                                    <p>atk {">"} def</p>
+                                                  ) : item.relative_physical_stats ==
+                                                    1 ? (
+                                                    <p>def{">"}atk</p>
+                                                  ) : item.relative_physical_stats ==
+                                                    0 ? (
+                                                    <p>def{"="}atk</p>
+                                                  ) : null}
+                                                </div>
+                                              ) : null}
+                                              <Line></Line>
+                                            </div>
+                                          );
+                                        }
+                                      )
+                                    : null}
+                                </div>
+
+                                {/* {allEvolutions[idx].special.gender?
+                            <div>
+                              {allEvolutions[idx].special.gender == "1"
+                                ? "female"
+                                : allEvolutions[idx].special.gender == "2"
+                                ? "male"
+                                : null}
+                            </div>
+                            :null} */}
+                              </div>
+                            </div>
+
+                            {evolutions[idx] && evolutions[idx].sprites ? (
+                              <>
+                                <Artwork
+                                  src={
+                                    evolutions[idx].sprites.other[
+                                      "official-artwork"
+                                    ]["front_default"]
+                                  }
+                                  onClick={() => {
+                                    navigate(`/pokemon/${evolutions[idx].id}`);
+                                  }}
+                                />
+                                <h4>
+                                  {evolution.name ? evolution.name : null}
+                                </h4>
+                              </>
+                            ) : null}
+                          </Evolution>
+                        );
+                      }
+                    })
+                  : null}
+              </SplitEvolutions>
+              <DoubleEvolutions>
+                {evolutions
+                  ? evolutions.map((evolution, idx) => {
+                      if (allEvolutions[idx].doubleEvo == true) {
+                        return (
+                          <Evolution key={idx}>
+                            <div>
+                              <div>
+                                <div>
+                                  {allEvolutions[idx].special
+                                    ? allEvolutions[idx].special.map(
+                                        (item, i) => {
+                                          return (
+                                            <div key={i}>
+                                              <p>
+                                                {item.min_level ? (
+                                                  <span>
+                                                    Level {item.min_level}{" "}
+                                                  </span>
+                                                ) : null}
+                                              </p>
+                                              <p>
+                                                {item.held_item ? (
+                                                  <span>
+                                                    holding{" "}
+                                                    {item.held_item.name}{" "}
+                                                  </span>
+                                                ) : null}
+                                              </p>
+                                              <p>
+                                                {item.trigger &&
+                                                item.trigger.name ==
+                                                  "level-up" ? (
+                                                  <span> Level up </span>
+                                                ) : item.trigger.name ==
+                                                  "trade" ? (
+                                                  <span> By trade</span>
+                                                ) : item.trigger.name ==
+                                                  "other" ? (
+                                                  <span>other</span>
+                                                ) : null}
+                                              </p>
+                                              <p>
+                                                {item.item ? (
+                                                  <span>
+                                                    {" "}
+                                                    use {item.item.name}{" "}
+                                                  </span>
+                                                ) : null}
+                                              </p>
+
+                                              {item.location ? (
+                                                <Location>
+                                                  at{" "}
+                                                  {item.location.name
+                                                    .split("-")
+                                                    .join(" ")}
+                                                </Location>
+                                              ) : null}
+
+                                              <p>
+                                                {item.time_of_day ? (
+                                                  <span>
+                                                    {item.time_of_day} time
+                                                  </span>
+                                                ) : null}
+                                              </p>
+                                              <p>
+                                                {item.min_beauty ? (
+                                                  <span>
+                                                    Beauty {item.min_beauty}
+                                                  </span>
+                                                ) : null}
+                                              </p>
+                                              <p>
+                                                {item.min_affection ? (
+                                                  <span>
+                                                    Affection{" "}
+                                                    {item.min_affection}
+                                                  </span>
+                                                ) : null}
+                                              </p>
+                                              <p>
+                                                {item.min_happiness ? (
+                                                  <span>
+                                                    Happiness{" "}
+                                                    {item.min_happiness}
+                                                  </span>
+                                                ) : null}
+                                              </p>
+                                              <p>
+                                                {item.needs_overworld_rain ? (
+                                                  <span>when raining</span>
+                                                ) : null}
+                                              </p>
+                                              <p>
+                                                {item.known_move_type ? (
+                                                  <span>
+                                                    knows{" "}
+                                                    {item.known_move_type.name}{" "}
+                                                    move
+                                                  </span>
+                                                ) : null}
+                                              </p>
+                                              {item.relative_physical_stats ? (
+                                                <div>
+                                                  {item.relative_physical_stats ==
+                                                  -1 ? (
+                                                    <p>atk {">"} def</p>
+                                                  ) : item.relative_physical_stats ==
+                                                    1 ? (
+                                                    <p>def{">"}atk</p>
+                                                  ) : item.relative_physical_stats ==
+                                                    0 ? (
+                                                    <p>def=atk</p>
+                                                  ) : null}
+                                                </div>
+                                              ) : null}
+                                              <Line></Line>
+                                            </div>
+                                          );
+                                        }
+                                      )
+                                    : null}
+                                </div>
+
+                                {/* {allEvolutions[idx].special.gender?
+                            <div>
+                              {allEvolutions[idx].special.gender == "1"
+                                ? "female"
+                                : allEvolutions[idx].special.gender == "2"
+                                ? "male"
+                                : null}
+                            </div>
+                            :null} */}
+                              </div>
+                            </div>
+
+                            {evolutions[idx] && evolutions[idx].sprites ? (
+                              <>
+                                <Artwork
+                                  src={
+                                    evolutions[idx].sprites.other[
+                                      "official-artwork"
+                                    ]["front_default"]
+                                  }
+                                  onClick={() => {
+                                    navigate(`/pokemon/${evolutions[idx].id}`);
+                                  }}
+                                />
+                                <h4>
+                                  {evolution.name ? evolution.name : null}
+                                </h4>
+                              </>
+                            ) : null}
+                          </Evolution>
+                        );
+                      }
+                    })
+                  : null}
+              </DoubleEvolutions>
+            </EvoContainer>
           )}
 
           <Container>
@@ -281,7 +631,11 @@ export default function EvolutionChain(props) {
                     return (
                       <div key={item.name}>
                         <Artwork
-                          src={item.sprites.front_default}
+                          src={
+                            item.sprites.other["official-artwork"][
+                              "front_default"
+                            ]
+                          }
                           onClick={() => {
                             navigate(`/pokemon/${item.id}`);
                           }}

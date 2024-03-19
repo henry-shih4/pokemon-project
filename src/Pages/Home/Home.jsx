@@ -101,7 +101,7 @@ export default function Home() {
               id="search"
               value={search}
               onChange={(e) => {
-                setSearch(e.target.value);
+                setSearch(e.target.value.toLowerCase());
               }}
             />
             <DropDown>
