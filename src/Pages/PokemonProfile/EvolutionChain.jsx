@@ -23,23 +23,25 @@ const Evolutions = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 2rem;
+  gap: 1rem;
 `;
 
 const Evolution = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: center;
   align-items: center;
   h4 {
     text-transform: capitalize;
+    margin:6px;
   }
 `;
 
 const SplitEvolutions = styled.div`
   display: flex;
   justify-content: center;
-  gap: 2rem;
+  gap: 4rem;
+  margin-top:20px;
 `;
 
 const DoubleEvolutions = styled.div`
@@ -71,10 +73,7 @@ const Error = styled.h3`
   justify-content: center;
 `;
 
-const EvoInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+
 const AltForm = styled.div`
   display: flex;
   gap: 2rem;
@@ -103,6 +102,10 @@ const Artwork = styled.img`
 const Arrow = styled.div`
 display:flex;
 justify-content:center;
+`
+const EvoInfo = styled.div`
+gap:2px;  
+padding-bottom:20px;
 `
 
 export default function EvolutionChain(props) {
@@ -149,7 +152,7 @@ export default function EvolutionChain(props) {
                                 ) : null}
                               </Arrow>
                               <div>
-                                <div>
+                                <EvoInfo>
                                   {allEvolutions[idx].special
                                     ? allEvolutions[idx].special.map(
                                         (item, i) => {
@@ -265,7 +268,7 @@ export default function EvolutionChain(props) {
                                         }
                                       )
                                     : null}
-                                </div>
+                                </EvoInfo>
 
                                 {/* {allEvolutions[idx].special.gender?
                             <div>
@@ -318,7 +321,7 @@ export default function EvolutionChain(props) {
                                 ) : null}
                               </Arrow>
                               <div>
-                                <div>
+                                <EvoInfo>
                                   {allEvolutions[idx].special
                                     ? allEvolutions[idx].special.map(
                                         (item, i) => {
@@ -434,7 +437,7 @@ export default function EvolutionChain(props) {
                                         }
                                       )
                                     : null}
-                                </div>
+                                </EvoInfo>
 
                                 {/* {allEvolutions[idx].special.gender?
                             <div>
