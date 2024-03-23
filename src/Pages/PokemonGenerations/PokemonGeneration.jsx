@@ -13,12 +13,11 @@ font-family:Roboto;
   background-color: #ffffff;
   display: grid;
   width: 90%;
-  min-width:350px;
+  min-width:375px;
   margin: auto;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap:10px;
-  justify-content:center;
-  align-items:center;
+  justify-items:center;
 `;
 
 const ButtonLink = styled(NavLink)`
@@ -65,6 +64,7 @@ text-align:center;
 `
 
 const Pokemon = styled.div`
+min-width:250px;
   display: flex;
   flex-direction: column;
   background-color: #fff;

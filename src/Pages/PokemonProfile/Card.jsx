@@ -14,11 +14,11 @@ const Container = styled.div`
 
 const Info = styled.div`
   display: flex;
-  width: 100%;
+  width: 80%;
   height: 100%;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
+  gap: 4rem;
   margin: 1rem;
   @media (max-width: 900px) {
     flex-direction: column;
@@ -30,6 +30,7 @@ const Vitals = styled.div`
   text-align: center;
   display:flex;
   flex-direction:column;
+  
   h3 {
     font-weight: bold;
     margin: 2px;
@@ -46,6 +47,7 @@ const Vitals = styled.div`
 const Sprites = styled.div`
   display: flex;
   justify-content:center;
+  gap:2rem;
   p{
     text-align:center;
   }
@@ -142,18 +144,20 @@ const CategoryTitle = styled.div`
 const AbilityBox = styled.div`
   display: flex;
   flex-direction:column;
-  gap: 0.3rem;
+
   justify-content: center;
   align-items: start;
   div {
-    padding: 1px;
+    padding: 4px;
   }
   padding-right:10px;
 `;
 const AbilityName = styled.div`
+gap:10px;
   h4 {
     text-transform: capitalize;
     margin: 4px;
+    text-decoration: underline;
   }
 `;
 
@@ -169,16 +173,17 @@ const Box = styled.div`
   display: flex;
   justify-items: center;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
   width: 50%;
   align-items: center;
+
 `;
 const MainSection = styled.div`
   display: flex;
   justify-items: center;
   align-items: start;
-  gap: 2rem;
-  @media (max-width: 900px) {
+  gap: 4rem;
+  @media (max-width: 1180px) {
     flex-direction: column;
   }
 `;

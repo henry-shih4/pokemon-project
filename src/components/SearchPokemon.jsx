@@ -11,9 +11,11 @@ const Search = styled.input`
   border-radius: 5px;
   font-size: 16px;
   margin: 10px;
+  width:300px;
 `;
 
-const SearchContainer = styled.div``;
+const SearchContainer = styled.div`
+`;
 
 const Form = styled.div``;
 
@@ -21,6 +23,8 @@ const DropDown = styled.div`
   position: absolute;
   bottom: full;
   cursor: pointer;
+  background-color: #f0f0f0;
+  padding-right:20px;
 `;
 
 const Sprite = styled.img`
@@ -59,11 +63,11 @@ function SearchPokemon() {
   }, [search]);
 
   return (
-    <Form>
-      <label htmlFor="search">Pokemon Name or Pokedex Number</label>
+  
       <SearchContainer>
         <Search
           id="search"
+          placeholder="Pokemon Name or Pokedex Number"
           value={search}
           onChange={(e) => {
             setSearch(e.target.value.toLowerCase());
@@ -88,7 +92,7 @@ function SearchPokemon() {
             : null}
         </DropDown>
       </SearchContainer>
-    </Form>
+  
   );
 }
 

@@ -14,6 +14,7 @@ const Container = styled.div`
 const Type = styled.div`
   padding: 1em;
   font-size: 24px;
+  
 `;
 
 export default function PokemonTypes() {

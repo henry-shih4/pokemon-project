@@ -12,12 +12,11 @@ const Container = styled.div`
   background-color: #ffffff;
   display: grid;
   width: 90%;
-  min-width: 350px;
+  min-width: 375px;
   margin: auto;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 10px;
-  justify-content: center;
-  align-items: center;
+  justify-items: center;
 `;
 
 const ButtonLink = styled(NavLink)`
@@ -34,9 +33,11 @@ const ButtonLink = styled(NavLink)`
   color: #fff;
   background-color: #ee1515;
   margin: 1em;
+
 `;
 
 const Pokemon = styled.div`
+  min-width: 250px;
   display: flex;
   flex-direction: column;
   background-color: #fff;
@@ -55,13 +56,14 @@ const Pokemon = styled.div`
 const Title = styled.div`
   text-align: center;
   text-transform: capitalize;
-  letter-spacing: 4px;
-  font-size: 32px;
-  font-weight: bold;
-  padding: 1em;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; 
+  width: 140px;
+  letter-spacing: 0.1rem;
+  div{
+    width:120px;
+  }
 `;
 
 const Name = styled.div`
@@ -95,9 +97,12 @@ const TypeBox = styled.div`
   align-items: center;
   padding: 2rem;
   text-transform: capitalize;
+  font-family: Roboto;
 `;
 const Type = styled.div`
   width: 120px;
+  letter-spacing: 0.1rem;
+
 `;
 
 const TypeContainer = styled.div`
@@ -256,15 +261,15 @@ export default function PokemonType() {
             })}
           </TypeBox>
 
-          <Title>
-            <CurrentType
-              style={{ backgroundColor: `${typeMap[typeName].color}` }}
-            >
-              <TypeIcon src={typeMap[typeName].img} />
-              <div>{typeName} </div>
-            </CurrentType>
-          </Title>
           <Container>
+            <Title>
+              <CurrentType
+                style={{ backgroundColor: `${typeMap[typeName].color}` }}
+              >
+                <TypeIcon src={typeMap[typeName].img} />
+                <div>{typeName} </div>
+              </CurrentType>
+            </Title>
             {pokeData
               ? pokeData.map((item) => {
                   return (

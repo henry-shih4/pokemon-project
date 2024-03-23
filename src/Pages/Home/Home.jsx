@@ -35,7 +35,7 @@ export default function Home() {
 
   return (
     <>
-<Navigation></Navigation>
+      <Navigation></Navigation>
       {loading ? (
         <LoadingScreen>
           <Loading />
@@ -43,9 +43,14 @@ export default function Home() {
       ) : (
         <Container>
           <h1>Welcome to the Pokedex!</h1>
-          <NavLink target="_blank" to="https://pokeapi.co/">powered by PokéAPI</NavLink>
+          <NavLink target="_blank" to="https://pokeapi.co/">
+            powered by PokéAPI
+          </NavLink>
           <h2>Search Pokemon by ...</h2>
-          <Search/>
+          <form>
+            <label htmlFor="search">Pokemon Name or Pokedex Number</label>
+            <Search />
+          </form>
         </Container>
       )}
     </>
