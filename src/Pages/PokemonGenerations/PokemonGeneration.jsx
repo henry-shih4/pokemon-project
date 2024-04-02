@@ -94,6 +94,11 @@ const Title = styled.div`
 
 const Sprite = styled(LazyLoadImage)`
   image-rendering: pixelated;
+  transition: transform 200ms linear;
+  &:hover {
+    transform: scale(1.1);
+    transition: transform 200ms linear;
+  }
 `;
 
 const LoadingScreen = styled.div`

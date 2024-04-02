@@ -293,17 +293,20 @@ export default function Pokemon() {
       }
 
       setAllEvolutions(evoChain);
+      setEvoLoading(false)
     }
   }, [evolutionData]);
 
   useEffect(() => {
     if (allEvolutions) {
-      setEvoLoading(true);
       filterEvolution(allEvolutions);
-      setEvoLoading(false);
     }
   }, [allEvolutions, pokeList]);
 
+
+  useEffect(()=>{
+    console.log(evoLoading)
+  })
   return (
     <>
       <Navigation />

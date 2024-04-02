@@ -8,8 +8,6 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  width: 100%;
 `;
 
 const Info = styled.div`
@@ -18,38 +16,41 @@ const Info = styled.div`
   height: 100%;
   justify-content: center;
   align-items: center;
-  gap: 4rem;
+  gap: 3rem;
   margin: 1rem;
   @media (max-width: 900px) {
     flex-direction: column;
+    gap: 1.5rem;
   }
-
 `;
 
 const Vitals = styled.div`
   text-align: center;
-  display:flex;
-  flex-direction:column;
-  
+  display: flex;
+  flex-direction: column;
+
   h3 {
     font-weight: bold;
     margin: 2px;
   }
-  
-    @media (max-width: 900px) {
-      
-      flex-direction: row;
-      gap:14px;
-    }
-  
+
+  @media (max-width: 900px) {
+    flex-direction: row;
+    gap: 14px;
+  }
 `;
 
 const Sprites = styled.div`
   display: flex;
-  justify-content:center;
-  gap:2rem;
-  p{
-    text-align:center;
+  justify-content: center;
+  gap: 2rem;
+  p {
+    text-align: center;
+  }
+
+  @media (max-width: 500px) {
+    flex-direction: column;
+    gap: 0;
   }
 `;
 const Sprite = styled.img`
@@ -59,9 +60,7 @@ const Sprite = styled.img`
 `;
 
 const Artwork = styled.img`
-  padding-left:10px;
-  height: 400px;
-  width: 400px;
+  max-width: 350px;
 `;
 
 const Title = styled.h1`
@@ -76,6 +75,8 @@ const Stats = styled.div`
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  padding-left: 10px;
+  padding-right: 10px;
 `;
 
 const StatContainer = styled.div`
@@ -85,6 +86,9 @@ const StatContainer = styled.div`
   align-items: center;
   gap: 1rem;
   width: 50%;
+  max-width: 350px;
+  padding-left: 10px;
+  padding-right: 10px;
 `;
 
 const StatName = styled.div`
@@ -102,6 +106,10 @@ const Bar = styled.div`
   display: flex;
   border-radius: 10px;
   background-color: lightgray;
+
+  @media (max-width: 425px) {
+    display: none;
+  }
 `;
 
 const TypeIcon = styled.img`
@@ -136,24 +144,25 @@ const CategoryTitle = styled.div`
   display: flex;
   justify-content: start;
   h3 {
-    width:full;
+    width: full;
     margin: 4px;
   }
 `;
 
 const AbilityBox = styled.div`
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
 
   justify-content: center;
   align-items: start;
   div {
     padding: 4px;
   }
-  padding-right:10px;
+  padding-right: 10px;
+  min-width:350px;
 `;
 const AbilityName = styled.div`
-gap:10px;
+  gap: 10px;
   h4 {
     text-transform: capitalize;
     margin: 4px;
@@ -176,13 +185,12 @@ const Box = styled.div`
   gap: 1rem;
   width: 50%;
   align-items: center;
-
 `;
 const MainSection = styled.div`
   display: flex;
   justify-items: center;
   align-items: start;
-  gap: 4rem;
+  gap: 2rem;
   @media (max-width: 1180px) {
     flex-direction: column;
   }
@@ -191,13 +199,17 @@ const MainSection = styled.div`
 const Entry = styled.div`
   padding: 10px;
   display: flex;
+  justify-content: center;
   flex-direction: column;
   gap: 10px;
   width: 45%;
-  margin: 1.5rem;
+  margin: 1rem;
   h3 {
     text-transform: capitalize;
     margin: 4px;
+  }
+  @media (max-width: 900px) {
+    width: 75%;
   }
 `;
 
@@ -306,17 +318,16 @@ export default function Card(props) {
   };
 
   const generationMap = {
-    'i' : 1, 
-    'ii': 2,
-    'iii': 3,
-    'iv': 4,
-    'v': 5,
-    'vi': 6,
-    'Vvii':7,
-    'viii': 8, 
-    'ix': 9
-
-  }
+    i: 1,
+    ii: 2,
+    iii: 3,
+    iv: 4,
+    v: 5,
+    vi: 6,
+    Vvii: 7,
+    viii: 8,
+    ix: 9,
+  };
   useEffect(() => {
     console.log(art);
   }, []);
@@ -451,7 +462,7 @@ export default function Card(props) {
                       <div
                         style={{
                           backgroundColor: "blue",
-                          width: `${stat.base_stat * 1.8}px`,
+                          width: `${stat.base_stat * 1.5}px`,
                           borderRadius: "10px",
                         }}
                       ></div>

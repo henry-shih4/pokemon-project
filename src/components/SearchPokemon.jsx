@@ -14,10 +14,9 @@ const Search = styled.input`
   width:300px;
 `;
 
-const SearchContainer = styled.div`
+const SearchContainer = styled.form`
 `;
 
-const Form = styled.div``;
 
 const DropDown = styled.div`
   position: absolute;
@@ -63,36 +62,39 @@ function SearchPokemon() {
   }, [search]);
 
   return (
-  
-      <SearchContainer>
-        <Search
-          id="search"
-          placeholder="Pokemon Name or Pokedex Number"
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value.toLowerCase());
-          }}
-        />
-        <DropDown>
-          {results.length && search
-            ? results.map((item) => {
-                return (
-                  <Result
-                    key={item.id}
-                    onClick={() => {
-                      navigate(`/pokemon/${item.id}`);
-                    }}
-                  >
-                    <Sprite src={item.sprites.front_default} />
+    <SearchContainer
+      onSubmit={(e) => {
+        e.target.value = ""
+      }}
+    >
+      <Search
+        id="search"
+        placeholder="Pokemon Name or Pokedex Number"
+        value={search}
+        onChange={(e) => {
+          setSearch(e.target.value.toLowerCase());
+        }}
+      />
 
-                    <div>{item.name}</div>
-                  </Result>
-                );
-              })
-            : null}
-        </DropDown>
-      </SearchContainer>
-  
+      <DropDown>
+        {results.length && search
+          ? results.map((item) => {
+              return (
+                <Result
+                  key={item.id}
+                  onClick={() => {
+                    navigate(`/pokemon/${item.id}`);
+                  }}
+                >
+                  <Sprite src={item.sprites.front_default} />
+
+                  <div>{item.name}</div>
+                </Result>
+              );
+            })
+          : null}
+      </DropDown>
+    </SearchContainer>
   );
 }
 

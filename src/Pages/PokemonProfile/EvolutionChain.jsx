@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
 import { PokemonContext } from "../../components/PokemonContext";
-import DownArrow from "../../icons/down-arrow.svg"
+import DownArrow from "../../icons/down-arrow.svg";
+import { all } from "axios";
 
 const Container = styled.div`
   font-family: "Roboto", sans-serif;
@@ -33,15 +34,26 @@ const Evolution = styled.div`
   align-items: center;
   h4 {
     text-transform: capitalize;
-    margin:6px;
+    margin: 6px;
   }
 `;
 
 const SplitEvolutions = styled.div`
   display: flex;
   justify-content: center;
+  align-items: end;
   gap: 4rem;
-  margin-top:20px;
+  margin-top: 20px;
+  @media (max-width: 900px) {
+    justify-content: start;
+
+    overflow-x: scroll;
+    max-width: 550px;
+  }
+
+  @media (max-width: 600px) {
+    max-width: 350px;
+  }
 `;
 
 const DoubleEvolutions = styled.div`
@@ -73,7 +85,6 @@ const Error = styled.h3`
   justify-content: center;
 `;
 
-
 const AltForm = styled.div`
   display: flex;
   gap: 2rem;
@@ -97,16 +108,17 @@ const Artwork = styled.img`
   width: 120px;
   display: flex;
   justify-content: center;
+  cursor: pointer;
 `;
 
 const Arrow = styled.div`
-display:flex;
-justify-content:center;
-`
+  display: flex;
+  justify-content: center;
+`;
 const EvoInfo = styled.div`
-gap:2px;  
-padding-bottom:20px;
-`
+  gap: 2px;
+  padding-bottom: 20px;
+`;
 
 export default function EvolutionChain(props) {
   const navigate = useNavigate();
@@ -132,17 +144,12 @@ export default function EvolutionChain(props) {
       ) : (
         <Container>
           <Heading>Evolution Chain</Heading>
-          {speciesLoading ? (
-            <LoadingContainer>
-              <Loading />
-            </LoadingContainer>
-          ) : (
+          {evolutions && allEvolutions? (
             <EvoContainer>
               <Evolutions>
-                
                 {evolutions
                   ? evolutions.map((evolution, idx) => {
-                      if (allEvolutions[idx].splitEvo == false) {
+                      if ( allEvolutions[idx] && allEvolutions[idx].splitEvo == false) {
                         return (
                           <Evolution key={idx}>
                             <div>
@@ -292,6 +299,7 @@ export default function EvolutionChain(props) {
                                   }
                                   onClick={() => {
                                     navigate(`/pokemon/${evolutions[idx].id}`);
+                                    window.scrollTo(0, 0);
                                   }}
                                 />
                                 <h4>
@@ -305,11 +313,12 @@ export default function EvolutionChain(props) {
                     })
                   : null}
               </Evolutions>
+
               <SplitEvolutions>
                 {evolutions
                   ? evolutions.map((evolution, idx) => {
                       if (
-                        allEvolutions[idx].splitEvo &&
+                        allEvolutions[idx]  && allEvolutions[idx].splitEvo == true && 
                         !allEvolutions[idx].doubleEvo
                       ) {
                         return (
@@ -477,7 +486,7 @@ export default function EvolutionChain(props) {
               <DoubleEvolutions>
                 {evolutions
                   ? evolutions.map((evolution, idx) => {
-                      if (allEvolutions[idx].doubleEvo == true) {
+                      if ( allEvolutions[idx] && allEvolutions[idx].doubleEvo == true) {
                         return (
                           <Evolution key={idx}>
                             <div>
@@ -641,8 +650,7 @@ export default function EvolutionChain(props) {
                   : null}
               </DoubleEvolutions>
             </EvoContainer>
-          )}
-
+          ) : null}
           <Container>
             <h3>Alternate Forms</h3>
             <AltForm>
