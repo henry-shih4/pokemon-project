@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
 import { PokemonContext } from "../../components/PokemonContext";
 import DownArrow from "../../icons/down-arrow.svg";
-import { all } from "axios";
 
 const Container = styled.div`
   font-family: "Roboto", sans-serif;
@@ -140,7 +139,7 @@ export default function EvolutionChain(props) {
   return (
     <>
       {evoLoading || loading ? (
-        <Loading />
+        <Loading variant='small' />
       ) : (
         <Container>
           <Heading>Evolution Chain</Heading>
@@ -470,6 +469,7 @@ export default function EvolutionChain(props) {
                                   }
                                   onClick={() => {
                                     navigate(`/pokemon/${evolutions[idx].id}`);
+                                     window.scrollTo(0, 0);
                                   }}
                                 />
                                 <h4>
@@ -666,6 +666,7 @@ export default function EvolutionChain(props) {
                           }
                           onClick={() => {
                             navigate(`/pokemon/${item.id}`);
+                             window.scrollTo(0, 0);
                           }}
                         />
                         <h4>{item.name.split("-").join(" ")}</h4>
@@ -685,29 +686,3 @@ export default function EvolutionChain(props) {
     </>
   );
 }
-
-/* <div>
-                          <div>
-                            {allEvolutions[idx]
-                              ? allEvolutions[idx].level
-                              : null}
-                          </div>
-                          <div>
-                            {allEvolutions[idx]?.item
-                              ? allEvolutions[idx].item.name
-                              : null}
-                          </div>
-                          <div>
-                            {allEvolutions[idx]?.trigger
-                              ? allEvolutions[idx].trigger
-                              : null}
-                          </div>
-                        </div> */
-
-/* {allEvolutions? allEvolutions.map((item,idx)=>{
-          return (
-          <div key={idx}>
-          {item.special.min_level}
-          </div>
-          )
-        }) :null} */

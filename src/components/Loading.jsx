@@ -8,14 +8,11 @@ const spinAnimation = keyframes`
 `;
 
 const Spinner = styled.img`
-  height: 150px;
+  width: ${({ props }) => (props.variant === "small" ? "50px" : "140px")};
+  height: ${({ props }) => (props.variant === "small" ? "50px" : "140px")};
   animation: 1s linear infinite ${spinAnimation};
 `;
 
-export default function Loading() {
-  return (
-    <div>
-      <Spinner src="/pokeball.svg" />
-    </div>
-  );
+export default function Loading(props) {
+  return <Spinner props={props} src="/pokeball.svg" />;
 }

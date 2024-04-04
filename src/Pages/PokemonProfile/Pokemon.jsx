@@ -3,12 +3,10 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios, { all } from "axios";
 import Card from "./Card";
 import Navigation from "../../components/Navigation";
-import Loading from "../../components/Loading";
 import EvolutionChain from "./EvolutionChain";
 import { PokemonContext } from "../../components/PokemonContext";
 
 export default function Pokemon() {
-  const navigate = useNavigate();
   const { id } = useParams();
   const [pokeData, setPokeData] = useState([]);
   const { state } = useLocation();
@@ -22,22 +20,18 @@ export default function Pokemon() {
   const [altForms, setAltForms] = useState([]);
   const [evoLoading, setEvoLoading] = useState(true);
   const [abilityText, setAbilityText] = useState([]);
-  const [evoGenData, setEvoGenData] = useState([]);
+  const [abilityLoading, setAbilityLoading] = useState(false)
 
   const fetchPokemon = async () => {
     console.log("making new fetch request");
-    // const data = await axios.get(
-    //   `https://pokeapi.co/api/v2/pokemon-species/${id.split("-")[0]}/`
-    // );
-    // const pokeId = data.data.id
-    // console.log(data.data.id)
-
+  
     const pokeInfo = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
     setPokeData(pokeInfo.data);
   };
 
   const fetchAbilityData = async () => {
     if (pokeData.abilities) {
+      setAbilityLoading(true)
       let abilities = pokeData.abilities;
 
       let ability_urls = [];
@@ -56,6 +50,7 @@ export default function Pokemon() {
         }
       }
       setAbilityText(ability_texts);
+      setAbilityLoading(false);
     }
   };
 
@@ -293,7 +288,6 @@ export default function Pokemon() {
       }
 
       setAllEvolutions(evoChain);
-      setEvoLoading(false)
     }
   }, [evolutionData]);
 
@@ -307,6 +301,12 @@ export default function Pokemon() {
   useEffect(()=>{
     console.log(evoLoading)
   })
+
+  useEffect(()=>{
+    if (evolutions && evolutions[0] !== undefined){
+    setEvoLoading(false)
+    }
+  },[evolutions])
   return (
     <>
       <Navigation />
@@ -326,6 +326,7 @@ export default function Pokemon() {
               abilityText={abilityText}
               height={String(pokeData.height)}
               weight={pokeData.weight}
+              abilityLoading={abilityLoading}
             />
           </>
         ) : null}

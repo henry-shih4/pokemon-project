@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import Loading from "../../components/Loading";
 
 const Container = styled.div`
   font-family: "Roboto", sans-serif;
@@ -235,6 +236,7 @@ export default function Card(props) {
     abilityText,
     height,
     weight,
+    abilityLoading,
   } = props;
   const [entry, setEntry] = useState("");
   const [totalStat, setTotalStat] = useState(0);
@@ -417,29 +419,35 @@ export default function Card(props) {
               </TypeBox>
             </Section>
             <Section>
-              <AbilityBox>
-                <CategoryTitle>
-                  <h3>Abilities</h3>
-                </CategoryTitle>
-                <AbilityName>
-                  {abilities
-                    ? abilities.map((item, idx) => {
-                        return (
-                          <div key={idx}>
-                            <h4>
-                              {item.ability.name}{" "}
-                              {item.is_hidden == true ? <> (hidden) </> : null}
-                            </h4>
+              {abilityLoading ? (
+                <Loading variant='small' />
+              ) : (
+                <AbilityBox>
+                  <CategoryTitle>
+                    <h3>Abilities</h3>
+                  </CategoryTitle>
+                  <AbilityName>
+                    {abilities
+                      ? abilities.map((item, idx) => {
+                          return (
+                            <div key={idx}>
+                              <h4>
+                                {item.ability.name}{" "}
+                                {item.is_hidden == true ? (
+                                  <> (hidden) </>
+                                ) : null}
+                              </h4>
 
-                            {abilityText[idx] ? (
-                              <div>{abilityText[idx].flavor_text}</div>
-                            ) : null}
-                          </div>
-                        );
-                      })
-                    : null}
-                </AbilityName>
-              </AbilityBox>
+                              {abilityText[idx] ? (
+                                <div>{abilityText[idx].flavor_text}</div>
+                              ) : null}
+                            </div>
+                          );
+                        })
+                      : null}
+                  </AbilityName>
+                </AbilityBox>
+              )}
             </Section>
           </MainSection>
         </Box>

@@ -51,6 +51,7 @@ const Pokemon = styled.div`
   &:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
+  cursor: pointer;
 `;
 
 const Title = styled.div`
@@ -83,7 +84,8 @@ const Name = styled.div`
 const Sprite = styled(LazyLoadImage)`
   image-rendering: pixelated;
   transition: transform 200ms linear;
-  &:hover {
+
+  ${Pokemon}:hover & {
     transform: scale(1.1);
     transition: transform 200ms linear;
   }
@@ -135,6 +137,14 @@ const CurrentType = styled.div`
 const TypeIcon = styled.img`
   height: 36px;
   width: 36px;
+`;
+
+
+const LoadingContainer = styled.div`
+  height: 100vh;
+  width: 100%;
+  display: grid;
+  place-content: center;
 `;
 
 export default function PokemonType() {
@@ -235,7 +245,9 @@ export default function PokemonType() {
     <>
       <Navigation />
       {loading || !pokeData ? (
-        <Loading />
+        <LoadingContainer>
+          <Loading />
+        </LoadingContainer>
       ) : (
         <>
           <TypeBox>

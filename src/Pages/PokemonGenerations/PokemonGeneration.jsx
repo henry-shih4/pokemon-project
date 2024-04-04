@@ -64,7 +64,7 @@ text-align:center;
 `
 
 const Pokemon = styled.div`
-min-width:250px;
+  min-width: 250px;
   display: flex;
   flex-direction: column;
   background-color: #fff;
@@ -76,9 +76,10 @@ min-width:250px;
   justify-content: center;
   align-items: center;
   &:hover {
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-  
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  cursor: pointer;
+
 `;
 
 const Title = styled.div`
@@ -95,7 +96,8 @@ const Title = styled.div`
 const Sprite = styled(LazyLoadImage)`
   image-rendering: pixelated;
   transition: transform 200ms linear;
-  &:hover {
+
+  ${Pokemon}:hover & {
     transform: scale(1.1);
     transition: transform 200ms linear;
   }
