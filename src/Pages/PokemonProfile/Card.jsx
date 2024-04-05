@@ -62,6 +62,9 @@ const Sprite = styled.img`
 
 const Artwork = styled.img`
   max-width: 350px;
+  @media (max-width: 580px) {
+    max-width: 200px;
+  }
 `;
 
 const Title = styled.h1`
@@ -160,7 +163,7 @@ const AbilityBox = styled.div`
     padding: 4px;
   }
   padding-right: 10px;
-  min-width:350px;
+  min-width: 350px;
 `;
 const AbilityName = styled.div`
   gap: 10px;
@@ -220,6 +223,12 @@ const TotalStat = styled.div`
   justify-content: center;
   font-weight: bold;
   gap: 14px;
+`;
+
+const LoadingScreen = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default function Card(props) {
@@ -420,8 +429,10 @@ export default function Card(props) {
             </Section>
             <Section>
               {abilityLoading ? (
-                <Loading variant='small' />
-              ) : (
+                <LoadingScreen>
+                  <Loading variant="small" />
+                </LoadingScreen> 
+             ) : (
                 <AbilityBox>
                   <CategoryTitle>
                     <h3>Abilities</h3>

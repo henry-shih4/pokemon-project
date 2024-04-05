@@ -119,6 +119,12 @@ const EvoInfo = styled.div`
   padding-bottom: 20px;
 `;
 
+const LoadingScreen = styled.div`
+display:flex;
+justify-content:center;
+align-items:center;
+`;
+
 export default function EvolutionChain(props) {
   const navigate = useNavigate();
   const {
@@ -138,17 +144,22 @@ export default function EvolutionChain(props) {
 
   return (
     <>
-      {evoLoading || loading ? (
-        <Loading variant='small' />
+      {evoLoading ? (
+        <LoadingScreen>
+          <Loading variant="small" />
+        </LoadingScreen>
       ) : (
         <Container>
           <Heading>Evolution Chain</Heading>
-          {evolutions && allEvolutions? (
+          {evolutions && allEvolutions ? (
             <EvoContainer>
               <Evolutions>
                 {evolutions
                   ? evolutions.map((evolution, idx) => {
-                      if ( allEvolutions[idx] && allEvolutions[idx].splitEvo == false) {
+                      if (
+                        allEvolutions[idx] &&
+                        allEvolutions[idx].splitEvo == false
+                      ) {
                         return (
                           <Evolution key={idx}>
                             <div>
@@ -317,7 +328,8 @@ export default function EvolutionChain(props) {
                 {evolutions
                   ? evolutions.map((evolution, idx) => {
                       if (
-                        allEvolutions[idx]  && allEvolutions[idx].splitEvo == true && 
+                        allEvolutions[idx] &&
+                        allEvolutions[idx].splitEvo == true &&
                         !allEvolutions[idx].doubleEvo
                       ) {
                         return (
@@ -469,7 +481,7 @@ export default function EvolutionChain(props) {
                                   }
                                   onClick={() => {
                                     navigate(`/pokemon/${evolutions[idx].id}`);
-                                     window.scrollTo(0, 0);
+                                    window.scrollTo(0, 0);
                                   }}
                                 />
                                 <h4>
@@ -486,7 +498,10 @@ export default function EvolutionChain(props) {
               <DoubleEvolutions>
                 {evolutions
                   ? evolutions.map((evolution, idx) => {
-                      if ( allEvolutions[idx] && allEvolutions[idx].doubleEvo == true) {
+                      if (
+                        allEvolutions[idx] &&
+                        allEvolutions[idx].doubleEvo == true
+                      ) {
                         return (
                           <Evolution key={idx}>
                             <div>
@@ -666,7 +681,7 @@ export default function EvolutionChain(props) {
                           }
                           onClick={() => {
                             navigate(`/pokemon/${item.id}`);
-                             window.scrollTo(0, 0);
+                            window.scrollTo(0, 0);
                           }}
                         />
                         <h4>{item.name.split("-").join(" ")}</h4>

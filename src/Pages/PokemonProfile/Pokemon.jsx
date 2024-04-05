@@ -5,6 +5,15 @@ import Card from "./Card";
 import Navigation from "../../components/Navigation";
 import EvolutionChain from "./EvolutionChain";
 import { PokemonContext } from "../../components/PokemonContext";
+import Loading from "../../components/Loading";
+import styled from "styled-components";
+
+const LoadingScreen = styled.div`
+  height: 100vh;
+  width: 100%;
+  display: grid;
+  place-content: center;
+`;
 
 export default function Pokemon() {
   const { id } = useParams();
@@ -328,18 +337,21 @@ export default function Pokemon() {
               weight={pokeData.weight}
               abilityLoading={abilityLoading}
             />
+            <EvolutionChain
+              evolutions={evolutions}
+              speciesLoading={speciesLoading}
+              speciesError={speciesError}
+              allEvolutions={allEvolutions}
+              altForms={altForms}
+              evoLoading={evoLoading}
+            />
           </>
-        ) : null}
+        ) : (
+          <LoadingScreen>
+            <Loading />
+          </LoadingScreen>
+        )}
       </div>
-
-      <EvolutionChain
-        evolutions={evolutions}
-        speciesLoading={speciesLoading}
-        speciesError={speciesError}
-        allEvolutions={allEvolutions}
-        altForms={altForms}
-        evoLoading={evoLoading}
-      />
     </>
   );
 }

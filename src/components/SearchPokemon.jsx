@@ -57,15 +57,16 @@ function SearchPokemon() {
     setResults(filterList.slice(0, 5));
   }
 
+  function handleSearchSubmit(){
+       setSearch("")
+  }
   useEffect(() => {
     findResults();
   }, [search]);
 
   return (
     <SearchContainer
-      onSubmit={(e) => {
-        e.target.value = ""
-      }}
+
     >
       <Search
         id="search"
@@ -84,6 +85,7 @@ function SearchPokemon() {
                   key={item.id}
                   onClick={() => {
                     navigate(`/pokemon/${item.id}`);
+                    handleSearchSubmit()
                   }}
                 >
                   <Sprite src={item.sprites.front_default} />
