@@ -246,6 +246,7 @@ export default function Card(props) {
     height,
     weight,
     abilityLoading,
+    errorPage
   } = props;
   const [entry, setEntry] = useState("");
   const [totalStat, setTotalStat] = useState(0);
@@ -374,6 +375,11 @@ export default function Card(props) {
     }
   }, [generation, description]);
 
+
+  useEffect(()=>{
+console.log(errorPage)
+  },[])
+  
   return (
     <Container>
       <Title>
@@ -465,7 +471,7 @@ export default function Card(props) {
       </Info>
       <Entry>
         <h3>Pokedex Entry</h3>
-        <div>{entry}</div>
+        <div>{entry?entry:'N/A'}</div>
       </Entry>
       <StatContainer>
         {stats

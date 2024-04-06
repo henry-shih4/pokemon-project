@@ -7,6 +7,7 @@ import EvolutionChain from "./EvolutionChain";
 import { PokemonContext } from "../../components/PokemonContext";
 import Loading from "../../components/Loading";
 import styled from "styled-components";
+import ErrorPage from "../../components/ErrorPage";
 
 const LoadingScreen = styled.div`
   height: 100vh;
@@ -29,18 +30,24 @@ export default function Pokemon() {
   const [altForms, setAltForms] = useState([]);
   const [evoLoading, setEvoLoading] = useState(true);
   const [abilityText, setAbilityText] = useState([]);
-  const [abilityLoading, setAbilityLoading] = useState(false)
+  const [abilityLoading, setAbilityLoading] = useState(false);
+  const [errorPage, setErrorPage] = useState(false);
 
   const fetchPokemon = async () => {
     console.log("making new fetch request");
-  
-    const pokeInfo = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
+
+    const pokeInfo = await axios
+      .get(`https://pokeapi.co/api/v2/pokemon/${id}`)
+      .catch((error) => {
+        setErrorPage(true);
+        return error;
+      });
     setPokeData(pokeInfo.data);
   };
 
   const fetchAbilityData = async () => {
     if (pokeData.abilities) {
-      setAbilityLoading(true)
+      setAbilityLoading(true);
       let abilities = pokeData.abilities;
 
       let ability_urls = [];
@@ -223,8 +230,9 @@ export default function Pokemon() {
               console.log(evoData.evolves_to[i].evolves_to);
               doubleEvo = true;
               const specialA = [];
-              let currentEvoDetails = evoData.evolves_to[i].evolves_to[0].evolution_details;
-              console.log(currentEvoDetails)
+              let currentEvoDetails =
+                evoData.evolves_to[i].evolves_to[0].evolution_details;
+              console.log(currentEvoDetails);
               for (let j = 0; j <= currentEvoDetails.length; j++) {
                 if (currentEvoDetails[j]) {
                   let special = {};
@@ -306,52 +314,57 @@ export default function Pokemon() {
     }
   }, [allEvolutions, pokeList]);
 
+  useEffect(() => {
+    console.log(evoLoading);
+  });
 
-  useEffect(()=>{
-    console.log(evoLoading)
-  })
-
-  useEffect(()=>{
-    if (evolutions && evolutions[0] !== undefined){
-    setEvoLoading(false)
+  useEffect(() => {
+    if (evolutions && evolutions[0] !== undefined) {
+      setEvoLoading(false);
     }
-  },[evolutions])
+  }, [evolutions]);
   return (
     <>
-      <Navigation />
-      <div>
-        {pokeData.name && speciesData && pokeData.sprites.other ? (
-          <>
-            <Card
-              name={pokeData.name}
-              img={pokeData.sprites}
-              art={pokeData.sprites.other["official-artwork"]["front_default"]}
-              id={pokeData.id}
-              stats={pokeData.stats}
-              abilities={pokeData.abilities}
-              types={pokeData.types}
-              description={speciesData.flavor_text_entries}
-              generation={speciesData.generation.name}
-              abilityText={abilityText}
-              height={String(pokeData.height)}
-              weight={pokeData.weight}
-              abilityLoading={abilityLoading}
-            />
-            <EvolutionChain
-              evolutions={evolutions}
-              speciesLoading={speciesLoading}
-              speciesError={speciesError}
-              allEvolutions={allEvolutions}
-              altForms={altForms}
-              evoLoading={evoLoading}
-            />
-          </>
-        ) : (
-          <LoadingScreen>
-            <Loading />
-          </LoadingScreen>
-        )}
-      </div>
+      {errorPage ? (
+        <ErrorPage />
+      ) : (
+        <div>
+          {pokeData.name && speciesData && pokeData.sprites.other ? (
+            <>
+              <Card
+                name={pokeData.name}
+                img={pokeData.sprites}
+                art={
+                  pokeData.sprites.other["official-artwork"]["front_default"]
+                }
+                id={pokeData.id}
+                stats={pokeData.stats}
+                abilities={pokeData.abilities}
+                types={pokeData.types}
+                description={speciesData.flavor_text_entries}
+                generation={speciesData.generation.name}
+                abilityText={abilityText}
+                height={String(pokeData.height)}
+                weight={pokeData.weight}
+                abilityLoading={abilityLoading}
+                errorPage={errorPage}
+              />
+              <EvolutionChain
+                evolutions={evolutions}
+                speciesLoading={speciesLoading}
+                speciesError={speciesError}
+                allEvolutions={allEvolutions}
+                altForms={altForms}
+                evoLoading={evoLoading}
+              />
+            </>
+          ) : (
+            <LoadingScreen>
+              <Loading />
+            </LoadingScreen>
+          )}
+        </div>
+      )}
     </>
   );
 }

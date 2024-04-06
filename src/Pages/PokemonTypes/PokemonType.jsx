@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate, NavLink, useParams } from "react-router-dom";
 import { useContext, useMemo, useState, useEffect } from "react";
 import { PokemonContext } from "../../components/PokemonContext";
 import Loading from "../../components/Loading";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import Navigation from "../../components/Navigation";
+import ErrorPage from "../../components/ErrorPage";
 
 const Container = styled.div`
   font-family: Roboto;
@@ -17,23 +18,6 @@ const Container = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 10px;
   justify-items: center;
-`;
-
-const ButtonLink = styled(NavLink)`
-  display: inline-block;
-  padding: 12px 24px;
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-  text-decoration: none;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  color: #fff;
-  background-color: #ee1515;
-  margin: 1em;
-
 `;
 
 const Pokemon = styled.div`
@@ -59,11 +43,11 @@ const Title = styled.div`
   text-transform: capitalize;
   display: flex;
   justify-content: center;
-  align-items: center; 
+  align-items: center;
   width: 140px;
   letter-spacing: 0.1rem;
-  div{
-    width:120px;
+  div {
+    width: 120px;
   }
 `;
 
@@ -104,7 +88,17 @@ const TypeBox = styled.div`
 const Type = styled.div`
   width: 120px;
   letter-spacing: 0.1rem;
+  @media (max-width: 600px) {
+    display: none;
+  }
+`;
 
+const TypeSmall = styled.div`
+  width: 120px;
+  letter-spacing: 0.1rem;
+  @media (min-width: 600px) {
+    display: none;
+  }
 `;
 
 const TypeContainer = styled.div`
@@ -135,10 +129,9 @@ const CurrentType = styled.div`
 `;
 
 const TypeIcon = styled.img`
-  height: 36px;
-  width: 36px;
+  height: 24px;
+  width: 24px;
 `;
-
 
 const LoadingContainer = styled.div`
   height: 100vh;
@@ -150,8 +143,7 @@ const LoadingContainer = styled.div`
 export default function PokemonType() {
   const { pokeList, loading } = useContext(PokemonContext);
   const navigate = useNavigate();
-  const [typeName, setTypeName] = useState("grass");
-
+  const { type = "grass" } = useParams();
   const typeMap = {
     grass: {
       name: "grass",
@@ -229,21 +221,18 @@ export default function PokemonType() {
     console.log("filtering..");
     const pokemon = pokeList.filter((item) => {
       return (
-        item.types[0].type.name === typeName ||
-        (item.types[1] && item.types[1].type.name === typeName)
+        item.types[0].type.name === type ||
+        (item.types[1] && item.types[1].type.name === type)
       );
     });
-
-    let data = sessionStorage.getItem("type");
-    if (data) {
-      setTypeName(data);
-    }
     return pokemon;
-  }, [pokeList, typeName]);
+  }, [pokeList, type]);
 
+  useEffect(() => {
+    console.log(type);
+  });
   return (
     <>
-      <Navigation />
       {loading || !pokeData ? (
         <LoadingContainer>
           <Loading />
@@ -253,60 +242,84 @@ export default function PokemonType() {
           <TypeBox>
             {Object.values(typeMap).map((item, idx) => {
               return (
-                <Type
-                  key={item.name}
-                  onClick={() => {
-                    setTypeName(item.name);
-                    sessionStorage.setItem("type", item.name);
-                  }}
-                >
-                  {typeMap[item.name] ? (
-                    <TypeContainer
-                      style={{ backgroundColor: `${typeMap[item.name].color}` }}
-                    >
-                      <TypeIcon src={typeMap[item.name].img} />
-                      <div>{item.name}</div>
-                    </TypeContainer>
-                  ) : null}
-                </Type>
+                <React.Fragment key={item.name + idx}>
+                  <Type
+                    onClick={() => {
+                      navigate(`/types/${item.name}`);
+                      sessionStorage.setItem("type", item.name);
+                    }}
+                  >
+                    {typeMap[item.name] ? (
+                      <TypeContainer
+                        style={{
+                          backgroundColor: `${typeMap[item.name].color}`,
+                        }}
+                      >
+                        <TypeIcon src={typeMap[item.name].img} />
+                        <div>{item.name}</div>
+                      </TypeContainer>
+                    ) : null}
+                  </Type>
+                  <TypeSmall
+                    
+                    onClick={() => {
+                      navigate(`/types/${item.name}`);
+                      sessionStorage.setItem("type", item.name);
+                    }}
+                  >
+                    {typeMap[item.name] ? (
+                      <TypeContainer
+                        style={{
+                          backgroundColor: `${typeMap[item.name].color}`,
+                        }}
+                      >
+                        <TypeIcon src={typeMap[item.name].img} />
+                      </TypeContainer>
+                    ) : null}
+                  </TypeSmall>
+                </React.Fragment>
               );
             })}
           </TypeBox>
 
-          <Container>
-            <Title>
-              <CurrentType
-                style={{ backgroundColor: `${typeMap[typeName].color}` }}
-              >
-                <TypeIcon src={typeMap[typeName].img} />
-                <div>{typeName} </div>
-              </CurrentType>
-            </Title>
-            {pokeData
-              ? pokeData.map((item) => {
-                  return (
-                    <Pokemon
-                      key={item.id}
-                      onClick={() => {
-                        navigate(`/pokemon/${item.id}`, {
-                          state: { item },
-                        });
-                      }}
-                    >
-                      <Name>
-                        {item.name} <span>#{item.id}</span>
-                      </Name>
-                      <Sprite
-                        width={140}
-                        height={140}
-                        src={item.sprites.front_default}
-                        placeholderSrc={"/pokeball.svg"}
-                      />
-                    </Pokemon>
-                  );
-                })
-              : null}
-          </Container>
+          {!(type in typeMap) ? (
+            <ErrorPage />
+          ) : (
+            <Container>
+              <Title>
+                <CurrentType
+                  style={{ backgroundColor: `${typeMap[type].color}` }}
+                >
+                  <TypeIcon src={typeMap[type].img} />
+                  <div>{type} </div>
+                </CurrentType>
+              </Title>
+              {pokeData
+                ? pokeData.map((item) => {
+                    return (
+                      <Pokemon
+                        key={item.id}
+                        onClick={() => {
+                          navigate(`/pokemon/${item.id}`, {
+                            state: { item },
+                          });
+                        }}
+                      >
+                        <Name>
+                          {item.name} <span>#{item.id}</span>
+                        </Name>
+                        <Sprite
+                          width={140}
+                          height={140}
+                          src={item.sprites.front_default}
+                          placeholderSrc={"/pokeball.svg"}
+                        />
+                      </Pokemon>
+                    );
+                  })
+                : null}
+            </Container>
+          )}
         </>
       )}
     </>

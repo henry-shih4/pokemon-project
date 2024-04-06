@@ -1,40 +1,22 @@
 import React from "react";
 import styled from "styled-components";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState, useMemo, useCallback } from "react";
 import { PokemonContext } from "../../components/PokemonContext";
 import Loading from "../../components/Loading";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import Navigation from "../../components/Navigation";
-
+import ErrorPage from '../../components/ErrorPage'
 
 const Container = styled.div`
-font-family:Roboto;
+  font-family: Roboto;
   background-color: #ffffff;
   display: grid;
   width: 90%;
-  min-width:375px;
+  min-width: 375px;
   margin: auto;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap:10px;
-  justify-items:center;
-`;
-
-const ButtonLink = styled(NavLink)`
-  font-family: Roboto;
-  display: inline-block;
-  padding: 12px 24px;
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-  text-decoration: none;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  color: #fff;
-  background-color: #ee1515;
-  margin: 1em;
+  gap: 10px;
+  justify-items: center;
 `;
 
 const Form = styled.div`
@@ -43,9 +25,9 @@ const Form = styled.div`
   justify-content: center;
 `;
 const Select = styled.select`
-  text-align:center;
-  display:flex;
-  justify-content:center;
+  text-align: center;
+  display: flex;
+  justify-content: center;
   background-color: #fff;
   border: 1px solid #ddd;
   padding: 10px;
@@ -60,8 +42,8 @@ const Select = styled.select`
 `;
 
 const Option = styled.option`
-text-align:center;
-`
+  text-align: center;
+`;
 
 const Pokemon = styled.div`
   min-width: 250px;
@@ -79,7 +61,6 @@ const Pokemon = styled.div`
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
   cursor: pointer;
-
 `;
 
 const Title = styled.div`
@@ -111,7 +92,7 @@ const LoadingScreen = styled.div`
 `;
 
 export default function PokemonType() {
-  const [generationNumber, setGenerationNumber] = useState("1");
+  const { generationNumber = 1 } = useParams();
   const [start, setStart] = useState();
   const [end, setEnd] = useState();
   const { pokeList, loading } = useContext(PokemonContext);
@@ -156,28 +137,21 @@ export default function PokemonType() {
     }
   }, [generationNumber]);
 
-
-  useEffect(()=>{
-    console.log(generationNumber)
-  }, [generationNumber])
+  useEffect(() => {
+    console.log(generationNumber);
+  }, [generationNumber]);
   const pokeData = useMemo(() => {
-    let data = sessionStorage.getItem("generation");
-    if (data){
-      setGenerationNumber(data)
-    }
     generation();
     let pokemon = pokeList;
     return pokemon;
   }, [pokeList, start, end, generation]);
 
-
-    // useEffect(()=>{
-    //   console.log(pokeList)
-    // },[pokeList])
+  useEffect(() => {
+    console.log(generationNumber);
+  });
 
   return (
     <>
-      <Navigation/>
       {loading ? (
         <LoadingScreen>
           <Loading />
@@ -186,9 +160,9 @@ export default function PokemonType() {
         <>
           <Form>
             <Select
-            defaultValue={generationNumber}
+              defaultValue={generationNumber}
               onChange={(e) => {
-                setGenerationNumber(e.target.value);
+                navigate(`/generation/${e.target.value}`);
                 sessionStorage.setItem("generation", e.target.value);
               }}
             >
@@ -203,6 +177,7 @@ export default function PokemonType() {
               <Option value={9}>Generation 9</Option>
             </Select>
           </Form>
+          {generationNumber > 9 ? <ErrorPage /> :
           <Container>
             {pokeData
               ? pokeData.slice(start, end).map((item) => {
@@ -229,6 +204,7 @@ export default function PokemonType() {
                 })
               : null}
           </Container>
+}
         </>
       )}
     </>

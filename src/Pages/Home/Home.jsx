@@ -4,7 +4,6 @@ import styled from "styled-components";
 import Loading from "../../components/Loading";
 import { useContext, useState, useEffect } from "react";
 import { PokemonContext } from "../../components/PokemonContext";
-import Navigation from '../../components/Navigation'
 import Search from '../../components/SearchPokemon'
 
 const Container = styled.section`
@@ -34,7 +33,6 @@ export default function Home() {
 
   return (
     <>
-      <Navigation></Navigation>
       {loading ? (
         <LoadingScreen>
           <Loading />
@@ -46,10 +44,10 @@ export default function Home() {
             powered by PokéAPI
           </NavLink>
           <h2>Search Pokemon by ...</h2>
-          <form>
+          
             <label htmlFor="search">Pokemon Name or Pokedex Number</label>
             <Search />
-          </form>
+          
         </Container>
       )}
     </>

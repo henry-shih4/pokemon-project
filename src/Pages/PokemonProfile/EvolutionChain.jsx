@@ -58,7 +58,7 @@ const SplitEvolutions = styled.div`
 const DoubleEvolutions = styled.div`
   display: flex;
   justify-content: center;
-  gap: 2rem;
+  gap: 4rem;
 `;
 
 const Line = styled.div`
@@ -120,9 +120,9 @@ const EvoInfo = styled.div`
 `;
 
 const LoadingScreen = styled.div`
-display:flex;
-justify-content:center;
-align-items:center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default function EvolutionChain(props) {
@@ -651,6 +651,7 @@ export default function EvolutionChain(props) {
                                   }
                                   onClick={() => {
                                     navigate(`/pokemon/${evolutions[idx].id}`);
+                                    window.scrollTo(0, 0);
                                   }}
                                 />
                                 <h4>
@@ -667,7 +668,7 @@ export default function EvolutionChain(props) {
             </EvoContainer>
           ) : null}
           <Container>
-            <h3>Alternate Forms</h3>
+            {altForms.length > 0 ? <h3>Alternate Forms</h3> : null}
             <AltForm>
               {altForms
                 ? altForms.map((item) => {

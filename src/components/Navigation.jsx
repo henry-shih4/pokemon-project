@@ -1,6 +1,6 @@
 import React from "react";
 import {useState} from "react"
-import { NavLink } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import SearchPokemon from "./SearchPokemon";
 import { keyframes } from "styled-components";
@@ -22,7 +22,7 @@ const ButtonLink = styled(NavLink)`
   &:hover {
     background-color: #b6b6c9;
   }
-`;
+  `
 
 const Header = styled.div`
   display: flex;
@@ -152,20 +152,29 @@ to {
 
 
 export default function Navigation() {
+  var gen = '1';
+  var type = 'grass';
+  if (sessionStorage.getItem("generation")){
+    gen = sessionStorage.getItem("generation");
+  }
+  
+    if (sessionStorage.getItem("type")) {
+      type = sessionStorage.getItem("type");
+    }
 
   const [sideBarOpen, setSideBarOpen] = useState(false);
+   const navigate = useNavigate();
 
   return (
     <MainNav>
-      
-        <Sidebar sideBarOpen={sideBarOpen}>
-          <Links>
-            <Link to="/">Home</Link>
-            <Link to="/types">Types</Link>
-            <Link to="/generation">Generations</Link>
-          </Links>
-        </Sidebar>
-     
+      <Sidebar sideBarOpen={sideBarOpen}>
+        <Links>
+          <Link to="/">Home</Link>
+          <Link to={"/types/" + type}>Types</Link>
+          <Link to={"generation/" + gen}>Generations</Link>
+        </Links>
+      </Sidebar>
+
       <NavButtonFloat>
         <NavIcon
           sideBarOpen={sideBarOpen}
@@ -179,8 +188,8 @@ export default function Navigation() {
       </NavButtonFloat>
       <Header>
         <ButtonLink to="/">Home</ButtonLink>
-        <ButtonLink to="/types">Types</ButtonLink>
-        <ButtonLink to="/generation">Generations</ButtonLink>
+        <ButtonLink to={"/types/" + type}>Types</ButtonLink>
+        <ButtonLink to={"generation/" + gen}>Generations</ButtonLink>
         <Search>
           <SearchPokemon />
         </Search>
