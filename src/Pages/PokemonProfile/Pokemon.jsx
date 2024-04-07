@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import axios, { all } from "axios";
 import Card from "./Card";
-import Navigation from "../../components/Navigation";
 import EvolutionChain from "./EvolutionChain";
 import { PokemonContext } from "../../components/PokemonContext";
 import Loading from "../../components/Loading";
@@ -34,7 +33,6 @@ export default function Pokemon() {
   const [errorPage, setErrorPage] = useState(false);
 
   const fetchPokemon = async () => {
-    console.log("making new fetch request");
 
     const pokeInfo = await axios
       .get(`https://pokeapi.co/api/v2/pokemon/${id}`)
@@ -80,8 +78,9 @@ export default function Pokemon() {
           return response;
         })
         .catch((error) => {
-          console.log(error);
+          
           setSpeciesError(true);
+          return error
         })
         .then((response) => {
           axios.get(response.data.evolution_chain.url).then((response) => {
@@ -90,8 +89,8 @@ export default function Pokemon() {
           });
         })
         .catch((error) => {
-          console.log(error);
           setSpeciesError(true);
+          return error
         });
     }
   };
@@ -112,7 +111,6 @@ export default function Pokemon() {
   }, [id]);
 
   async function filterEvolution(list) {
-    console.log("filtering evolutions");
     if (speciesData) {
       let forms = [];
       for (let i = 1; i < speciesData.varieties.length; i++) {
@@ -152,22 +150,14 @@ export default function Pokemon() {
   }
 
   useEffect(() => {
-    console.log(pokeData);
-  }, [pokeData]);
-  useEffect(() => {
-    console.log(speciesData);
-  }, [speciesData]);
-
-  useEffect(() => {
     if (evolutionData) {
       let evoChain = [];
       let evoData = evolutionData.chain;
       let splitEvo = false;
       let doubleEvo = false;
-      console.log(evoData);
+      let splitContinue = false;
       do {
         let numberOfEvolutions = evoData["evolves_to"].length;
-        console.log(numberOfEvolutions);
 
         if (numberOfEvolutions > 1) {
           splitEvo = true;
@@ -191,7 +181,6 @@ export default function Pokemon() {
               special: specialA,
             });
           } else {
-            splitEvo = true;
             evoChain.push({
               evolution: evoData.species.name,
               splitEvo: false,
@@ -226,13 +215,18 @@ export default function Pokemon() {
           }
 
           for (let i = 0; i < evoData.evolves_to.length; i++) {
-            if (numberOfEvolutions > 1 && evoData.evolves_to[0].evolves_to[0]) {
-              console.log(evoData.evolves_to[i].evolves_to);
+            if (numberOfEvolutions > 1 && evoData.evolves_to[i].evolves_to[0]) {
+
+              if (
+                evoData.evolves_to[i].evolves_to[0].species['name'] =='hydrapple'
+              ) {
+                splitContinue = true
+              } 
               doubleEvo = true;
               const specialA = [];
               let currentEvoDetails =
                 evoData.evolves_to[i].evolves_to[0].evolution_details;
-              console.log(currentEvoDetails);
+
               for (let j = 0; j <= currentEvoDetails.length; j++) {
                 if (currentEvoDetails[j]) {
                   let special = {};
@@ -258,14 +252,6 @@ export default function Pokemon() {
               });
             }
           }
-          // if (numberOfEvolutions > 1 && evoData.evolves_to[1].evolves_to[0]) {
-          //   console.log(evoData.evolves_to[1].evolves_to);
-          //   evoChain.push({
-          //     evolution: evoData.evolves_to[1].evolves_to[0].species.name,
-          //     splitEvo: true,
-          //   });
-          //   doubleEvo = true;
-          // }
         } else {
           const specialA = [];
           let currentEvo = evoData.species.name;
@@ -300,7 +286,7 @@ export default function Pokemon() {
         evoChain.pop();
       }
 
-      if (doubleEvo) {
+      if (doubleEvo && !splitContinue) {
         evoChain.pop();
       }
 
@@ -313,10 +299,6 @@ export default function Pokemon() {
       filterEvolution(allEvolutions);
     }
   }, [allEvolutions, pokeList]);
-
-  useEffect(() => {
-    console.log(evoLoading);
-  });
 
   useEffect(() => {
     if (evolutions && evolutions[0] !== undefined) {

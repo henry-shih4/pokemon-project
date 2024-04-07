@@ -1,6 +1,6 @@
 import React from "react";
 import {useState} from "react"
-import { useNavigate, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import SearchPokemon from "./SearchPokemon";
 import { keyframes } from "styled-components";
@@ -163,7 +163,6 @@ export default function Navigation() {
     }
 
   const [sideBarOpen, setSideBarOpen] = useState(false);
-   const navigate = useNavigate();
 
   return (
     <MainNav>
@@ -179,7 +178,6 @@ export default function Navigation() {
         <NavIcon
           sideBarOpen={sideBarOpen}
           onClick={() => {
-            console.log("open");
             setSideBarOpen((setSideBarOpen) => !sideBarOpen);
           }}
         >

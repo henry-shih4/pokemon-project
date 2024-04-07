@@ -1,8 +1,7 @@
-import React, { useEffect, useContext } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
-import { PokemonContext } from "../../components/PokemonContext";
 import DownArrow from "../../icons/down-arrow.svg";
 
 const Container = styled.div`
@@ -135,12 +134,6 @@ export default function EvolutionChain(props) {
     altForms,
     evoLoading,
   } = props;
-  const { loading } = useContext(PokemonContext);
-
-  useEffect(() => {
-    console.log(allEvolutions);
-    console.log(evolutions);
-  }, [evolutions]);
 
   return (
     <>
@@ -265,6 +258,13 @@ export default function EvolutionChain(props) {
                                                   </span>
                                                 ) : null}
                                               </p>
+                                              <p>
+                                                {item.gender == 1 ? (
+                                                  <span>female</span>
+                                                ) : item.gender == 0 ? (
+                                                  <span>male</span>
+                                                ) : null}
+                                              </p>
                                               {item.relative_physical_stats ? (
                                                 <div>
                                                   {item.relative_physical_stats ==
@@ -286,16 +286,6 @@ export default function EvolutionChain(props) {
                                       )
                                     : null}
                                 </EvoInfo>
-
-                                {/* {allEvolutions[idx].special.gender?
-                            <div>
-                              {allEvolutions[idx].special.gender == "1"
-                                ? "female"
-                                : allEvolutions[idx].special.gender == "2"
-                                ? "male"
-                                : null}
-                            </div>
-                            :null} */}
                               </div>
                             </div>
 
@@ -437,6 +427,13 @@ export default function EvolutionChain(props) {
                                                   </span>
                                                 ) : null}
                                               </p>
+                                              <p>
+                                                {item.gender == 1 ? (
+                                                  <span>female</span>
+                                                ) : item.gender == 0 ? (
+                                                  <span>male</span>
+                                                ) : null}
+                                              </p>
                                               {item.relative_physical_stats ? (
                                                 <div>
                                                   {item.relative_physical_stats ==
@@ -458,16 +455,6 @@ export default function EvolutionChain(props) {
                                       )
                                     : null}
                                 </EvoInfo>
-
-                                {/* {allEvolutions[idx].special.gender?
-                            <div>
-                              {allEvolutions[idx].special.gender == "1"
-                                ? "female"
-                                : allEvolutions[idx].special.gender == "2"
-                                ? "male"
-                                : null}
-                            </div>
-                            :null} */}
                               </div>
                             </div>
 
@@ -607,6 +594,13 @@ export default function EvolutionChain(props) {
                                                   </span>
                                                 ) : null}
                                               </p>
+                                              <p>
+                                                {item.gender == 1 ? (
+                                                  <span>female</span>
+                                                ) : item.gender == 0 ? (
+                                                  <span>male</span>
+                                                ) : null}
+                                              </p>
                                               {item.relative_physical_stats ? (
                                                 <div>
                                                   {item.relative_physical_stats ==
@@ -629,15 +623,15 @@ export default function EvolutionChain(props) {
                                     : null}
                                 </div>
 
-                                {/* {allEvolutions[idx].special.gender?
+                                {/* { allEvolutions[idx].special.gender?
                             <div>
-                              {allEvolutions[idx].special.gender == "1"
+                              {allEvolutions[idx].special[0].gender == "1"
                                 ? "female"
-                                : allEvolutions[idx].special.gender == "2"
+                                : allEvolutions[idx].special[0].gender == "2"
                                 ? "male"
                                 : null}
                             </div>
-                            :null} */}
+                            :null}  */}
                               </div>
                             </div>
 

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useContext, useState, useEffect } from "react";
 import { PokemonContext } from "../components/PokemonContext";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Search = styled.input`
   flex: 1;

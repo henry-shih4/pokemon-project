@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Loading from "../../components/Loading";
-import { useContext, useState, useEffect } from "react";
+import { useContext} from "react";
 import { PokemonContext } from "../../components/PokemonContext";
 import Search from '../../components/SearchPokemon'
 
@@ -27,9 +27,7 @@ const LoadingScreen = styled.div`
 
 
 export default function Home() {
-  const { pokeList, loading } = useContext(PokemonContext);
-  const navigate = useNavigate();
-
+  const { loading } = useContext(PokemonContext);
 
   return (
     <>

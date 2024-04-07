@@ -1,11 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { useNavigate, NavLink, useParams } from "react-router-dom";
-import { useContext, useMemo, useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useContext, useMemo } from "react";
 import { PokemonContext } from "../../components/PokemonContext";
 import Loading from "../../components/Loading";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import Navigation from "../../components/Navigation";
 import ErrorPage from "../../components/ErrorPage";
 
 const Container = styled.div`
@@ -218,7 +217,6 @@ export default function PokemonType() {
   };
 
   const pokeData = useMemo(() => {
-    console.log("filtering..");
     const pokemon = pokeList.filter((item) => {
       return (
         item.types[0].type.name === type ||
@@ -228,9 +226,6 @@ export default function PokemonType() {
     return pokemon;
   }, [pokeList, type]);
 
-  useEffect(() => {
-    console.log(type);
-  });
   return (
     <>
       {loading || !pokeData ? (

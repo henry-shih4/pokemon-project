@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useParams, useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState, useMemo, useCallback } from "react";
+import { useContext, useState, useMemo, useCallback } from "react";
 import { PokemonContext } from "../../components/PokemonContext";
 import Loading from "../../components/Loading";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -137,18 +137,11 @@ export default function PokemonType() {
     }
   }, [generationNumber]);
 
-  useEffect(() => {
-    console.log(generationNumber);
-  }, [generationNumber]);
   const pokeData = useMemo(() => {
     generation();
     let pokemon = pokeList;
     return pokemon;
   }, [pokeList, start, end, generation]);
-
-  useEffect(() => {
-    console.log(generationNumber);
-  });
 
   return (
     <>

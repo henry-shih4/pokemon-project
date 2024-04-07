@@ -340,9 +340,6 @@ export default function Card(props) {
     viii: 8,
     ix: 9,
   };
-  useEffect(() => {
-    console.log(art);
-  }, []);
 
   // calculate total stat of pokemon
   useEffect(() => {
@@ -376,10 +373,6 @@ export default function Card(props) {
   }, [generation, description]);
 
 
-  useEffect(()=>{
-console.log(errorPage)
-  },[])
-  
   return (
     <Container>
       <Title>
