@@ -45,9 +45,10 @@ const Sidebar = styled.div`
   height: 50vh;
   width: 200px;
   display: none;
+  
   @media (max-width: 600px) {
     display: flex;
-
+    
     animation-duration: 1s;
     animation-name: ${(props) => (props.sideBarOpen ? slideIn : slideOut)};
     animation-fill-mode: forwards;
@@ -71,22 +72,26 @@ const Search = styled.div`
 
 const Link = styled(NavLink)`
   font-weight: bold;
-  color:white;
-  letter-spacing:4px;
-
+  color: white;
+  letter-spacing: 4px;
+  height:60px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  &:hover {
+    background-color: #b6b6c9;
+  }
 `;
 
 const Links = styled.div`
   margin-top: 5rem;
-  padding-left: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-`;
-
-const NavButtonContainer = styled.div`
 
 `;
+
 
 const NavButtonFloat = styled.div`
   position:absolute;

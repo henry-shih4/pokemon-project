@@ -8,6 +8,7 @@ import { PokemonProvider } from "./components/PokemonContext";
 import NotFound from "./components/NotFound";
 import Navigation from "./components/Navigation";
 import ScrollToTop from "./components/ScrollToTop";
+import ScrollToTopButton from "./components/ScrollToTopButton";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
+        <ScrollToTopButton />
       </PokemonProvider>
     </div>
   );

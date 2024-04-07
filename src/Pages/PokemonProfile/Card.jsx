@@ -45,8 +45,10 @@ const Sprites = styled.div`
   display: flex;
   justify-content: center;
   gap: 2rem;
+  margin-top:24px;
   p {
     text-align: center;
+    margin:0;
   }
 
   @media (max-width: 500px) {
@@ -207,7 +209,8 @@ const Entry = styled.div`
   flex-direction: column;
   gap: 10px;
   width: 45%;
-  margin: 1rem;
+  max-width:480px;
+  margin-bottom:2rem;
   h3 {
     text-transform: capitalize;
     margin: 4px;

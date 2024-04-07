@@ -60,6 +60,7 @@ function SearchPokemon() {
   function handleSearchSubmit(){
        setSearch("")
   }
+  
   useEffect(() => {
     findResults();
   }, [search]);
@@ -91,6 +92,7 @@ function SearchPokemon() {
                   <Sprite src={item.sprites.front_default} />
 
                   <div>{item.name}</div>
+                  <div>#{item.id}</div>
                 </Result>
               );
             })
