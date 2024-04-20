@@ -37,7 +37,7 @@ export default function Home() {
         </LoadingScreen>
       ) : (
         <Container>
-          <h1>Welcome to the Pokedex!</h1>
+          <h1>Welcome to the Pokedex Portal!</h1>
           <NavLink target="_blank" to="https://pokeapi.co/">
             powered by PokéAPI
           </NavLink>
