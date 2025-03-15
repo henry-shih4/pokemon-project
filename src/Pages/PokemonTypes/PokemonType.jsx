@@ -8,112 +8,160 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import ErrorPage from "../../components/ErrorPage";
 
 const Container = styled.div`
-  font-family: Roboto;
-  background-color: #ffffff;
+  padding: var(--spacing-xl);
+  max-width: 1400px;
+  margin: 0 auto;
   display: grid;
-  width: 90%;
-  min-width: 375px;
-  margin: auto;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 10px;
-  justify-items: center;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
 `;
 
 const Pokemon = styled.div`
-  min-width: 250px;
+  position: relative;
   display: flex;
   flex-direction: column;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease;
-  justify-content: center;
   align-items: center;
-  &:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  overflow: hidden;
   cursor: pointer;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--primary);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover::after {
+    opacity: 1;
+  }
+
+
 `;
 
 const Title = styled.div`
+  width: 100%;
   text-align: center;
-  text-transform: capitalize;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 140px;
-  letter-spacing: 0.1rem;
-  div {
-    width: 120px;
+  margin-bottom: var(--spacing-sm);
+  
+  span {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+`;
+
+const Header = styled.div`
+  text-align: center;
+  margin: var(--spacing-xl);
+
+  h1 {
+    color: var(--primary);
+    margin-bottom: var(--spacing-md);
+  }
+
+  p {
+    color: var(--text-secondary);
   }
 `;
 
 const Name = styled.div`
-  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--text-primary);
   text-transform: capitalize;
-  padding: 4px;
-  text-align: center;
-  text-transform: capitalize;
-  font-size: 20px;
-  span {
-    font-weight: bold;
-    font-size: 14px;
-    padding-left: 8px;
-  }
+  margin-bottom: var(--spacing-xs);
 `;
 
 const Sprite = styled(LazyLoadImage)`
+  width: 150px;
+  height: 150px;
   image-rendering: pixelated;
-  transition: transform 200ms linear;
+  transition: transform 0.3s ease;
 
   ${Pokemon}:hover & {
     transform: scale(1.1);
-    transition: transform 200ms linear;
   }
 `;
 
 const TypeBox = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 1rem;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
-  text-transform: capitalize;
-  font-family: Roboto;
-`;
-const Type = styled.div`
-  width: 120px;
-  letter-spacing: 0.1rem;
-  @media (max-width: 600px) {
-    display: none;
-  }
-`;
-
-const TypeSmall = styled.div`
-  width: 120px;
-  letter-spacing: 0.1rem;
-  @media (min-width: 600px) {
-    display: none;
-  }
-`;
-
-const TypeContainer = styled.div`
-  padding: 6px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0 0.5rem;
-  border-radius: 10px;
+  gap: var(--spacing-sm);
+  padding: 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
   color: white;
-  cursor: pointer;
-  &:hover {
-    transform: scale(1.1);
-    transition: transform 200ms linear;
+  background-color: ${props => props.color};
+  margin: 4px;
+  text-transform: capitalize;
+
+  img {
+    width: 16px;
+    height: 16px;
   }
-  font-size: 18px;
+`;
+
+const Type = styled.div`
+ 
+`;
+
+
+
+const TypeContainer = styled.button`
+  background: ${props => props.color};
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  text-transform: capitalize;
+  box-shadow: var(--shadow-sm);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px ${props => props.color}40;
+  }
+
+  ${props => props.selected && `
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    outline: 3px solid white;
+  `}
+
+  img {
+    width: 24px;
+    height: 24px;
+  }
+
+  width:120px;
 `;
 
 const CurrentType = styled.div`
@@ -128,8 +176,8 @@ const CurrentType = styled.div`
 `;
 
 const TypeIcon = styled.img`
-  height: 24px;
-  width: 24px;
+  height: 18px;
+  width: 18px;
 `;
 
 const LoadingContainer = styled.div`
@@ -234,6 +282,9 @@ export default function PokemonType() {
         </LoadingContainer>
       ) : (
         <>
+        <Header>
+          <h1>Filter by Type</h1>
+        </Header>
           <TypeBox>
             {Object.values(typeMap).map((item, idx) => {
               return (
@@ -255,23 +306,6 @@ export default function PokemonType() {
                       </TypeContainer>
                     ) : null}
                   </Type>
-                  <TypeSmall
-                    
-                    onClick={() => {
-                      navigate(`/types/${item.name}`);
-                      sessionStorage.setItem("type", item.name);
-                    }}
-                  >
-                    {typeMap[item.name] ? (
-                      <TypeContainer
-                        style={{
-                          backgroundColor: `${typeMap[item.name].color}`,
-                        }}
-                      >
-                        <TypeIcon src={typeMap[item.name].img} />
-                      </TypeContainer>
-                    ) : null}
-                  </TypeSmall>
                 </React.Fragment>
               );
             })}
@@ -281,14 +315,13 @@ export default function PokemonType() {
             <ErrorPage />
           ) : (
             <Container>
-              <Title>
                 <CurrentType
                   style={{ backgroundColor: `${typeMap[type].color}` }}
                 >
                   <TypeIcon src={typeMap[type].img} />
                   <div>{type} </div>
                 </CurrentType>
-              </Title>
+              
               {pokeData
                 ? pokeData.map((item) => {
                     return (
@@ -300,9 +333,10 @@ export default function PokemonType() {
                           });
                         }}
                       >
-                        <Name>
-                          {item.name} <span>#{item.id}</span>
-                        </Name>
+                      <Title>
+                        <Name>{item.name}</Name>
+                        <span>#{item.id.toString().padStart(3, '0')}</span>
+                      </Title>
                         <Sprite
                           width={140}
                           height={140}

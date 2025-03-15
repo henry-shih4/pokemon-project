@@ -1,87 +1,107 @@
-import React from "react";
-import {useState} from "react"
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import SearchPokemon from "./SearchPokemon";
 import { keyframes } from "styled-components";
 
-
 const ButtonLink = styled(NavLink)`
   display: inline-block;
   padding: 10px 20px;
-  margin: 1em;
-  font-size: 18px;
-  font-weight: bold;
+  margin: 0.5em;
+  font-size: 16px;
+  font-weight: 600;
   text-align: center;
   text-decoration: none;
-  border-radius: 10px;
-  color: #3498db;
-  background-color: #fff;
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  background-color: var(--surface);
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+
   &:hover {
-    background-color: #b6b6c9;
+    background-color: var(--background);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
   }
-  `
+
+  &.active {
+    color: white;
+    background-color: var(--primary);
+  }
+`;
 
 const Header = styled.div`
   display: flex;
   gap: 0 1rem;
-  letter-spacing: 4px;
-  font-family: "Roboto", sans-serif;
-
   align-items: center;
-  @media (max-width: 600px) {
+  padding: 0.5rem var(--spacing-md);
+  background-color: var(--surface);
+  box-shadow: var(--shadow-md);
+
+  @media (max-width: 700px) {
     display: none;
   }
 `;
 
 const Sidebar = styled.div`
   flex-direction: column;
-
-  background-color: #3498db;
-  position: absolute;
-  top: 0%;
-  height: 50vh;
-  width: 200px;
+  background-color: var(--surface);
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 250px;
+  z-index: 1000;
+  box-shadow: var(--shadow-lg);
   display: none;
   
-  @media (max-width: 600px) {
+  @media (max-width: 700px) {
     display: flex;
-    
-    animation-duration: 1s;
+    animation-duration: 0.3s;
     animation-name: ${(props) => (props.sideBarOpen ? slideIn : slideOut)};
     animation-fill-mode: forwards;
   }
 `;
 
-const MainNav = styled.div`
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  font-family: "Roboto", sans-serif;
-  @media (max-width: 600px) {
-    position: fixed;
-    top: 0%;
-  }
+const MainNav = styled.nav`
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--surface);
 `;
 
 const Search = styled.div`
+  margin-left: 10rem;
+  width: 100%;
   @media (max-width: 900px) {
     display: none;
   }
 `;
 
 const Link = styled(NavLink)`
-  font-weight: bold;
-  color: white;
-  letter-spacing: 4px;
-  height:60px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
+  font-weight: 600;
+  color: var(--text-primary);
+  padding: var(--spacing-md);
+  display: flex;
+  align-items: center;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.2s ease;
+  text-decoration: none;
+
   &:hover {
-    background-color: #b6b6c9;
+    background-color: var(--background);
+  }
+
+  &.active {
+    color: var(--primary);
+    background-color: var(--background);
+  }
+
+  svg {
+    margin-right: var(--spacing-sm);
+    width: 20px;
+    height: 20px;
   }
 `;
 
@@ -89,12 +109,24 @@ const Links = styled.div`
   margin-top: 5rem;
   display: flex;
   flex-direction: column;
-
 `;
 
+const NavButtonFloat = styled.button`
+  position: fixed;
+  top: var(--spacing-md);
+  left: var(--spacing-md);
+  z-index: 1001;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
 
-const NavButtonFloat = styled.div`
-  position:absolute;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
   @media (min-width: 600px) {
     display: none;
   }
@@ -103,69 +135,49 @@ const NavButtonFloat = styled.div`
 const NavIcon = styled.div`
   height: 40px;
   width: 40px;
-  margin: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   animation-duration: 0.2s;
   animation-name: ${(props) => (props.sideBarOpen ? rotate : counterRotate)};
   animation-fill-mode: forwards;
 `;
 
 const Icon = styled.img`
-  height: 40px;
-  width: 40px;
+  height: 24px;
+  width: 24px;
 `;
 
-
 const rotate = keyframes`
-  from {
-    transform: rotate(0deg);
-
-  }
-
-  to {
-    transform: rotate(90deg);
-
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(90deg); }
 `;
 
 const counterRotate = keyframes`
-  from {
-    transform: rotate(90deg);
-
-  }
-
-  to {
-    transform: rotate(0deg);
-
-  }
+  from { transform: rotate(90deg); }
+  to { transform: rotate(0deg); }
 `;
 
 const slideIn = keyframes`
-from{
-  transform:translateX(-100%)
-} 
-to {
-  transform:translateX(0%)
-}`;
+  from { transform: translateX(-100%) }
+  to { transform: translateX(0%) }
+`;
 
 const slideOut = keyframes`
-from{
-  transform:translateX(0%)
-} 
-to {
-  transform:translateX(-100%)
-}`;
-
+  from { transform: translateX(0%) }
+  to { transform: translateX(-100%) }
+`;
 
 export default function Navigation() {
   var gen = '1';
   var type = 'grass';
-  if (sessionStorage.getItem("generation")){
+  if (sessionStorage.getItem("generation")) {
     gen = sessionStorage.getItem("generation");
   }
   
-    if (sessionStorage.getItem("type")) {
-      type = sessionStorage.getItem("type");
-    }
+  if (sessionStorage.getItem("type")) {
+    type = sessionStorage.getItem("type");
+  }
 
   const [sideBarOpen, setSideBarOpen] = useState(false);
 
@@ -173,29 +185,26 @@ export default function Navigation() {
     <MainNav>
       <Sidebar sideBarOpen={sideBarOpen}>
         <Links>
-          <Link to="/">Home</Link>
-          <Link to={"/types/" + type}>Types</Link>
-          <Link to={"generation/" + gen}>Generations</Link>
+          <Link onClick={() => setSideBarOpen(!sideBarOpen)} to="/">Home</Link>
+          <Link onClick={() => setSideBarOpen(!sideBarOpen)} to={"/types/" + type}>Types</Link>
+          <Link onClick={() => setSideBarOpen(!sideBarOpen)} to="/type-guide">Type Guide</Link>
+          <Link onClick={() => setSideBarOpen(!sideBarOpen)} to={"/generation/" + gen}>Generations</Link>
+          <Link onClick={() => setSideBarOpen(!sideBarOpen)} to="/teams">Team Builder</Link>
         </Links>
       </Sidebar>
 
-      <NavButtonFloat>
-        <NavIcon
-          sideBarOpen={sideBarOpen}
-          onClick={() => {
-            setSideBarOpen((setSideBarOpen) => !sideBarOpen);
-          }}
-        >
-          <Icon src="/open.svg"></Icon>
+      <NavButtonFloat onClick={() => setSideBarOpen(!sideBarOpen)}>
+        <NavIcon sideBarOpen={sideBarOpen}>
+          <Icon src="/open.svg" alt="menu" />
         </NavIcon>
       </NavButtonFloat>
+
       <Header>
         <ButtonLink to="/">Home</ButtonLink>
         <ButtonLink to={"/types/" + type}>Types</ButtonLink>
-        <ButtonLink to={"generation/" + gen}>Generations</ButtonLink>
-        <Search>
-          <SearchPokemon />
-        </Search>
+        <ButtonLink to="/type-guide">Type Guide</ButtonLink>
+        <ButtonLink to={"/generation/" + gen}>Generations</ButtonLink>
+        <ButtonLink to="/teams">Team Builder</ButtonLink>
       </Header>
     </MainNav>
   );

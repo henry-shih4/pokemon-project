@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import axios, { all } from "axios";
-import Card from "./Card";
+import PokemonCard from "./PokemonCard";
 import EvolutionChain from "./EvolutionChain";
 import { PokemonContext } from "../../components/PokemonContext";
 import Loading from "../../components/Loading";
@@ -313,7 +313,7 @@ export default function Pokemon() {
         <div>
           {pokeData.name && speciesData && pokeData.sprites.other ? (
             <>
-              <Card
+              <PokemonCard
                 name={pokeData.name}
                 img={pokeData.sprites}
                 art={

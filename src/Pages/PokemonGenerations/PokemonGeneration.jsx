@@ -8,36 +8,40 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import ErrorPage from '../../components/ErrorPage'
 
 const Container = styled.div`
-  font-family: Roboto;
-  background-color: #ffffff;
+  padding: var(--spacing-xl);
+  max-width: 1400px;
+  margin: 0 auto;
   display: grid;
-  width: 90%;
-  min-width: 375px;
-  margin: auto;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 10px;
-  justify-items: center;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
 `;
 
 const Form = styled.div`
-  margin: 2em;
+  margin: 2em auto;
+  max-width: 300px;
   display: flex;
   justify-content: center;
 `;
+
 const Select = styled.select`
+  width: 100%;
   text-align: center;
-  display: flex;
-  justify-content: center;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 8px;
+  background-color: var(--surface);
+  border: 2px solid var(--border);
+  padding: var(--spacing-md);
+  font-size: 1rem;
+  border-radius: var(--radius-md);
   outline: none;
   cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--primary);
+  }
+
   &:focus {
-    border-color: #3498db;
-    box-shadow: 0 0 5px rgba(52, 152, 219, 0.7);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-sm);
   }
 `;
 
@@ -46,41 +50,84 @@ const Option = styled.option`
 `;
 
 const Pokemon = styled.div`
-  min-width: 250px;
+  position: relative;
   display: flex;
   flex-direction: column;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease;
-  justify-content: center;
   align-items: center;
-  &:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  overflow: hidden;
   cursor: pointer;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--primary);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover::after {
+    opacity: 1;
+  }
 `;
 
 const Title = styled.div`
+  width: 100%;
   text-align: center;
-  text-transform: capitalize;
-  font-size: 20px;
+  margin-bottom: var(--spacing-sm);
+  
   span {
-    font-weight: bold;
-    font-size: 14px;
-    padding-left: 8px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
   }
 `;
 
+const Name = styled.div`
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-transform: capitalize;
+  margin-bottom: var(--spacing-xs);
+`;
+
+const TypeBadge = styled.div`
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: white;
+  background-color: ${props => props.color};
+  margin: 0 4px;
+`;
+
+const TypeContainer = styled.div`
+  margin-top: var(--spacing-sm);
+  display: flex;
+  gap: var(--spacing-xs);
+  justify-content: center;
+`;
+
 const Sprite = styled(LazyLoadImage)`
+  width: 150px;
+  height: 150px;
   image-rendering: pixelated;
-  transition: transform 200ms linear;
+  transition: transform 0.3s ease;
 
   ${Pokemon}:hover & {
     transform: scale(1.1);
-    transition: transform 200ms linear;
   }
 `;
 
@@ -184,14 +231,26 @@ export default function PokemonType() {
                       }}
                     >
                       <Title>
-                        {item.name} <span>#{item.id}</span>
+                        <Name>{item.name}</Name>
+                        <span>#{item.id.toString().padStart(3, '0')}</span>
                       </Title>
                       <Sprite
-                        width={120}
-                        height={120}
+                        width={150}
+                        height={150}
                         src={item.sprites.front_default}
                         placeholderSrc={"/pokeball.svg"}
+                        effect="opacity"
                       />
+                      {/* <TypeContainer>
+                        {item.types.map((type, index) => (
+                          <TypeBadge
+                            key={index}
+                            color={typeMap[type.type.name]?.color || '#999'}
+                          >
+                            {type.type.name}
+                          </TypeBadge>
+                        ))}
+                      </TypeContainer> */}
                     </Pokemon>
                   );
                 })

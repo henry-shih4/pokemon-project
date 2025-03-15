@@ -71,6 +71,7 @@ const Location = styled.div`
 const Heading = styled.h2`
   display: flex;
   justify-content: center;
+  margin-bottom: 20px;
 `;
 
 const LoadingContainer = styled.div`
@@ -99,6 +100,8 @@ const AltForm = styled.div`
   @media (max-width: 900px) {
     flex-direction: column;
   }
+  max-width: 550px;
+  overflow-x: scroll;
 `;
 
 const Artwork = styled.img`
@@ -662,7 +665,7 @@ export default function EvolutionChain(props) {
             </EvoContainer>
           ) : null}
           <Container>
-            {altForms.length > 0 ? <h3>Alternate Forms</h3> : null}
+            {altForms.length > 0 ? <Heading>Alternate Forms</Heading> : null}
             <AltForm>
               {altForms
                 ? altForms.map((item) => {
